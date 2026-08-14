@@ -284,10 +284,6 @@ export default function DashboardPage() {
           </div>
         </section>
         )}
-
-        <p className="mt-8 font-label-sm text-label-sm text-on-surface-variant">
-          {t.platform.xpHint}
-        </p>
       </PageMain>
     </AppShell>
   );
