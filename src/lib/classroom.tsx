@@ -21,11 +21,16 @@ export type Material = {
 
 export type SubmissionStatus = "assigned" | "turned_in" | "returned";
 
+export type SubmissionKind = "text" | "link" | "file";
+
 export type Submission = {
   studentId: string;
   studentName: string;
   status: SubmissionStatus;
+  kind: SubmissionKind;
   text: string;
+  linkUrl?: string;
+  fileName?: string;
   turnedInAt?: string;
   score?: number;
   feedback?: string;
@@ -83,7 +88,17 @@ type ClassroomContextValue = {
     classId: string,
     input: { title: string; description: string; dueAt: string; attachments?: Material[] },
   ) => Assignment | null;
-  submitWork: (classId: string, assignmentId: string, student: User, text: string) => void;
+  submitWork: (
+    classId: string,
+    assignmentId: string,
+    student: User,
+    payload: {
+      kind: SubmissionKind;
+      text: string;
+      linkUrl?: string;
+      fileName?: string;
+    },
+  ) => void;
   returnWork: (
     classId: string,
     assignmentId: string,
@@ -174,6 +189,7 @@ function seedClasses(): Classroom[] {
               studentId: "stu-demo-1",
               studentName: "กุลธิดา",
               status: "turned_in",
+              kind: "text",
               text: "ส่งครบ 10 ข้อแล้ว ขอ feedback จุดที่ใช้สูตรผิดได้ไหมครับ/ค่ะ",
               turnedInAt: now,
             },
@@ -181,13 +197,16 @@ function seedClasses(): Classroom[] {
               studentId: "stu-demo-2",
               studentName: "ณัฐพล",
               status: "assigned",
+              kind: "text",
               text: "",
             },
             {
               studentId: "stu-demo-3",
               studentName: "พิมพ์ใจ",
               status: "returned",
+              kind: "file",
               text: "ส่งครบแล้ว",
+              fileName: "integral-hw.pdf",
               turnedInAt: now,
               score: 95,
               feedback: "ดีมาก อธิบายขั้นตอนชัด",
@@ -206,19 +225,23 @@ function seedClasses(): Classroom[] {
               studentId: "stu-demo-1",
               studentName: "กุลธิดา",
               status: "assigned",
+              kind: "text",
               text: "",
             },
             {
               studentId: "stu-demo-2",
               studentName: "ณัฐพล",
               status: "assigned",
+              kind: "text",
               text: "",
             },
             {
               studentId: "stu-demo-3",
               studentName: "พิมพ์ใจ",
               status: "turned_in",
-              text: "สรุปเรียบร้อย https://example.com/notes",
+              kind: "link",
+              text: "สรุปเรียบร้อย",
+              linkUrl: "https://example.com/notes",
               turnedInAt: now,
             },
           ],
@@ -237,7 +260,19 @@ export function ClassroomProvider({ children }: { children: ReactNode }) {
       const raw = window.localStorage.getItem(STORAGE);
       if (raw) {
         const parsed = JSON.parse(raw) as Classroom[];
-        setClasses(Array.isArray(parsed) && parsed.length ? parsed : seedClasses());
+        const normalized = (Array.isArray(parsed) && parsed.length ? parsed : seedClasses()).map(
+          (c) => ({
+            ...c,
+            assignments: c.assignments.map((a) => ({
+              ...a,
+              submissions: a.submissions.map((s) => ({
+                ...s,
+                kind: s.kind ?? "text",
+              })),
+            })),
+          }),
+        );
+        setClasses(normalized);
       } else {
         const seeded = seedClasses();
         setClasses(seeded);
@@ -307,6 +342,7 @@ export function ClassroomProvider({ children }: { children: ReactNode }) {
               studentId: student.id,
               studentName: student.name,
               status: "assigned" as const,
+              kind: "text" as const,
               text: "",
             },
           ],
@@ -379,7 +415,8 @@ export function ClassroomProvider({ children }: { children: ReactNode }) {
         submissions: cls.members.map((m) => ({
           studentId: m.id,
           studentName: m.name,
-          status: "assigned",
+          status: "assigned" as const,
+          kind: "text" as const,
           text: "",
         })),
       };
@@ -394,7 +431,17 @@ export function ClassroomProvider({ children }: { children: ReactNode }) {
   );
 
   const submitWork = useCallback(
-    (classId: string, assignmentId: string, student: User, text: string) => {
+    (
+      classId: string,
+      assignmentId: string,
+      student: User,
+      payload: {
+        kind: SubmissionKind;
+        text: string;
+        linkUrl?: string;
+        fileName?: string;
+      },
+    ) => {
       persist(
         classes.map((c) => {
           if (c.id !== classId) return c;
@@ -402,28 +449,29 @@ export function ClassroomProvider({ children }: { children: ReactNode }) {
             ...c,
             assignments: c.assignments.map((a) => {
               if (a.id !== assignmentId) return a;
+              const nextSub = {
+                studentId: student.id,
+                studentName: student.name,
+                status: "turned_in" as const,
+                kind: payload.kind,
+                text: payload.text,
+                linkUrl: payload.linkUrl,
+                fileName: payload.fileName,
+                turnedInAt: new Date().toISOString(),
+              };
               const exists = a.submissions.some((s) => s.studentId === student.id);
               const submissions = exists
                 ? a.submissions.map((s) =>
                     s.studentId === student.id
                       ? {
                           ...s,
-                          text,
-                          status: "turned_in" as const,
-                          turnedInAt: new Date().toISOString(),
+                          ...nextSub,
+                          score: s.score,
+                          feedback: s.feedback,
                         }
                       : s,
                   )
-                : [
-                    ...a.submissions,
-                    {
-                      studentId: student.id,
-                      studentName: student.name,
-                      status: "turned_in" as const,
-                      text,
-                      turnedInAt: new Date().toISOString(),
-                    },
-                  ];
+                : [...a.submissions, nextSub];
               return { ...a, submissions };
             }),
             members: c.members.map((m) =>

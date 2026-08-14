@@ -6,6 +6,7 @@ import { useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { Icon } from "@/components/Icon";
 import { PageMain } from "@/components/PageMain";
+import { TeacherTeachSchedule } from "@/components/TeacherTeachSchedule";
 import { usePageScript } from "@/lib/a11y";
 import { assets } from "@/lib/assets";
 import { useAuth } from "@/lib/auth";
@@ -21,9 +22,14 @@ type Activity = {
 
 export default function DashboardPage() {
   const { t } = useI18n();
-  const { isLoggedIn, openLogin, requireAuth } = useAuth();
+  const { isLoggedIn, isTeacher, openLogin, requireAuth } = useAuth();
   const { triggerSave, status } = useAutosave();
-  usePageScript(t.dashboard.pageSummary, true);
+  usePageScript(
+    isTeacher
+      ? `${t.dashboard.pageSummary}. ${t.dash.teachScheduleTitle}. ${t.dash.teachScheduleSub}`
+      : t.dashboard.pageSummary,
+    true,
+  );
 
   const [activities, setActivities] = useState<Activity[]>([
     { id: "a1", title: t.dash.act1, type: "study", done: false },
@@ -89,24 +95,38 @@ export default function DashboardPage() {
                 >
                   <Icon name="groups" /> {t.navExtra.classroom}
                 </Link>
-                <Link
-                  href="/tutor"
-                  onClick={(e) => {
-                    if (!requireAuth("/tutor")) e.preventDefault();
-                  }}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/10 px-5 py-3 font-label-md text-label-md text-white backdrop-blur low-bw:backdrop-blur-none"
-                >
-                  <Icon name="photo_camera" /> {t.dash.ctaTutor}
-                </Link>
-                <Link
-                  href="/plan"
-                  onClick={(e) => {
-                    if (!requireAuth("/plan")) e.preventDefault();
-                  }}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/10 px-5 py-3 font-label-md text-label-md text-white"
-                >
-                  <Icon name="school" /> {t.dash.ctaPlan}
-                </Link>
+                {isTeacher ? (
+                  <Link
+                    href="/teacher/copilot"
+                    onClick={(e) => {
+                      if (!requireAuth("/teacher/copilot")) e.preventDefault();
+                    }}
+                    className="inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/10 px-5 py-3 font-label-md text-label-md text-white"
+                  >
+                    <Icon name="psychology" /> {t.navExtra.copilot}
+                  </Link>
+                ) : (
+                  <>
+                    <Link
+                      href="/tutor"
+                      onClick={(e) => {
+                        if (!requireAuth("/tutor")) e.preventDefault();
+                      }}
+                      className="inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/10 px-5 py-3 font-label-md text-label-md text-white backdrop-blur low-bw:backdrop-blur-none"
+                    >
+                      <Icon name="photo_camera" /> {t.dash.ctaTutor}
+                    </Link>
+                    <Link
+                      href="/plan"
+                      onClick={(e) => {
+                        if (!requireAuth("/plan")) e.preventDefault();
+                      }}
+                      className="inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/10 px-5 py-3 font-label-md text-label-md text-white"
+                    >
+                      <Icon name="school" /> {t.dash.ctaPlan}
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
             <Image
@@ -177,7 +197,10 @@ export default function DashboardPage() {
           ))}
         </div>
 
-        {/* Schedule */}
+        {/* Schedule — teacher timetable vs student activities */}
+        {isTeacher ? (
+          <TeacherTeachSchedule />
+        ) : (
         <section>
           <div className="mb-4 flex items-end justify-between gap-3">
             <div>
@@ -245,6 +268,7 @@ export default function DashboardPage() {
             ))}
           </div>
         </section>
+        )}
 
         <p className="mt-8 font-label-sm text-label-sm text-on-surface-variant">
           {t.platform.xpHint}

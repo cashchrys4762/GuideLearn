@@ -50,11 +50,43 @@ export default function PlanPage() {
     triggerSave();
   };
 
-  const deadlineSummary = [
-    `${t.missions.timeline.t1Date}. ${t.missions.timeline.t1Title}. ${t.missions.timeline.t1Desc}`,
-    `${t.missions.timeline.t2Date}. ${t.missions.timeline.t2Title}. ${t.missions.timeline.t2Desc}`,
-    `${t.missions.timeline.t3Date}. ${t.missions.timeline.t3Title}. ${t.missions.timeline.t3Desc}`,
-  ].join(" ");
+  const milestones = useMemo(
+    () => [
+      {
+        id: "t1",
+        iso: "2026-07-15",
+        date: t.missions.timeline.t1Date,
+        title: t.missions.timeline.t1Title,
+        desc: t.missions.timeline.t1Desc,
+      },
+      {
+        id: "t2",
+        iso: "2026-08-20",
+        date: t.missions.timeline.t2Date,
+        title: t.missions.timeline.t2Title,
+        desc: t.missions.timeline.t2Desc,
+      },
+      {
+        id: "t3",
+        iso: "2026-09-05",
+        date: t.missions.timeline.t3Date,
+        title: t.missions.timeline.t3Title,
+        desc: t.missions.timeline.t3Desc,
+      },
+    ],
+    [t],
+  );
+
+  const currentMilestoneId = useMemo(() => {
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
+    const upcoming = milestones.find((m) => new Date(m.iso).getTime() >= start.getTime());
+    return (upcoming ?? milestones[milestones.length - 1])?.id;
+  }, [milestones]);
+
+  const deadlineSummary = milestones
+    .map((m) => `${m.date}. ${m.title}. ${m.desc}`)
+    .join(" ");
 
   return (
     <AppShell>
@@ -289,56 +321,65 @@ export default function PlanPage() {
               </div>
               <div className="relative space-y-8 pl-6" role="list">
                 <div className="absolute top-2 bottom-6 left-10 w-[4px] rounded-full bg-surface-container" />
-                <div className="absolute top-2 left-10 h-1/3 w-[4px] rounded-full bg-secondary-container" />
-
-                <div className="relative flex items-start gap-6" role="listitem">
-                  <div className="z-10 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-4 border-white bg-secondary-container shadow-sm">
-                    <Icon name="check" className="text-[16px] text-white" />
-                  </div>
-                  <div>
-                    <span className="font-label-sm text-label-sm mb-1 block text-secondary-container">
-                      {t.missions.timeline.t1Date}
-                    </span>
-                    <h4 className="font-headline-md text-body-lg text-on-background mb-1">
-                      {t.missions.timeline.t1Title}
-                    </h4>
-                    <p className="font-body-md text-body-md text-on-surface-variant">
-                      {t.missions.timeline.t1Desc}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="relative flex items-start gap-6" role="listitem">
-                  <div className="ring-primary-fixed z-10 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-4 border-white bg-primary shadow-sm ring-4">
-                    <Icon name="priority_high" className="animate-pulse text-[16px] text-white" />
-                  </div>
-                  <div className="w-full rounded-2xl border border-primary-fixed/50 bg-primary-fixed/20 p-4">
-                    <span className="font-label-sm text-label-sm mb-1 block text-primary">
-                      {t.missions.timeline.t2Date}
-                    </span>
-                    <h4 className="font-headline-md text-body-lg text-on-background mb-1">
-                      {t.missions.timeline.t2Title}
-                    </h4>
-                    <p className="font-body-md text-body-md text-on-surface-variant">
-                      {t.missions.timeline.t2Desc}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="relative flex items-start gap-6 opacity-60" role="listitem">
-                  <div className="z-10 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-4 border-white bg-surface-container-high shadow-sm" />
-                  <div>
-                    <span className="font-label-sm text-label-sm text-on-surface-variant mb-1 block">
-                      {t.missions.timeline.t3Date}
-                    </span>
-                    <h4 className="font-headline-md text-body-lg text-on-background mb-1">
-                      {t.missions.timeline.t3Title}
-                    </h4>
-                    <p className="font-body-md text-body-md text-on-surface-variant">
-                      {t.missions.timeline.t3Desc}
-                    </p>
-                  </div>
-                </div>
+                {milestones.map((m, idx) => {
+                  const isCurrent = m.id === currentMilestoneId;
+                  const isPast =
+                    new Date(m.iso).getTime() <
+                    new Date(new Date().toDateString()).getTime();
+                  const currentIdx = milestones.findIndex((x) => x.id === currentMilestoneId);
+                  const isFuture = idx > currentIdx;
+                  return (
+                    <div
+                      key={m.id}
+                      className={`relative flex items-start gap-6 ${isFuture ? "opacity-60" : ""}`}
+                      role="listitem"
+                    >
+                      <div
+                        className={`z-10 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-4 border-white shadow-sm ${
+                          isCurrent
+                            ? "bg-primary ring-4 ring-primary-fixed"
+                            : isPast
+                              ? "bg-secondary-container"
+                              : "bg-surface-container-high"
+                        }`}
+                      >
+                        {isCurrent ? (
+                          <Icon name="priority_high" className="text-[16px] text-white" />
+                        ) : isPast ? (
+                          <Icon name="check" className="text-[16px] text-white" />
+                        ) : null}
+                      </div>
+                      <div
+                        className={
+                          isCurrent
+                            ? "w-full rounded-2xl border border-primary-fixed/50 bg-primary-fixed/20 p-4"
+                            : ""
+                        }
+                      >
+                        {isCurrent && (
+                          <span className="mb-2 inline-flex rounded-full bg-primary-container px-2.5 py-0.5 text-[11px] font-bold text-on-primary-container">
+                            {t.classroom.currentWork} · {t.classroom.nearestDue}
+                          </span>
+                        )}
+                        <span
+                          className={`font-label-sm text-label-sm mb-1 block ${
+                            isCurrent
+                              ? "text-primary"
+                              : isPast
+                                ? "text-secondary-container"
+                                : "text-on-surface-variant"
+                          }`}
+                        >
+                          {m.date}
+                        </span>
+                        <h4 className="font-headline-md text-body-lg text-on-background mb-1">
+                          {m.title}
+                        </h4>
+                        <p className="font-body-md text-body-md text-on-surface-variant">{m.desc}</p>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </section>
           </div>

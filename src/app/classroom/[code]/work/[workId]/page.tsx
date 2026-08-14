@@ -54,6 +54,23 @@ function WorkReview() {
       <p className="mb-4 text-sm text-on-surface-variant">{assignment.description}</p>
       <div className="mb-4 rounded-2xl bg-surface-container p-4 text-sm whitespace-pre-wrap">
         {submission.text || t.classroom.noSubmissions}
+        {submission.linkUrl && (
+          <p className="mt-2">
+            <a
+              href={submission.linkUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="font-semibold text-primary underline"
+            >
+              {submission.linkUrl}
+            </a>
+          </p>
+        )}
+        {submission.fileName && (
+          <p className="mt-2 font-semibold">
+            📎 {submission.fileName} ({submission.kind || "file"})
+          </p>
+        )}
       </div>
       <label className="mb-3 block text-xs text-on-surface-variant">
         {t.classroom.score}

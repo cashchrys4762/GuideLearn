@@ -9,8 +9,15 @@ import { PageMain } from "@/components/PageMain";
 import { RequireAuth } from "@/components/RequireAuth";
 import { usePageScript } from "@/lib/a11y";
 import { useAuth } from "@/lib/auth";
-import { useClassrooms } from "@/lib/classroom";
+import { useClassrooms, type SubmissionKind } from "@/lib/classroom";
 import { useI18n } from "@/lib/i18n";
+
+type Draft = {
+  kind: SubmissionKind;
+  text: string;
+  linkUrl: string;
+  fileName: string;
+};
 
 export default function ClassDetailPage() {
   const params = useParams<{ code: string }>();
@@ -47,9 +54,30 @@ export default function ClassDetailPage() {
   const [workTitle, setWorkTitle] = useState("");
   const [workDesc, setWorkDesc] = useState("");
   const [dueAt, setDueAt] = useState("");
-  const [drafts, setDrafts] = useState<Record<string, string>>({});
+  const [drafts, setDrafts] = useState<Record<string, Draft>>({});
+
+  const sortedAssignments = useMemo(() => {
+    if (!classroom) return [];
+    return [...classroom.assignments].sort(
+      (a, b) => new Date(a.dueAt).getTime() - new Date(b.dueAt).getTime(),
+    );
+  }, [classroom]);
+
+  const currentAssignmentId = useMemo(() => {
+    const now = Date.now();
+    const upcoming = sortedAssignments.find((a) => new Date(a.dueAt).getTime() >= now - 86400000);
+    return (upcoming ?? sortedAssignments[0])?.id;
+  }, [sortedAssignments]);
 
   const link = useMemo(() => (classroom ? joinUrl(classroom.code) : ""), [classroom, joinUrl]);
+
+  const getDraft = (id: string, mine?: { kind?: SubmissionKind; text?: string; linkUrl?: string; fileName?: string }): Draft =>
+    drafts[id] ?? {
+      kind: mine?.kind ?? "text",
+      text: mine?.text ?? "",
+      linkUrl: mine?.linkUrl ?? "",
+      fileName: mine?.fileName ?? "",
+    };
 
   const copy = async (kind: "code" | "link") => {
     if (!classroom) return;
@@ -195,18 +223,29 @@ export default function ClassDetailPage() {
               )}
 
               <ul className="space-y-4">
-                {classroom.assignments.map((a) => {
+                {sortedAssignments.map((a) => {
                   const mine = user
                     ? a.submissions.find((s) => s.studentId === user.id)
                     : undefined;
                   const turned = a.submissions.filter((s) => s.status !== "assigned").length;
+                  const isCurrent = a.id === currentAssignmentId;
+                  const draft = getDraft(a.id, mine);
                   return (
                     <li
                       key={a.id}
-                      className="rounded-[20px] border border-outline-variant bg-white p-4 sm:p-5"
+                      className={`rounded-[20px] border bg-white p-4 sm:p-5 ${
+                        isCurrent
+                          ? "border-2 border-primary shadow-sm"
+                          : "border-outline-variant"
+                      }`}
                     >
                       <div className="flex flex-wrap items-start justify-between gap-2">
                         <div>
+                          {isCurrent && (
+                            <span className="mb-2 inline-flex rounded-full bg-primary-container px-2.5 py-0.5 text-[11px] font-bold text-on-primary-container">
+                              {t.classroom.currentWork} · {t.classroom.nearestDue}
+                            </span>
+                          )}
                           <h3 className="text-base font-bold sm:text-lg">{a.title}</h3>
                           <p className="mt-1 text-sm text-on-surface-variant">{a.description}</p>
                           <p className="mt-2 text-xs text-on-surface-variant">
@@ -254,26 +293,154 @@ export default function ClassDetailPage() {
                               {typeof mine.score === "number" ? ` · ${mine.score}` : ""}
                             </p>
                           )}
-                          <textarea
-                            value={drafts[a.id] ?? mine?.text ?? ""}
-                            onChange={(e) =>
-                              setDrafts((d) => ({ ...d, [a.id]: e.target.value }))
-                            }
-                            rows={3}
-                            className="w-full rounded-xl border border-outline-variant px-3 py-2 text-sm outline-none focus:border-primary"
-                            placeholder={t.classroom.yourWork}
-                          />
+                          {(mine?.linkUrl || mine?.fileName) && mine.status !== "assigned" && (
+                            <p className="text-xs text-on-surface-variant">
+                              {mine.fileName && (
+                                <span className="mr-2 inline-flex items-center gap-1">
+                                  <Icon name="description" className="text-[16px]" />
+                                  {mine.fileName}
+                                </span>
+                              )}
+                              {mine.linkUrl && (
+                                <a
+                                  href={mine.linkUrl}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="inline-flex items-center gap-1 text-primary underline"
+                                >
+                                  <Icon name="link" className="text-[16px]" />
+                                  {mine.linkUrl}
+                                </a>
+                              )}
+                            </p>
+                          )}
+                          <div className="flex flex-wrap gap-2">
+                            {(
+                              [
+                                ["text", t.classroom.submitAsText, "notes"],
+                                ["link", t.classroom.submitAsLink, "link"],
+                                ["file", t.classroom.submitAsFile, "attach_file"],
+                              ] as const
+                            ).map(([k, label, icon]) => (
+                              <button
+                                key={k}
+                                type="button"
+                                onClick={() =>
+                                  setDrafts((d) => ({
+                                    ...d,
+                                    [a.id]: { ...getDraft(a.id, mine), kind: k },
+                                  }))
+                                }
+                                className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-semibold ${
+                                  draft.kind === k
+                                    ? "bg-primary text-white"
+                                    : "bg-surface-container text-on-surface-variant"
+                                }`}
+                              >
+                                <Icon name={icon} className="text-[16px]" />
+                                {label}
+                              </button>
+                            ))}
+                          </div>
+                          {draft.kind === "text" && (
+                            <textarea
+                              value={draft.text}
+                              onChange={(e) =>
+                                setDrafts((d) => ({
+                                  ...d,
+                                  [a.id]: { ...draft, text: e.target.value },
+                                }))
+                              }
+                              rows={3}
+                              className="w-full rounded-xl border border-outline-variant px-3 py-2 text-sm outline-none focus:border-primary"
+                              placeholder={t.classroom.yourWork}
+                            />
+                          )}
+                          {draft.kind === "link" && (
+                            <div className="space-y-2">
+                              <input
+                                value={draft.linkUrl}
+                                onChange={(e) =>
+                                  setDrafts((d) => ({
+                                    ...d,
+                                    [a.id]: { ...draft, linkUrl: e.target.value },
+                                  }))
+                                }
+                                className="w-full rounded-xl border border-outline-variant px-3 py-2 text-sm outline-none focus:border-primary"
+                                placeholder={t.classroom.linkPlaceholder}
+                              />
+                              <textarea
+                                value={draft.text}
+                                onChange={(e) =>
+                                  setDrafts((d) => ({
+                                    ...d,
+                                    [a.id]: { ...draft, text: e.target.value },
+                                  }))
+                                }
+                                rows={2}
+                                className="w-full rounded-xl border border-outline-variant px-3 py-2 text-sm outline-none focus:border-primary"
+                                placeholder={t.classroom.workDesc}
+                              />
+                            </div>
+                          )}
+                          {draft.kind === "file" && (
+                            <div className="space-y-2">
+                              <input
+                                value={draft.fileName}
+                                onChange={(e) =>
+                                  setDrafts((d) => ({
+                                    ...d,
+                                    [a.id]: { ...draft, fileName: e.target.value },
+                                  }))
+                                }
+                                className="w-full rounded-xl border border-outline-variant px-3 py-2 text-sm outline-none focus:border-primary"
+                                placeholder={t.classroom.fileNamePlaceholder}
+                              />
+                              <input
+                                type="file"
+                                onChange={(e) => {
+                                  const f = e.target.files?.[0];
+                                  if (!f) return;
+                                  setDrafts((d) => ({
+                                    ...d,
+                                    [a.id]: {
+                                      ...draft,
+                                      fileName: f.name,
+                                      text: draft.text || f.name,
+                                    },
+                                  }));
+                                }}
+                                className="block w-full text-sm text-on-surface-variant file:mr-3 file:rounded-full file:border-0 file:bg-primary-fixed file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-on-primary-fixed-variant"
+                              />
+                              <textarea
+                                value={draft.text}
+                                onChange={(e) =>
+                                  setDrafts((d) => ({
+                                    ...d,
+                                    [a.id]: { ...draft, text: e.target.value },
+                                  }))
+                                }
+                                rows={2}
+                                className="w-full rounded-xl border border-outline-variant px-3 py-2 text-sm outline-none focus:border-primary"
+                                placeholder={t.classroom.workDesc}
+                              />
+                            </div>
+                          )}
                           <button
                             type="button"
                             disabled={!user}
                             onClick={() => {
                               if (!user) return;
-                              submitWork(
-                                classroom.id,
-                                a.id,
-                                user,
-                                drafts[a.id] ?? mine?.text ?? "",
-                              );
+                              const d = getDraft(a.id, mine);
+                              if (d.kind === "link" && !d.linkUrl.trim()) return;
+                              if (d.kind === "file" && !d.fileName.trim()) return;
+                              if (d.kind === "text" && !d.text.trim()) return;
+                              submitWork(classroom.id, a.id, user, {
+                                kind: d.kind,
+                                text: d.text,
+                                linkUrl: d.linkUrl || undefined,
+                                fileName: d.fileName || undefined,
+                              });
                             }}
                             className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-on-primary"
                           >

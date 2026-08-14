@@ -237,6 +237,13 @@ export type Dictionary = {
     turnInRate: string;
     advise: string;
     localFirst: string;
+    submitAsText: string;
+    submitAsLink: string;
+    submitAsFile: string;
+    linkPlaceholder: string;
+    fileNamePlaceholder: string;
+    currentWork: string;
+    nearestDue: string;
   };
   dash: {
     todayQuestion: string;
@@ -256,6 +263,20 @@ export type Dictionary = {
     act2: string;
     act3: string;
     newActivity: string;
+    teachScheduleTitle: string;
+    teachScheduleSub: string;
+    addPeriod: string;
+    removePeriod: string;
+    cancelPeriod: string;
+    periodDay: string;
+    periodStart: string;
+    periodEnd: string;
+    periodSubject: string;
+    periodRoom: string;
+    periodClass: string;
+    calendarWeek: string;
+    periodsFor: string;
+    noPeriods: string;
   };
   tools: {
     tutorTitle: string;
@@ -373,13 +394,13 @@ const en: Dictionary = {
       portfolio: "Finalize Activity Portfolio Log",
     },
     timeline: {
-      t1Date: "Oct 15, 2023",
+      t1Date: "Jul 15, 2026",
       t1Title: "Portfolio Submission",
       t1Desc: "All documents uploaded.",
-      t2Date: "Nov 20, 2023",
+      t2Date: "Aug 20, 2026",
       t2Title: "Quota Registration",
       t2Desc: "Pay fees and select test center.",
-      t3Date: "Dec 05, 2023",
+      t3Date: "Sep 05, 2026",
       t3Title: "Written Exam",
       t3Desc: "Mathematics and Logic test.",
     },
@@ -543,6 +564,13 @@ const en: Dictionary = {
     turnInRate: "Turn-in rate",
     advise: "Suggested next step",
     localFirst: "Saved on this device · low data · works when the network is weak",
+    submitAsText: "Text",
+    submitAsLink: "Link",
+    submitAsFile: "File",
+    linkPlaceholder: "https://…",
+    fileNamePlaceholder: "e.g. homework.pdf (name only — low-bandwidth)",
+    currentWork: "Current work",
+    nearestDue: "Nearest deadline",
   },
   dash: {
     todayQuestion: "What should you do next today?",
@@ -563,6 +591,20 @@ const en: Dictionary = {
     act2: "English mock · tomorrow 19:00",
     act3: "Portfolio due · Aug 18 23:59",
     newActivity: "New activity",
+    teachScheduleTitle: "Teaching timetable & calendar",
+    teachScheduleSub: "Plan your week, add or remove class periods anytime.",
+    addPeriod: "Add period",
+    removePeriod: "Remove period",
+    cancelPeriod: "Cancel",
+    periodDay: "Day",
+    periodStart: "Start",
+    periodEnd: "End",
+    periodSubject: "Subject / class",
+    periodRoom: "Room",
+    periodClass: "Classroom code (optional)",
+    calendarWeek: "Week calendar",
+    periodsFor: "Periods on",
+    noPeriods: "No periods this day. Tap Add period to create one.",
   },
   tools: {
     tutorTitle: "Homework Tutor",
@@ -701,13 +743,13 @@ const th: Dictionary = {
       portfolio: "สรุปบันทึกกิจกรรมพอร์ตโฟลิโอ",
     },
     timeline: {
-      t1Date: "15 ต.ค. 2566",
+      t1Date: "15 ก.ค. 2569",
       t1Title: "ส่งพอร์ตโฟลิโอ",
       t1Desc: "อัปโหลดเอกสารครบแล้ว",
-      t2Date: "20 พ.ย. 2566",
+      t2Date: "20 ส.ค. 2569",
       t2Title: "ลงทะเบียนโควตา",
       t2Desc: "ชำระค่าธรรมเนียมและเลือกศูนย์สอบ",
-      t3Date: "5 ธ.ค. 2566",
+      t3Date: "5 ก.ย. 2569",
       t3Title: "สอบข้อเขียน",
       t3Desc: "สอบคณิตศาสตร์และตรรกะ",
     },
@@ -871,6 +913,13 @@ const th: Dictionary = {
     turnInRate: "อัตราการส่งงาน",
     advise: "แนะนำขั้นถัดไป",
     localFirst: "บันทึกในเครื่อง · กินดาต้าน้อย · ใช้ได้เมื่อเน็ตอ่อน",
+    submitAsText: "ข้อความ",
+    submitAsLink: "ลิงก์",
+    submitAsFile: "ไฟล์",
+    linkPlaceholder: "https://…",
+    fileNamePlaceholder: "เช่น homework.pdf (ใส่ชื่อไฟล์ — ประหยัดเน็ต)",
+    currentWork: "งานปัจจุบัน",
+    nearestDue: "กำหนดส่งที่ใกล้ถึง",
   },
   dash: {
     todayQuestion: "วันนี้ควรทำอะไรต่อ",
@@ -891,6 +940,20 @@ const th: Dictionary = {
     act2: "ข้อสอบจำลองอังกฤษ · พรุ่งนี้ 19:00",
     act3: "ส่งพอร์ตโฟลิโอ · 18 ส.ค. 23:59",
     newActivity: "กิจกรรมใหม่",
+    teachScheduleTitle: "ตารางสอนและปฏิทิน",
+    teachScheduleSub: "ดูตารางรายสัปดาห์ เพิ่มหรือลดคาบเรียนได้ทันที",
+    addPeriod: "เพิ่มคาบ",
+    removePeriod: "ลบคาบ",
+    cancelPeriod: "ยกเลิก",
+    periodDay: "วัน",
+    periodStart: "เริ่ม",
+    periodEnd: "สิ้นสุด",
+    periodSubject: "วิชา / ชั้นเรียน",
+    periodRoom: "ห้อง",
+    periodClass: "รหัสชั้นเรียน (ถ้ามี)",
+    calendarWeek: "ปฏิทินสัปดาห์",
+    periodsFor: "คาบของวัน",
+    noPeriods: "ยังไม่มีคาบวันนี้ กดเพิ่มคาบเพื่อสร้าง",
   },
   tools: {
     tutorTitle: "ติวการบ้าน",
