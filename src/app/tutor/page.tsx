@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState, type DragEvent, type KeyboardEvent } from "react";
+import { useRef, useState, type DragEvent, type FormEvent, type KeyboardEvent } from "react";
 import { AppShell } from "@/components/AppShell";
 import { Icon } from "@/components/Icon";
 import { PageMain } from "@/components/PageMain";
@@ -9,19 +9,29 @@ import { RequireAuth } from "@/components/RequireAuth";
 import { usePageScript, useVoice } from "@/lib/a11y";
 import { assets } from "@/lib/assets";
 import { useAutosave } from "@/lib/autosave";
+import { readAsDataUrl } from "@/lib/client-files";
 import { useI18n } from "@/lib/i18n";
 
-type DropStatus = "idle" | "analyzing";
+type Msg = { role: "user" | "assistant"; content: string };
 
 export default function TutorPage() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const { speak } = useVoice();
   const { triggerSave } = useAutosave();
   usePageScript(`${t.tools.tutorTitle}. ${t.tools.tutorBody}`, true);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
-  const [dropStatus, setDropStatus] = useState<DropStatus>("idle");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [input, setInput] = useState("");
+  const [preview, setPreview] = useState<string | null>(null);
+  const [messages, setMessages] = useState<Msg[]>([
+    {
+      role: "assistant",
+      content: `${t.studyBuddy.welcome}\n\n${t.studyBuddy.welcomeHint}`,
+    },
+  ]);
 
   const steps = [
     t.tools.tutorStep1,
@@ -35,15 +45,84 @@ export default function TutorPage() {
     e.stopPropagation();
   };
 
-  const handleFiles = (files: FileList | null) => {
-    if (!files || files.length === 0) return;
-    setDropStatus("analyzing");
+  const askTutor = async (opts: { message?: string; imageDataUrl?: string | null }) => {
+    const message = (opts.message || "").trim();
+    const imageDataUrl = opts.imageDataUrl ?? null;
+    if (!message && !imageDataUrl) return;
+
+    setBusy(true);
+    setError(null);
+
+    const userLabel = imageDataUrl
+      ? message
+        ? `${message}\n[${locale === "th" ? "แนบรูปโจทย์" : "Attached homework photo"}]`
+        : locale === "th"
+          ? "อัปโหลดรูปโจทย์การบ้านแล้ว ช่วยพาคิดทีละขั้นหน่อย"
+          : "Uploaded a homework photo — please guide me step by step."
+      : message;
+
+    const nextHistory = [...messages, { role: "user" as const, content: userLabel }];
+    setMessages(nextHistory);
+    if (message) setInput("");
     speak(t.studyBuddy.analyzing);
-    window.setTimeout(() => {
-      setDropStatus("idle");
+
+    try {
+      const res = await fetch("/api/ai/tutor", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          locale,
+          message,
+          imageDataUrl,
+          history: messages
+            .filter((m) => m.role === "user" || m.role === "assistant")
+            .slice(-8)
+            .map((m) => ({ role: m.role, content: m.content })),
+        }),
+      });
+      const data = (await res.json()) as { ok?: boolean; reply?: string; error?: string };
+      if (!res.ok || !data.ok || !data.reply) {
+        throw new Error(data.error || (locale === "th" ? "ติวไม่สำเร็จ" : "Tutor request failed"));
+      }
+      setMessages((prev) => [...prev, { role: "assistant", content: data.reply! }]);
+      speak(`${t.studyBuddy.analysisComplete}. ${data.reply.slice(0, 180)}`);
       triggerSave();
-      speak(`${t.studyBuddy.analysisComplete}. ${t.studyBuddy.problem}`);
-    }, 1800);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "AI error";
+      setError(msg);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content:
+            locale === "th"
+              ? `ตอนนี้ยังช่วยต่อไม่ได้: ${msg}`
+              : `I couldn't continue right now: ${msg}`,
+        },
+      ]);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleFiles = async (files: FileList | null) => {
+    if (!files?.[0]) return;
+    try {
+      setBusy(true);
+      setError(null);
+      const dataUrl = await readAsDataUrl(files[0]);
+      setPreview(dataUrl);
+      await askTutor({ imageDataUrl: dataUrl });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Upload failed");
+      setBusy(false);
+    }
+  };
+
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (busy) return;
+    void askTutor({ message: input, imageDataUrl: null });
   };
 
   return (
@@ -88,7 +167,7 @@ export default function TutorPage() {
                 onDrop={(e) => {
                   preventDefaults(e);
                   setDragging(false);
-                  handleFiles(e.dataTransfer.files);
+                  void handleFiles(e.dataTransfer.files);
                 }}
                 className={`cloud-shadow flex min-h-[240px] cursor-pointer flex-col items-center justify-center rounded-[24px] border-4 border-dashed bg-white p-8 transition-all ${
                   dragging
@@ -96,20 +175,29 @@ export default function TutorPage() {
                     : "border-primary-fixed hover:border-primary/50"
                 }`}
               >
-                <div
-                  className={`mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary-fixed ${
-                    dropStatus === "analyzing" ? "text-tertiary-container" : "text-primary"
-                  }`}
-                >
-                  <Icon
-                    name={dropStatus === "analyzing" ? "check_circle" : "add_photo_alternate"}
-                    className="text-[32px]"
+                {preview ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={preview}
+                    alt="Homework preview"
+                    className="mb-4 max-h-40 rounded-xl object-contain"
                   />
-                </div>
+                ) : (
+                  <div
+                    className={`mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary-fixed ${
+                      busy ? "text-tertiary-container" : "text-primary"
+                    }`}
+                  >
+                    <Icon
+                      name={busy ? "hourglass_top" : "add_photo_alternate"}
+                      className="text-[32px]"
+                    />
+                  </div>
+                )}
                 <h3 className="font-headline-md text-[20px] text-primary">
-                  {dropStatus === "analyzing" ? t.studyBuddy.analyzing : t.studyBuddy.dropTitle}
+                  {busy ? t.studyBuddy.analyzing : t.studyBuddy.dropTitle}
                 </h3>
-                <p className="font-body-md text-body-md text-on-surface-variant mt-2 max-w-sm text-center">
+                <p className="font-body-md text-body-md mt-2 max-w-sm text-center text-on-surface-variant">
                   {t.studyBuddy.dropHint}
                 </p>
                 <input
@@ -117,12 +205,18 @@ export default function TutorPage() {
                   type="file"
                   accept="image/*,.pdf"
                   className="hidden"
-                  onChange={(e) => handleFiles(e.target.files)}
+                  onChange={(e) => void handleFiles(e.target.files)}
                 />
               </div>
 
+              {error && (
+                <p className="rounded-2xl bg-error-container/40 px-4 py-3 text-sm text-on-error-container">
+                  {error}
+                </p>
+              )}
+
               <section className="cloud-shadow rounded-[24px] bg-white p-6 md:p-8">
-                <h2 className="font-headline-md text-headline-md text-on-surface mb-4">
+                <h2 className="font-headline-md text-headline-md mb-4 text-on-surface">
                   {t.studyBuddy.step1.replace(":", "")}
                 </h2>
                 <ol className="space-y-3">
@@ -131,10 +225,10 @@ export default function TutorPage() {
                       key={step}
                       className="flex items-start gap-3 rounded-2xl border border-surface-dim bg-surface-container-low px-4 py-3"
                     >
-                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-on-primary">
                         {i + 1}
                       </span>
-                      <span className="font-body-md text-body-md text-on-surface pt-1">{step}</span>
+                      <span className="font-body-md text-body-md pt-1 text-on-surface">{step}</span>
                     </li>
                   ))}
                 </ol>
@@ -142,7 +236,7 @@ export default function TutorPage() {
             </div>
 
             <aside className="cloud-shadow flex min-h-[420px] flex-col overflow-hidden rounded-[24px] border border-surface-dim bg-white">
-              <div className="flex items-center gap-3 bg-gradient-to-r from-primary-container to-primary px-5 py-4">
+              <div className="flex items-center gap-3 bg-primary px-5 py-4 text-on-primary">
                 <Image
                   src={assets.tigerGrad}
                   alt={t.studyBuddy.coachName}
@@ -152,47 +246,56 @@ export default function TutorPage() {
                   unoptimized
                 />
                 <div>
-                  <p className="font-headline-md text-[18px] font-bold text-white">
-                    {t.studyBuddy.coachName}
-                  </p>
-                  <p className="font-label-sm text-label-sm text-primary-fixed opacity-90">
-                    {t.studyBuddy.online}
+                  <p className="font-headline-md text-[18px] font-bold">{t.studyBuddy.coachName}</p>
+                  <p className="font-label-sm text-label-sm opacity-90">
+                    {busy ? t.studyBuddy.analyzing : t.studyBuddy.online}
                   </p>
                 </div>
               </div>
-              <div className="flex flex-1 flex-col gap-4 bg-surface p-5">
-                <div className="max-w-[90%] rounded-[24px] rounded-bl-sm border border-surface-dim bg-white p-4">
-                  <p className="font-body-md text-body-md text-on-surface">
-                    {t.studyBuddy.welcome}
-                  </p>
-                  <p className="font-body-md text-body-md text-on-surface-variant mt-2">
-                    {t.studyBuddy.welcomeHint}
-                  </p>
-                  <button
-                    type="button"
-                    className="mt-2 text-primary"
-                    aria-label={t.studyBuddy.audioMode}
-                    onClick={() =>
-                      speak(`${t.studyBuddy.welcome} ${t.studyBuddy.welcomeHint}`)
-                    }
+
+              <div className="flex flex-1 flex-col gap-3 overflow-y-auto bg-surface p-5">
+                {messages.map((m, i) => (
+                  <div
+                    key={`${i}-${m.role}-${m.content.slice(0, 12)}`}
+                    className={`max-w-[92%] rounded-[24px] p-4 whitespace-pre-wrap ${
+                      m.role === "user"
+                        ? "ml-auto rounded-br-sm bg-primary text-on-primary"
+                        : "rounded-bl-sm border border-surface-dim bg-white text-on-surface"
+                    }`}
                   >
-                    <Icon name="volume_up" className="text-[20px]" />
+                    <p className="font-body-md text-body-md">{m.content}</p>
+                    {m.role === "assistant" && (
+                      <button
+                        type="button"
+                        className="mt-2 text-primary"
+                        aria-label={t.studyBuddy.audioMode}
+                        onClick={() => speak(m.content)}
+                      >
+                        <Icon name="volume_up" className="text-[20px]" />
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <form onSubmit={onSubmit} className="border-t border-surface-dim p-3">
+                <div className="flex gap-2">
+                  <input
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder={t.studyBuddy.placeholder}
+                    disabled={busy}
+                    className="min-w-0 flex-1 rounded-full border border-outline-variant bg-surface-container-low px-4 py-2.5 text-sm outline-none focus:border-primary"
+                  />
+                  <button
+                    type="submit"
+                    disabled={busy || !input.trim()}
+                    className="rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-on-primary disabled:opacity-50"
+                  >
+                    <Icon name="send" />
                   </button>
                 </div>
-                <div className="max-w-[85%] self-end rounded-[24px] rounded-br-sm bg-primary p-4 text-white">
-                  <p className="font-body-md text-body-md">{t.studyBuddy.userMsg}</p>
-                </div>
-                <div className="max-w-[90%] rounded-[24px] rounded-bl-sm border border-surface-dim bg-white p-4">
-                  <p className="font-body-md text-body-md">{t.studyBuddy.coachReply1}</p>
-                  <p className="font-body-md text-body-md mt-2">{t.studyBuddy.coachReply2}</p>
-                  <div className="mt-3 rounded-xl border border-tertiary-fixed bg-tertiary-fixed/40 p-3 text-[15px]">
-                    <p className="mb-1 font-bold text-on-tertiary-fixed-variant">
-                      {t.studyBuddy.step1}
-                    </p>
-                    <p>{t.studyBuddy.step1q}</p>
-                  </div>
-                </div>
-              </div>
+              </form>
             </aside>
           </div>
         </PageMain>

@@ -7,6 +7,7 @@ import { PageMain } from "@/components/PageMain";
 import { RequireAuth } from "@/components/RequireAuth";
 import { usePageScript } from "@/lib/a11y";
 import { useAutosave } from "@/lib/autosave";
+import { fileToStudyPayload } from "@/lib/client-files";
 import { useI18n } from "@/lib/i18n";
 
 type GenKind = "summary" | "flashcards" | "mcq" | "tf";
@@ -18,7 +19,15 @@ export default function FilesPage() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
-  const [uploaded, setUploaded] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [payload, setPayload] = useState<{
+    text?: string;
+    imageDataUrl?: string;
+    fileName: string;
+  } | null>(null);
+  const [paste, setPaste] = useState("");
   const [result, setResult] = useState<{ kind: GenKind; text: string } | null>(null);
 
   const labels =
@@ -28,39 +37,22 @@ export default function FilesPage() {
           flashcards: "บัตรคำ",
           mcq: "ปรนัย",
           tf: "ถูก–ผิด",
-          sampleTitle: "ผลลัพธ์ตัวอย่าง",
-          dropHint: "ลากไฟล์มาวาง หรือคลิกเพื่อเลือก",
+          resultTitle: "ผลลัพธ์จาก AI",
+          dropHint: "ลากไฟล์มาวาง หรือคลิกเพื่อเลือก (.txt .pdf รูป)",
+          pasteLabel: "หรือวางข้อความโน้ตที่นี่",
+          needFile: "อัปโหลดไฟล์หรือวางข้อความก่อน",
+          working: "AI กำลังสร้าง…",
         }
       : {
           summary: "Short summary",
           flashcards: "Flashcards",
           mcq: "Multiple choice",
           tf: "True / False",
-          sampleTitle: "Sample result",
-          dropHint: "Drag files here or click to browse",
-        };
-
-  const samples: Record<GenKind, string> =
-    locale === "th"
-      ? {
-          summary:
-            "แคลคูลัสบทนี้เน้นเทคนิคอินทิกรัล: การแทนค่า แยกส่วน และเศษส่วนย่อย จดจำรูปแบบมาตรฐานก่อนทำข้อสอบจับเวลา",
-          flashcards:
-            "หน้า 1: ∫xⁿ dx = ? → xⁿ⁺¹/(n+1)+C\nหน้า 2: กฎลูกโซ่ใช้เมื่อ… → ฟังก์ชันประกอบ\nหน้า 3: ∫eˣ dx = ? → eˣ+C",
-          mcq:
-            "ข้อ 1) ∫ 2x dx เท่ากับข้อใด?\nA) x²+C  B) 2x²+C  C) x+C  D) 2+C\nคำใบ้: ลองอินทิกรัลพจน์ต่อพจน์",
-          tf:
-            "1. อนุพันธ์ของค่าคงที่คือ 0 — ถูก\n2. อินทิกรัลของ 1/x คือ ln|x|+C — ถูก\n3. กฎผลคูณใช้กับอินทิกรัลโดยตรง — ผิด",
-        }
-      : {
-          summary:
-            "This unit focuses on integration techniques: substitution, parts, and partial fractions. Memorize standard forms before timed practice.",
-          flashcards:
-            "Card 1: ∫xⁿ dx = ? → xⁿ⁺¹/(n+1)+C\nCard 2: Chain rule applies when… → composition of functions\nCard 3: ∫eˣ dx = ? → eˣ+C",
-          mcq:
-            "Q1) What is ∫ 2x dx?\nA) x²+C  B) 2x²+C  C) x+C  D) 2+C\nHint: integrate term by term.",
-          tf:
-            "1. Derivative of a constant is 0 — True\n2. ∫(1/x) dx = ln|x|+C — True\n3. Product rule applies directly to integrals — False",
+          resultTitle: "AI result",
+          dropHint: "Drag files here or click (.txt .pdf images)",
+          pasteLabel: "Or paste notes here",
+          needFile: "Upload a file or paste text first",
+          working: "AI is generating…",
         };
 
   const preventDefaults = (e: DragEvent) => {
@@ -68,14 +60,58 @@ export default function FilesPage() {
     e.stopPropagation();
   };
 
-  const markUploaded = () => {
-    setUploaded(true);
-    triggerSave();
+  const ingestFile = async (file: File) => {
+    setBusy(true);
+    setError(null);
+    try {
+      const next = await fileToStudyPayload(file);
+      setPayload(next);
+      setFileName(next.fileName);
+      setResult(null);
+      triggerSave();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Upload failed");
+      setPayload(null);
+      setFileName(null);
+    } finally {
+      setBusy(false);
+    }
   };
 
-  const generate = (kind: GenKind) => {
-    setResult({ kind, text: samples[kind] });
-    triggerSave();
+  const generate = async (kind: GenKind) => {
+    const text = (payload?.text || paste).trim();
+    const imageDataUrl = payload?.imageDataUrl || null;
+    if (!text && !imageDataUrl) {
+      setError(labels.needFile);
+      return;
+    }
+
+    setBusy(true);
+    setError(null);
+    setResult(null);
+    try {
+      const res = await fetch("/api/ai/study", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          locale,
+          kind,
+          text,
+          imageDataUrl,
+          fileName: payload?.fileName || fileName || "notes",
+        }),
+      });
+      const data = (await res.json()) as { ok?: boolean; text?: string; error?: string };
+      if (!res.ok || !data.ok || !data.text) {
+        throw new Error(data.error || (locale === "th" ? "สร้างไม่สำเร็จ" : "Generation failed"));
+      }
+      setResult({ kind, text: data.text });
+      triggerSave();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "AI error");
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -117,35 +153,60 @@ export default function FilesPage() {
             onDrop={(e) => {
               preventDefaults(e);
               setDragging(false);
-              if (e.dataTransfer.files?.length) markUploaded();
+              const file = e.dataTransfer.files?.[0];
+              if (file) void ingestFile(file);
             }}
-            className={`cloud-shadow mb-8 flex min-h-[200px] cursor-pointer flex-col items-center justify-center rounded-[24px] border-4 border-dashed bg-white p-8 transition-all ${
+            className={`cloud-shadow mb-6 flex min-h-[180px] cursor-pointer flex-col items-center justify-center rounded-[24px] border-4 border-dashed bg-white p-8 transition-all ${
               dragging
                 ? "border-primary bg-primary-fixed/20"
                 : "border-primary-fixed hover:border-primary/50"
             }`}
           >
             <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary-fixed text-primary">
-              <Icon name="upload_file" className="text-[28px]" />
+              <Icon name={busy ? "hourglass_top" : "upload_file"} className="text-[28px]" />
             </div>
             <p className="font-headline-md text-[20px] text-primary">{t.tools.uploadCta}</p>
-            <p className="font-body-md text-body-md text-on-surface-variant mt-2">
-              {uploaded
+            <p className="font-body-md text-body-md mt-2 text-on-surface-variant">
+              {fileName
                 ? locale === "th"
-                  ? "อัปโหลดแล้ว — พร้อมสร้างสรุป"
-                  : "File ready — generate a study set"
+                  ? `พร้อมแล้ว: ${fileName}`
+                  : `Ready: ${fileName}`
                 : labels.dropHint}
             </p>
             <input
               ref={fileInputRef}
               type="file"
-              accept=".pdf,.png,.jpg,.jpeg,.txt,.docx"
+              accept=".pdf,.png,.jpg,.jpeg,.webp,.txt,.md,.csv"
               className="hidden"
               onChange={(e) => {
-                if (e.target.files?.length) markUploaded();
+                const file = e.target.files?.[0];
+                if (file) void ingestFile(file);
               }}
             />
           </div>
+
+          <label className="mb-8 block">
+            <span className="mb-2 block text-sm font-semibold text-on-surface-variant">
+              {labels.pasteLabel}
+            </span>
+            <textarea
+              value={paste}
+              onChange={(e) => setPaste(e.target.value)}
+              rows={5}
+              className="w-full rounded-2xl border border-outline-variant bg-white p-4 text-sm outline-none focus:border-primary"
+              placeholder={
+                locale === "th"
+                  ? "วางสรุปบทเรียนหรือโน้ตของคุณ…"
+                  : "Paste your lesson notes…"
+              }
+            />
+          </label>
+
+          {error && (
+            <p className="mb-6 rounded-2xl bg-error-container/40 px-4 py-3 text-sm text-on-error-container">
+              {error}
+            </p>
+          )}
 
           <div className="mb-8 flex flex-wrap gap-3">
             {(
@@ -159,14 +220,15 @@ export default function FilesPage() {
               <button
                 key={btn.kind}
                 type="button"
-                onClick={() => generate(btn.kind)}
-                className={`inline-flex items-center gap-2 rounded-full px-5 py-3 font-label-md text-label-md transition-colors ${
+                disabled={busy}
+                onClick={() => void generate(btn.kind)}
+                className={`inline-flex items-center gap-2 rounded-full px-5 py-3 font-label-md text-label-md transition-colors disabled:opacity-60 ${
                   result?.kind === btn.kind
                     ? "bg-primary text-on-primary"
-                    : "bg-white text-primary cloud-shadow hover:bg-primary-fixed/40"
+                    : "cloud-shadow bg-white text-primary hover:bg-primary-fixed/40"
                 }`}
               >
-                <Icon name={btn.icon} /> {btn.label}
+                <Icon name={btn.icon} /> {busy ? labels.working : btn.label}
               </button>
             ))}
           </div>
@@ -178,10 +240,10 @@ export default function FilesPage() {
                   <Icon name="auto_awesome" />
                 </div>
                 <h2 className="font-headline-md text-[20px] text-on-surface">
-                  {labels.sampleTitle}
+                  {labels.resultTitle}
                 </h2>
               </div>
-              <pre className="font-body-md text-body-md text-on-surface whitespace-pre-wrap rounded-2xl bg-surface-container-low p-5">
+              <pre className="font-body-md text-body-md whitespace-pre-wrap rounded-2xl bg-surface-container-low p-5 text-on-surface">
                 {result.text}
               </pre>
             </section>
