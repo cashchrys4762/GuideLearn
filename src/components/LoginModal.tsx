@@ -113,9 +113,6 @@ export function LoginModal() {
         </div>
 
         <div className="mb-4">
-          <p className="mb-2 font-label-sm text-label-sm text-on-surface-variant">
-            {t.platform.roleHint}
-          </p>
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
