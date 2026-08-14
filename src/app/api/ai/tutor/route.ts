@@ -18,7 +18,7 @@ export async function POST(req: Request) {
         {
           ok: false,
           error:
-            "ยังไม่ได้ตั้งค่า AI — เพิ่ม AI_GATEWAY_API_KEY หรือ OPENAI_API_KEY ใน Vercel Environment Variables",
+            "ยังไม่ได้ตั้งค่า AI — เพิ่ม GEMINI_API_KEY (ฟรีจาก Google AI Studio) หรือ OPENAI_API_KEY / AI_GATEWAY_API_KEY ใน Vercel Environment Variables",
         },
         { status: 503 },
       );
