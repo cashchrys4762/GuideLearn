@@ -133,6 +133,10 @@ export type Dictionary = {
     comingSoon: string;
     lowBandwidth: string;
     lowBandwidthHint: string;
+    theme: string;
+    themeHint: string;
+    themeLight: string;
+    themeDark: string;
   };
   placeholders: {
     notebook: string;
@@ -460,6 +464,10 @@ const en: Dictionary = {
     lowBandwidth: "Low-bandwidth mode",
     lowBandwidthHint:
       "Faster loads and less data: hide decorative images, blur, and motion. Best for unstable networks.",
+    theme: "Appearance",
+    themeHint: "Choose light or dark mode for the whole app.",
+    themeLight: "Light",
+    themeDark: "Dark",
   },
   placeholders: {
     notebook: "Notebook is coming soon.",
@@ -812,6 +820,10 @@ const th: Dictionary = {
     lowBandwidth: "โหมดประหยัดเน็ต",
     lowBandwidthHint:
       "โหลดเร็ว กินดาต้าน้อย: ซ่อนภาพตกแต่ง เบลอ และแอนิเมชัน เหมาะกับสัญญาณไม่เสถียร",
+    theme: "ธีมของแอป",
+    themeHint: "เลือกโหมดสว่างหรือมืดทั้งแอป",
+    themeLight: "สว่าง",
+    themeDark: "มืด",
   },
   placeholders: {
     notebook: "สมุดโน้ตกำลังจะมาเร็วๆ นี้",

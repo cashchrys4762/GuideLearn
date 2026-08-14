@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
-import { Quicksand } from "next/font/google";
+import { Mitr, Prompt } from "next/font/google";
 import { Providers } from "@/components/Providers";
 import "./globals.css";
 
-const quicksand = Quicksand({
-  subsets: ["latin"],
+const prompt = Prompt({
+  subsets: ["thai", "latin"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-quicksand",
+  variable: "--font-prompt",
+  display: "swap",
+});
+
+const mitr = Mitr({
+  subsets: ["thai", "latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-mitr",
   display: "swap",
 });
 
@@ -26,8 +33,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="th" className={`${quicksand.variable} h-full antialiased`}>
+    <html
+      lang="th"
+      className={`${prompt.variable} ${mitr.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("guidelearn-theme");if(t==="dark"){document.documentElement.classList.add("dark");document.documentElement.style.colorScheme="dark";}}catch(e){}})();`,
+          }}
+        />
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0..1,0&display=swap"
           rel="stylesheet"

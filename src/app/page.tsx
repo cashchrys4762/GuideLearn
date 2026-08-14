@@ -91,7 +91,7 @@ export default function DashboardPage() {
     <AppShell>
       <PageMain>
         {/* Welcome banner */}
-        <section className="hero-shine fade-up relative mb-6 overflow-hidden rounded-[1.75rem] p-5 text-white shadow-[0_20px_50px_-24px_rgba(0,88,190,0.55)] sm:mb-8 sm:rounded-[2.25rem] sm:p-8 md:p-10">
+        <section className="hero-shine fade-up relative mb-6 overflow-hidden rounded-[1.75rem] p-5 text-white shadow-[0_20px_50px_-24px_rgba(3,4,48,0.55)] sm:mb-8 sm:rounded-[2.25rem] sm:p-8 md:p-10">
           <div className="relative z-10 flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-2xl">
               <p className="mb-2 inline-flex rounded-full bg-white/15 px-3 py-1 font-label-md text-label-md text-white/90 backdrop-blur-sm">
@@ -107,7 +107,7 @@ export default function DashboardPage() {
                   onClick={(e) => {
                     if (!requireAuth("/classroom")) e.preventDefault();
                   }}
-                  className="btn-cute inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 font-label-md text-label-md text-primary"
+                  className="btn-cute inline-flex items-center gap-2 rounded-full bg-secondary px-5 py-3 font-label-md text-label-md text-on-secondary shadow-[0_8px_20px_-10px_rgba(244,162,49,0.7)]"
                 >
                   <Icon name="groups" /> {t.navExtra.classroom}
                 </Link>

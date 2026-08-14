@@ -57,7 +57,7 @@ export function LoginModal() {
         role="dialog"
         aria-modal="true"
         aria-label={t.platform.loginTitle}
-        className="max-h-[92dvh] w-full max-w-md overflow-y-auto rounded-[28px] border border-white/80 bg-white p-6 shadow-[0_30px_80px_-30px_rgba(0,88,190,0.45)] low-bw:shadow-none md:p-8"
+        className="max-h-[92dvh] w-full max-w-md overflow-y-auto rounded-[28px] border border-white/80 bg-white p-6 shadow-[0_30px_80px_-30px_rgba(3,4,48,0.45)] low-bw:shadow-none md:p-8"
       >
         <div className="mb-5 flex items-start justify-between gap-3">
           {!lowBandwidth && (

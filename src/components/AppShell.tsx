@@ -9,6 +9,7 @@ import { useAutosave } from "@/lib/autosave";
 import { useBandwidth } from "@/lib/bandwidth";
 import { useI18n } from "@/lib/i18n";
 import { useNotices } from "@/lib/notices";
+import { useTheme } from "@/lib/theme";
 import { Icon } from "./Icon";
 import { LanguageToggle } from "./LanguageToggle";
 import { VoiceFab } from "./VoiceFab";
@@ -24,6 +25,7 @@ export function AppShell({ children, compact = false }: AppShellProps) {
   const { t } = useI18n();
   const { user, isLoggedIn, isTeacher, openLogin, logout, requireAuth } = useAuth();
   const { lowBandwidth } = useBandwidth();
+  const { theme, toggleTheme } = useTheme();
   const { status } = useAutosave();
   const { unread, setPanelOpen } = useNotices();
 
@@ -80,7 +82,7 @@ export function AppShell({ children, compact = false }: AppShellProps) {
         </>
       )}
 
-      <header className="sticky top-0 z-40 border-b border-white/60 bg-white/80 shadow-[0_8px_30px_-18px_rgba(0,88,190,0.25)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/70">
+      <header className="sticky top-0 z-40 border-b border-secondary/30 bg-white/85 shadow-[0_8px_30px_-18px_rgba(3,4,48,0.22)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/75 dark:border-secondary/25 dark:bg-surface-container/85 dark:shadow-[0_8px_30px_-18px_rgba(0,0,0,0.55)]">
         <div className="mx-auto flex max-w-[1440px] items-center gap-2 px-3 py-2.5 sm:gap-3 sm:px-5 sm:py-3 lg:px-6">
           <Link
             href="/"
@@ -110,11 +112,21 @@ export function AppShell({ children, compact = false }: AppShellProps) {
             <input
               type="search"
               placeholder={t.platform.searchPlaceholder}
-              className="w-full rounded-full border border-transparent bg-surface-container-low py-2.5 pr-4 pl-10 text-sm shadow-inner outline-none transition focus:border-primary/40 focus:bg-white focus:shadow-[0_0_0_4px_rgba(33,112,228,0.12)]"
+              className="w-full rounded-full border border-transparent bg-surface-container-low py-2.5 pr-4 pl-10 text-sm shadow-inner outline-none transition focus:border-primary/40 focus:bg-surface-container-lowest focus:shadow-[0_0_0_4px_rgba(33,112,228,0.12)]"
             />
           </div>
 
           <div className="ml-auto flex items-center gap-1 sm:gap-2">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={theme === "dark" ? t.settings.themeLight : t.settings.themeDark}
+              title={theme === "dark" ? t.settings.themeLight : t.settings.themeDark}
+              className="rounded-full p-2 text-primary hover:bg-surface-container"
+            >
+              <Icon name={theme === "dark" ? "light_mode" : "dark_mode"} />
+            </button>
+
             <LanguageToggle size="sm" className="hidden sm:flex" />
 
             <button
@@ -133,7 +145,7 @@ export function AppShell({ children, compact = false }: AppShellProps) {
 
             {isLoggedIn && user ? (
               <div className="flex max-w-[42vw] items-center gap-1.5 rounded-full bg-surface-container-low py-1 pr-2 pl-1 sm:max-w-none sm:gap-2 sm:pr-3">
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-[#38bdf8] text-xs font-bold text-white shadow-sm sm:h-9 sm:w-9 sm:text-sm">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-xs font-bold text-white shadow-sm sm:h-9 sm:w-9 sm:text-sm">
                   {user.initials}
                 </div>
                 <div className="hidden min-w-0 leading-tight md:block">
@@ -182,7 +194,7 @@ export function AppShell({ children, compact = false }: AppShellProps) {
       <div className="mx-auto flex max-w-[1440px]">
         <nav
           aria-label="Main"
-          className="sticky top-[105px] hidden h-[calc(100dvh-105px)] w-56 shrink-0 flex-col overflow-y-auto border-r border-white/50 bg-white/55 px-2 py-5 backdrop-blur-md lg:flex lg:w-64 lg:px-3"
+          className="sticky top-[105px] hidden h-[calc(100dvh-105px)] w-56 shrink-0 flex-col overflow-y-auto border-r border-secondary/20 bg-white/70 px-2 py-5 backdrop-blur-md lg:flex lg:w-64 lg:px-3"
         >
           <ul className="flex-1 space-y-1">
             {items.map((item) => {
@@ -194,8 +206,8 @@ export function AppShell({ children, compact = false }: AppShellProps) {
                     onClick={go(item.href, item.public)}
                     className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 transition-all ${
                       active
-                        ? "bg-primary text-white shadow-[0_10px_24px_-12px_rgba(0,88,190,0.55)]"
-                        : "text-on-surface-variant hover:bg-primary-fixed/60 hover:text-primary"
+                        ? "bg-primary text-on-primary shadow-[0_10px_24px_-12px_rgba(3,4,48,0.55)] ring-2 ring-secondary/70 ring-offset-2 ring-offset-white"
+                        : "text-on-surface-variant hover:bg-secondary-fixed/70 hover:text-primary"
                     }`}
                   >
                     <Icon name={item.icon} filled={active} />
@@ -216,7 +228,7 @@ export function AppShell({ children, compact = false }: AppShellProps) {
               {t.platform.readinessShort}
             </p>
             <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-white/80">
-              <div className="h-full w-[68%] rounded-full bg-gradient-to-r from-primary to-[#38bdf8]" />
+              <div className="h-full w-[68%] rounded-full bg-gradient-to-r from-primary to-secondary" />
             </div>
           </div>
         </nav>
@@ -230,7 +242,7 @@ export function AppShell({ children, compact = false }: AppShellProps) {
         </div>
       </div>
 
-      <nav className="safe-bottom fixed bottom-0 left-0 z-40 flex w-full justify-around border-t border-white/70 bg-white/90 px-1 py-1.5 shadow-[0_-10px_30px_-20px_rgba(0,88,190,0.35)] backdrop-blur-xl sm:px-2 sm:py-2 lg:hidden low-bw:backdrop-blur-none">
+      <nav className="safe-bottom fixed bottom-0 left-0 z-40 flex w-full justify-around border-t border-white/70 bg-white/90 px-1 py-1.5 shadow-[0_-10px_30px_-20px_rgba(3,4,48,0.35)] backdrop-blur-xl sm:px-2 sm:py-2 lg:hidden low-bw:backdrop-blur-none">
         {mobileItems.map((item) => {
           const active = isActive(item.href);
           return (

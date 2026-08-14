@@ -8,6 +8,7 @@ import { AutosaveProvider } from "@/lib/autosave";
 import { BandwidthProvider } from "@/lib/bandwidth";
 import { ClassroomProvider } from "@/lib/classroom";
 import { NoticeProvider } from "@/lib/notices";
+import { ThemeProvider } from "@/lib/theme";
 import { LoginModal } from "@/components/LoginModal";
 import { NotificationPanel } from "@/components/NotificationPanel";
 import { AICoachChat } from "@/components/AICoachChat";
@@ -15,22 +16,24 @@ import { AICoachChat } from "@/components/AICoachChat";
 export function Providers({ children }: { children: ReactNode }) {
   return (
     <I18nProvider>
-      <BandwidthProvider>
-        <AuthProvider>
-          <ClassroomProvider>
-            <AutosaveProvider>
-              <NoticeProvider>
-                <VoiceProvider>
-                  {children}
-                  <LoginModal />
-                  <NotificationPanel />
-                  <AICoachChat />
-                </VoiceProvider>
-              </NoticeProvider>
-            </AutosaveProvider>
-          </ClassroomProvider>
-        </AuthProvider>
-      </BandwidthProvider>
+      <ThemeProvider>
+        <BandwidthProvider>
+          <AuthProvider>
+            <ClassroomProvider>
+              <AutosaveProvider>
+                <NoticeProvider>
+                  <VoiceProvider>
+                    {children}
+                    <LoginModal />
+                    <NotificationPanel />
+                    <AICoachChat />
+                  </VoiceProvider>
+                </NoticeProvider>
+              </AutosaveProvider>
+            </ClassroomProvider>
+          </AuthProvider>
+        </BandwidthProvider>
+      </ThemeProvider>
     </I18nProvider>
   );
 }

@@ -187,7 +187,7 @@ function ScoreBar({ title, score, icon }: { title: string; score: number; icon: 
       <p className="mt-2 text-3xl font-black text-primary">{score}%</p>
       <div className="mt-3 h-2 overflow-hidden rounded-full bg-white">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-primary to-[#38bdf8]"
+          className="h-full rounded-full bg-gradient-to-r from-primary to-[#f4a231]"
           style={{ width: `${Math.min(100, Math.max(0, score))}%` }}
         />
       </div>

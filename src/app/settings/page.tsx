@@ -7,25 +7,62 @@ import { PageMain } from "@/components/PageMain";
 import { usePageScript, useVoice } from "@/lib/a11y";
 import { useBandwidth } from "@/lib/bandwidth";
 import { useI18n } from "@/lib/i18n";
+import { useTheme, type ThemeMode } from "@/lib/theme";
 
 export default function SettingsPage() {
   const { t, locale } = useI18n();
   const { voiceMode, setVoiceMode, speak, listening } = useVoice();
   const { lowBandwidth, setLowBandwidth } = useBandwidth();
+  const { theme, setTheme } = useTheme();
   usePageScript(
-    `${t.settings.title}. ${t.settings.subtitle}. ${t.settings.lowBandwidth}. ${t.voiceHelp}`,
+    `${t.settings.title}. ${t.settings.subtitle}. ${t.settings.theme}. ${t.settings.lowBandwidth}. ${t.voiceHelp}`,
     true,
   );
+
+  const themes: Array<{ id: ThemeMode; label: string; icon: string }> = [
+    { id: "light", label: t.settings.themeLight, icon: "light_mode" },
+    { id: "dark", label: t.settings.themeDark, icon: "dark_mode" },
+  ];
 
   return (
     <AppShell>
       <PageMain narrow>
-        <h1 className="font-headline-lg-mobile text-headline-lg-mobile md:text-headline-lg mb-2 text-primary">
+        <h1 className="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg mb-2 text-primary">
           {t.settings.title}
         </h1>
         <p className="font-body-md text-body-md text-on-surface-variant mb-10">
           {t.settings.subtitle}
         </p>
+
+        <section className="cloud-shadow mb-6 rounded-[24px] bg-white p-6 md:p-8">
+          <h2 className="font-headline-md text-[22px] text-on-surface mb-2">
+            {t.settings.theme}
+          </h2>
+          <p className="font-body-md text-body-md text-on-surface-variant mb-4">
+            {t.settings.themeHint}
+          </p>
+          <div className="grid grid-cols-2 gap-3">
+            {themes.map((opt) => {
+              const active = theme === opt.id;
+              return (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => setTheme(opt.id)}
+                  aria-pressed={active}
+                  className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-left transition ${
+                    active
+                      ? "border-primary bg-primary-fixed text-on-primary-fixed-variant"
+                      : "border-outline-variant bg-surface-container-low text-on-surface"
+                  }`}
+                >
+                  <Icon name={opt.icon} className="text-[22px]" />
+                  <span className="font-semibold">{opt.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </section>
 
         <section className="cloud-shadow mb-6 rounded-[24px] bg-white p-6 md:p-8">
           <h2 className="font-headline-md text-[22px] text-on-surface mb-2">
