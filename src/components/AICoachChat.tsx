@@ -50,15 +50,15 @@ export function AICoachChat() {
         type="button"
         onClick={openCoach}
         aria-label={t.platform.coachFab}
-        className="safe-fab fixed right-3 bottom-[9.5rem] z-50 flex items-center gap-2 rounded-full bg-gradient-to-r from-[#5b4dff] to-primary px-3 py-2.5 text-sm text-white shadow-lg sm:right-5 sm:px-4 sm:py-3 lg:right-6 lg:bottom-28"
+        className="safe-fab fixed right-3 bottom-[9.5rem] z-50 flex items-center gap-2 rounded-full bg-gradient-to-r from-primary to-[#38bdf8] px-3 py-2.5 text-sm text-white shadow-[0_12px_28px_-10px_rgba(0,88,190,0.55)] sm:right-5 sm:px-4 sm:py-3 lg:right-6 lg:bottom-28"
       >
         <Icon name="smart_toy" filled />
         <span className="hidden font-label-md text-label-md sm:inline">{t.platform.coachFab}</span>
       </button>
 
       {open && (
-        <div className="safe-fab fixed right-3 bottom-[13.5rem] z-[60] flex h-[min(420px,55dvh)] w-[min(100%-1.5rem,380px)] flex-col overflow-hidden rounded-[28px] border border-surface-dim bg-white shadow-2xl sm:right-5 lg:right-6 lg:bottom-24 lg:h-[420px]">
-          <div className="flex items-center justify-between bg-gradient-to-r from-[#5b4dff] to-primary px-4 py-3 text-white">
+        <div className="safe-fab fixed right-3 bottom-[13.5rem] z-[60] flex h-[min(420px,55dvh)] w-[min(100%-1.5rem,380px)] flex-col overflow-hidden rounded-[28px] border border-white/80 bg-white shadow-[0_24px_60px_-24px_rgba(0,88,190,0.45)] sm:right-5 lg:right-6 lg:bottom-24 lg:h-[420px]">
+          <div className="flex items-center justify-between bg-gradient-to-r from-primary to-[#38bdf8] px-4 py-3 text-white">
             <div className="flex items-center gap-2">
               <Icon name="smart_toy" filled />
               <span className="font-label-md text-label-md">{t.platform.coachTitle}</span>

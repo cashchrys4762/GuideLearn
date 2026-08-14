@@ -80,11 +80,11 @@ export function AppShell({ children, compact = false }: AppShellProps) {
         </>
       )}
 
-      <header className="sticky top-0 z-40 border-b border-surface-dim/60 bg-white/90 backdrop-blur-md supports-[backdrop-filter]:bg-white/75">
+      <header className="sticky top-0 z-40 border-b border-white/60 bg-white/80 shadow-[0_8px_30px_-18px_rgba(0,88,190,0.25)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/70">
         <div className="mx-auto flex max-w-[1440px] items-center gap-2 px-3 py-2.5 sm:gap-3 sm:px-5 sm:py-3 lg:px-6">
           <Link
             href="/"
-            className="flex min-w-0 shrink-0 items-center gap-2"
+            className="flex min-w-0 shrink-0 items-center gap-2 transition hover:opacity-90"
             aria-label={t.brand}
           >
             {lowBandwidth ? (
@@ -110,7 +110,7 @@ export function AppShell({ children, compact = false }: AppShellProps) {
             <input
               type="search"
               placeholder={t.platform.searchPlaceholder}
-              className="w-full rounded-full border border-transparent bg-surface-container-low py-2 pr-4 pl-10 text-sm outline-none focus:border-primary focus:bg-white"
+              className="w-full rounded-full border border-transparent bg-surface-container-low py-2.5 pr-4 pl-10 text-sm shadow-inner outline-none transition focus:border-primary/40 focus:bg-white focus:shadow-[0_0_0_4px_rgba(33,112,228,0.12)]"
             />
           </div>
 
@@ -133,7 +133,7 @@ export function AppShell({ children, compact = false }: AppShellProps) {
 
             {isLoggedIn && user ? (
               <div className="flex max-w-[42vw] items-center gap-1.5 rounded-full bg-surface-container-low py-1 pr-2 pl-1 sm:max-w-none sm:gap-2 sm:pr-3">
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white sm:h-9 sm:w-9 sm:text-sm">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-[#38bdf8] text-xs font-bold text-white shadow-sm sm:h-9 sm:w-9 sm:text-sm">
                   {user.initials}
                 </div>
                 <div className="hidden min-w-0 leading-tight md:block">
@@ -155,7 +155,7 @@ export function AppShell({ children, compact = false }: AppShellProps) {
               <button
                 type="button"
                 onClick={() => openLogin()}
-                className="rounded-full bg-primary px-3 py-2 text-xs font-semibold text-on-primary sm:px-4 sm:text-sm"
+                className="btn-cute rounded-full bg-primary px-3 py-2 text-xs font-semibold text-on-primary sm:px-4 sm:text-sm"
               >
                 {t.platform.login}
               </button>
@@ -182,7 +182,7 @@ export function AppShell({ children, compact = false }: AppShellProps) {
       <div className="mx-auto flex max-w-[1440px]">
         <nav
           aria-label="Main"
-          className="sticky top-[105px] hidden h-[calc(100dvh-105px)] w-56 shrink-0 flex-col overflow-y-auto border-r border-surface-dim/40 bg-surface-container-low/80 px-2 py-5 lg:flex lg:w-64 lg:px-3"
+          className="sticky top-[105px] hidden h-[calc(100dvh-105px)] w-56 shrink-0 flex-col overflow-y-auto border-r border-white/50 bg-white/55 px-2 py-5 backdrop-blur-md lg:flex lg:w-64 lg:px-3"
         >
           <ul className="flex-1 space-y-1">
             {items.map((item) => {
@@ -192,26 +192,31 @@ export function AppShell({ children, compact = false }: AppShellProps) {
                   <Link
                     href={item.href}
                     onClick={go(item.href, item.public)}
-                    className={`flex items-center gap-3 rounded-full px-3 py-2.5 transition-all ${
+                    className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 transition-all ${
                       active
-                        ? "bg-primary-container text-on-primary-container shadow-sm"
-                        : "text-on-surface-variant hover:bg-surface-container-high"
+                        ? "bg-primary text-white shadow-[0_10px_24px_-12px_rgba(0,88,190,0.55)]"
+                        : "text-on-surface-variant hover:bg-primary-fixed/60 hover:text-primary"
                     }`}
                   >
                     <Icon name={item.icon} filled={active} />
                     <span className="flex-1 text-sm font-semibold">{item.label}</span>
-                    {!item.public && <Icon name="shield" className="text-[16px] opacity-70" />}
+                    {!item.public && (
+                      <Icon
+                        name="shield"
+                        className={`text-[16px] ${active ? "opacity-80" : "opacity-50"}`}
+                      />
+                    )}
                   </Link>
                 </li>
               );
             })}
           </ul>
-          <div className="mt-4 rounded-2xl bg-gradient-to-br from-[#5b4dff]/15 to-primary-fixed p-4">
+          <div className="mt-4 rounded-2xl border border-white/70 bg-gradient-to-br from-primary-fixed via-white to-secondary-fixed/70 p-4 shadow-sm">
             <p className="text-xs font-semibold text-on-surface-variant">
               {t.platform.readinessShort}
             </p>
-            <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/70">
-              <div className="h-full w-[68%] rounded-full bg-primary" />
+            <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-white/80">
+              <div className="h-full w-[68%] rounded-full bg-gradient-to-r from-primary to-[#38bdf8]" />
             </div>
           </div>
         </nav>
@@ -225,7 +230,7 @@ export function AppShell({ children, compact = false }: AppShellProps) {
         </div>
       </div>
 
-      <nav className="safe-bottom fixed bottom-0 left-0 z-40 flex w-full justify-around border-t border-surface-dim bg-white/95 px-1 py-1.5 backdrop-blur sm:px-2 sm:py-2 lg:hidden low-bw:backdrop-blur-none">
+      <nav className="safe-bottom fixed bottom-0 left-0 z-40 flex w-full justify-around border-t border-white/70 bg-white/90 px-1 py-1.5 shadow-[0_-10px_30px_-20px_rgba(0,88,190,0.35)] backdrop-blur-xl sm:px-2 sm:py-2 lg:hidden low-bw:backdrop-blur-none">
         {mobileItems.map((item) => {
           const active = isActive(item.href);
           return (
@@ -233,8 +238,8 @@ export function AppShell({ children, compact = false }: AppShellProps) {
               key={item.href}
               href={item.href}
               onClick={go(item.href, item.public)}
-              className={`flex min-w-0 flex-1 flex-col items-center gap-0.5 px-1 py-1 ${
-                active ? "text-primary" : "text-on-surface-variant"
+              className={`flex min-w-0 flex-1 flex-col items-center gap-0.5 rounded-2xl px-1 py-1.5 transition ${
+                active ? "bg-primary-fixed/70 text-primary" : "text-on-surface-variant"
               }`}
             >
               <Icon name={item.icon} filled={active} />

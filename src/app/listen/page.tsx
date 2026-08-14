@@ -65,7 +65,7 @@ export default function ListenPage() {
           </header>
 
           <div className="cloud-shadow mx-auto flex max-w-2xl flex-col overflow-hidden rounded-[24px] border border-surface-dim bg-white">
-            <div className="flex items-center gap-3 border-b border-surface-dim bg-gradient-to-r from-[#5b4dff]/15 to-primary-fixed/40 px-5 py-4">
+            <div className="flex items-center gap-3 border-b border-surface-dim bg-gradient-to-r from-primary-fixed/70 to-secondary-fixed/50 px-5 py-4">
               <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary text-white">
                 <Icon name="hearing" />
               </div>

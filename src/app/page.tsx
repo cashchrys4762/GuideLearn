@@ -75,13 +75,13 @@ export default function DashboardPage() {
     <AppShell>
       <PageMain>
         {/* Welcome banner */}
-        <section className="relative mb-6 overflow-hidden rounded-[1.5rem] bg-gradient-to-r from-[#4f46e5] via-primary to-[#38bdf8] p-5 text-white shadow-lg sm:mb-8 sm:rounded-[2rem] sm:p-8 md:p-10">
+        <section className="hero-shine fade-up relative mb-6 overflow-hidden rounded-[1.75rem] p-5 text-white shadow-[0_20px_50px_-24px_rgba(0,88,190,0.55)] sm:mb-8 sm:rounded-[2.25rem] sm:p-8 md:p-10">
           <div className="relative z-10 flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-2xl">
-              <p className="mb-2 font-label-md text-label-md text-white/80">
+              <p className="mb-2 inline-flex rounded-full bg-white/15 px-3 py-1 font-label-md text-label-md text-white/90 backdrop-blur-sm">
                 {t.dash.todayQuestion}
               </p>
-              <h1 className="font-headline-lg-mobile text-headline-lg-mobile md:text-headline-lg mb-3">
+              <h1 className="font-headline-lg-mobile text-headline-lg-mobile md:text-headline-lg mb-3 drop-shadow-sm">
                 {t.dashboard.greeting}
               </h1>
               <p className="mb-6 max-w-xl text-white/90">{t.dash.aiTip}</p>
@@ -91,7 +91,7 @@ export default function DashboardPage() {
                   onClick={(e) => {
                     if (!requireAuth("/classroom")) e.preventDefault();
                   }}
-                  className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 font-label-md text-label-md text-primary"
+                  className="btn-cute inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 font-label-md text-label-md text-primary"
                 >
                   <Icon name="groups" /> {t.navExtra.classroom}
                 </Link>
@@ -101,7 +101,7 @@ export default function DashboardPage() {
                     onClick={(e) => {
                       if (!requireAuth("/teacher/copilot")) e.preventDefault();
                     }}
-                    className="inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/10 px-5 py-3 font-label-md text-label-md text-white"
+                    className="inline-flex items-center gap-2 rounded-full border border-white/55 bg-white/15 px-5 py-3 font-label-md text-label-md text-white backdrop-blur-sm transition hover:bg-white/25"
                   >
                     <Icon name="psychology" /> {t.navExtra.copilot}
                   </Link>
@@ -112,7 +112,7 @@ export default function DashboardPage() {
                       onClick={(e) => {
                         if (!requireAuth("/tutor")) e.preventDefault();
                       }}
-                      className="inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/10 px-5 py-3 font-label-md text-label-md text-white backdrop-blur low-bw:backdrop-blur-none"
+                      className="inline-flex items-center gap-2 rounded-full border border-white/55 bg-white/15 px-5 py-3 font-label-md text-label-md text-white backdrop-blur-sm transition hover:bg-white/25 low-bw:backdrop-blur-none"
                     >
                       <Icon name="photo_camera" /> {t.dash.ctaTutor}
                     </Link>
@@ -121,7 +121,7 @@ export default function DashboardPage() {
                       onClick={(e) => {
                         if (!requireAuth("/plan")) e.preventDefault();
                       }}
-                      className="inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/10 px-5 py-3 font-label-md text-label-md text-white"
+                      className="inline-flex items-center gap-2 rounded-full border border-white/55 bg-white/15 px-5 py-3 font-label-md text-label-md text-white transition hover:bg-white/25"
                     >
                       <Icon name="school" /> {t.dash.ctaPlan}
                     </Link>
@@ -135,10 +135,9 @@ export default function DashboardPage() {
               width={280}
               height={180}
               priority
-              className="brand-hero-img mx-auto h-28 w-auto drop-shadow-lg sm:h-36 lg:mx-0 lg:h-44"
+              className="brand-hero-img mx-auto h-28 w-auto drop-shadow-[0_18px_30px_rgba(0,0,0,0.18)] sm:h-36 lg:mx-0 lg:h-44"
             />
           </div>
-          <div className="pointer-events-none absolute -right-10 -bottom-16 h-56 w-56 rounded-full bg-white/15 blur-2xl" />
         </section>
 
         {status !== "idle" && (
@@ -179,13 +178,13 @@ export default function DashboardPage() {
               value: "68%",
               label: t.dashboard.readiness,
               sub: t.dash.readinessUp,
-              color: "border-[#5b4dff]",
-              bg: "bg-[#5b4dff]/15 text-[#5b4dff]",
+              color: "border-sky-400",
+              bg: "bg-sky-50 text-sky-600",
             },
-          ].map((s) => (
+          ].map((s, i) => (
             <div
               key={s.label}
-              className={`cloud-shadow rounded-2xl border-t-4 bg-white p-5 ${s.color}`}
+              className={`card-lift cloud-shadow fade-up fade-up-delay-${Math.min(i + 1, 3)} rounded-[1.35rem] border border-white/80 border-t-4 bg-white/95 p-5 ${s.color}`}
             >
               <div className={`mb-3 inline-flex rounded-full p-2 ${s.bg}`}>
                 <Icon name={s.icon} filled />
@@ -214,7 +213,7 @@ export default function DashboardPage() {
             <button
               type="button"
               onClick={addActivity}
-              className="inline-flex items-center gap-1 rounded-full bg-primary px-4 py-2 font-label-md text-label-md text-on-primary"
+              className="btn-cute inline-flex items-center gap-1 rounded-full bg-primary px-4 py-2 font-label-md text-label-md text-on-primary"
             >
               <Icon name="add" /> {t.platform.addActivity}
             </button>
@@ -233,7 +232,7 @@ export default function DashboardPage() {
             {activities.map((a) => (
               <div
                 key={a.id}
-                className="cloud-shadow flex items-center gap-4 rounded-2xl bg-white p-4 md:p-5"
+                className="card-lift cloud-shadow flex items-center gap-4 rounded-[1.35rem] border border-white/80 bg-white/95 p-4 md:p-5"
               >
                 <button
                   type="button"

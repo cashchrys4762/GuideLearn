@@ -68,7 +68,7 @@ export default function PortfolioPage() {
             </div>
             <div className="h-3 w-full overflow-hidden rounded-full bg-surface-container">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-primary to-[#5b4dff]"
+                className="h-full rounded-full bg-gradient-to-r from-primary to-[#38bdf8]"
                 style={{ width: `${progress}%` }}
               />
             </div>

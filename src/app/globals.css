@@ -96,8 +96,14 @@
 
 body {
   font-family: var(--font-quicksand), ui-sans-serif, system-ui, sans-serif;
-  background: #fdf9ee;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(216, 226, 255, 0.55), transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, rgba(255, 221, 184, 0.45), transparent 50%),
+    radial-gradient(700px 400px at 50% 100%, rgba(195, 236, 215, 0.35), transparent 55%),
+    #fdf9ee;
   color: #1c1c15;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 .material-symbols-outlined {
@@ -117,11 +123,17 @@ body {
 }
 
 .cloud-shadow {
-  box-shadow: 0 10px 30px -10px rgba(0, 88, 190, 0.1);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.7) inset,
+    0 10px 28px -12px rgba(0, 88, 190, 0.14),
+    0 4px 12px -6px rgba(28, 28, 21, 0.06);
 }
 
 .cloud-shadow-lg {
-  box-shadow: 0 16px 40px -8px rgba(0, 88, 190, 0.08);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.8) inset,
+    0 18px 44px -14px rgba(0, 88, 190, 0.16),
+    0 8px 18px -10px rgba(28, 28, 21, 0.08);
 }
 
 .double-stack-shadow {
@@ -130,19 +142,51 @@ body {
     0 10px 20px -10px rgba(0, 88, 190, 0.1);
 }
 
+.card-lift {
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.card-lift:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.85) inset,
+    0 18px 40px -14px rgba(0, 88, 190, 0.2),
+    0 8px 16px -8px rgba(28, 28, 21, 0.08);
+}
+
+.btn-cute {
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    filter 0.15s ease;
+  box-shadow: 0 6px 16px -8px rgba(0, 88, 190, 0.45);
+}
+
+.btn-cute:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+}
+
+.btn-cute:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 8px -4px rgba(0, 88, 190, 0.35);
+}
+
 .blob-bg-1 {
   background: radial-gradient(
-    circle at 30% 70%,
-    rgba(216, 226, 255, 0.6) 0%,
-    transparent 60%
+    circle at 28% 72%,
+    rgba(216, 226, 255, 0.7) 0%,
+    transparent 58%
   );
 }
 
 .blob-bg-2 {
   background: radial-gradient(
-    circle at 70% 30%,
-    rgba(255, 221, 184, 0.6) 0%,
-    transparent 60%
+    circle at 78% 22%,
+    rgba(255, 221, 184, 0.65) 0%,
+    transparent 55%
   );
 }
 
@@ -195,6 +239,31 @@ body {
   animation: soft-pulse 3s infinite ease-in-out;
 }
 
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fade-up 0.45s ease both;
+}
+
+.fade-up-delay-1 {
+  animation-delay: 0.06s;
+}
+.fade-up-delay-2 {
+  animation-delay: 0.12s;
+}
+.fade-up-delay-3 {
+  animation-delay: 0.18s;
+}
+
 .voice-pulse {
   animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
 }
@@ -209,6 +278,33 @@ body {
   100% {
     box-shadow: 0 0 0 0 rgba(254, 166, 25, 0);
   }
+}
+
+.hero-shine {
+  background:
+    linear-gradient(120deg, #0058be 0%, #1d7aef 42%, #38bdf8 78%, #7dd3fc 100%);
+  position: relative;
+}
+
+.hero-shine::before {
+  content: "";
+  position: absolute;
+  inset: -20% auto auto -10%;
+  width: 55%;
+  height: 70%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.28), transparent 68%);
+  pointer-events: none;
+}
+
+.hero-shine::after {
+  content: "";
+  position: absolute;
+  right: -8%;
+  bottom: -30%;
+  width: 45%;
+  height: 70%;
+  background: radial-gradient(circle, rgba(254, 166, 25, 0.28), transparent 70%);
+  pointer-events: none;
 }
 
 .sr-only {
@@ -253,12 +349,21 @@ html.low-bandwidth .blob-bg-2 {
   display: none !important;
 }
 
+html.low-bandwidth body {
+  background: #fdf9ee;
+}
+
 html.low-bandwidth .cloud-shadow,
 html.low-bandwidth .shadow-lg,
 html.low-bandwidth .shadow-2xl,
 html.low-bandwidth .shadow-md,
-html.low-bandwidth .shadow-sm {
+html.low-bandwidth .shadow-sm,
+html.low-bandwidth .card-lift:hover {
   box-shadow: none !important;
+}
+
+html.low-bandwidth .card-lift:hover {
+  transform: none !important;
 }
 
 html.low-bandwidth * {
@@ -275,6 +380,11 @@ html.low-bandwidth [class*="backdrop-blur"] {
 }
 
 html.low-bandwidth .brand-hero-img {
+  display: none !important;
+}
+
+html.low-bandwidth .hero-shine::before,
+html.low-bandwidth .hero-shine::after {
   display: none !important;
 }
 
@@ -302,4 +412,3 @@ html.low-bandwidth .low-bw\:bg-primary {
   background-image: none !important;
   background-color: var(--color-primary);
 }
-
