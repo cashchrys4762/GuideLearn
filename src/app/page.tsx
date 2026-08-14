@@ -21,12 +21,28 @@ type Activity = {
 };
 
 export default function DashboardPage() {
-  const { t } = useI18n();
-  const { isLoggedIn, isTeacher, openLogin, requireAuth } = useAuth();
+  const { t, locale } = useI18n();
+  const { user, isLoggedIn, isTeacher, openLogin, requireAuth } = useAuth();
   const { triggerSave, status } = useAutosave();
+
+  const greeting = isTeacher
+    ? user?.name
+      ? locale === "th"
+        ? `สวัสดี ${user.name}`
+        : `Hello, ${user.name}`
+      : t.dash.greetingTeacher
+    : user?.name
+      ? locale === "th"
+        ? `สวัสดี ${user.name}`
+        : `Hello, ${user.name}`
+      : t.dashboard.greeting;
+
+  const todayQuestion = isTeacher ? t.dash.todayQuestionTeacher : t.dash.todayQuestion;
+  const aiTip = isTeacher ? t.dash.aiTipTeacher : t.dash.aiTip;
+
   usePageScript(
     isTeacher
-      ? `${t.dashboard.pageSummary}. ${t.dash.teachScheduleTitle}. ${t.dash.teachScheduleSub}`
+      ? `${greeting}. ${todayQuestion}. ${aiTip}. ${t.dash.teachScheduleTitle}. ${t.dash.teachScheduleSub}`
       : t.dashboard.pageSummary,
     true,
   );
@@ -79,12 +95,12 @@ export default function DashboardPage() {
           <div className="relative z-10 flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-2xl">
               <p className="mb-2 inline-flex rounded-full bg-white/15 px-3 py-1 font-label-md text-label-md text-white/90 backdrop-blur-sm">
-                {t.dash.todayQuestion}
+                {todayQuestion}
               </p>
               <h1 className="font-headline-lg-mobile text-headline-lg-mobile md:text-headline-lg mb-3 drop-shadow-sm">
-                {t.dashboard.greeting}
+                {greeting}
               </h1>
-              <p className="mb-6 max-w-xl text-white/90">{t.dash.aiTip}</p>
+              <p className="mb-6 max-w-xl text-white/90">{aiTip}</p>
               <div className="flex flex-wrap gap-3">
                 <Link
                   href="/classroom"

@@ -248,6 +248,9 @@ export type Dictionary = {
   dash: {
     todayQuestion: string;
     aiTip: string;
+    todayQuestionTeacher: string;
+    aiTipTeacher: string;
+    greetingTeacher: string;
     ctaTutor: string;
     ctaPlan: string;
     streakBest: string;
@@ -576,6 +579,10 @@ const en: Dictionary = {
     todayQuestion: "What should you do next today?",
     aiTip:
       "Prioritize Calculus review tonight, skim your English mock outline, then polish one portfolio entry before the weekend.",
+    todayQuestionTeacher: "What should you focus on as a teacher today?",
+    aiTipTeacher:
+      "Check submissions that are due soon, open Teacher Co-pilot for students who need attention, then prep tomorrow’s periods in your timetable.",
+    greetingTeacher: "Hello, Teacher Somchai",
     ctaTutor: "Open Homework Tutor",
     ctaPlan: "View University Plan",
     streakBest: "Best streak: 12 days",
@@ -925,6 +932,10 @@ const th: Dictionary = {
     todayQuestion: "วันนี้ควรทำอะไรต่อ",
     aiTip:
       "คืนนี้น่าจะทบทวนแคลคูลัสก่อน แล้วไล่โครงข้อสอบจำลองอังกฤษ จากนั้นเก็บงานพอร์ตโฟลิโอให้อีกนิดก่อนสุดสัปดาห์",
+    todayQuestionTeacher: "วันนี้ครูควรโฟกัสอะไรต่อ",
+    aiTipTeacher:
+      "ลองเช็กงานที่ใกล้กำหนดส่งก่อน แล้วเปิด Teacher Co-pilot ดูเด็กที่ควรติดตาม จากนั้นจัดคาบสอนในตารางให้พร้อมวันพรุ่งนี้",
+    greetingTeacher: "สวัสดี ครูสมชาย",
     ctaTutor: "เปิดติวการบ้าน",
     ctaPlan: "ดูแผนสู่มหาวิทยาลัย",
     streakBest: "สถิติดีสุด: 12 วัน",
