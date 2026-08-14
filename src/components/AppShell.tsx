@@ -83,22 +83,22 @@ export function AppShell({ children, compact = false }: AppShellProps) {
       )}
 
       <header className="sticky top-0 z-40 border-b border-outline-variant/50 bg-white/85 shadow-[0_8px_30px_-18px_rgba(30,79,158,0.18)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/75 dark:border-outline-variant/60 dark:bg-surface/90 dark:shadow-[0_8px_30px_-18px_rgba(0,0,0,0.55)]">
-        <div className="mx-auto flex max-w-[1440px] items-center gap-2 px-3 py-2.5 sm:gap-3 sm:px-5 sm:py-3 lg:px-6">
+        <div className="mx-auto flex h-14 max-w-[1440px] items-center gap-2 px-3 sm:gap-3 sm:px-5 lg:h-16 lg:px-6">
           <Link
             href="/"
-            className="flex min-w-0 shrink-0 items-center gap-2 transition hover:opacity-90"
+            className="flex h-full min-w-0 shrink-0 items-center gap-2 transition hover:opacity-90"
             aria-label={t.brand}
           >
             {lowBandwidth ? (
-              <span className="text-base font-bold text-primary sm:text-lg">{t.brand}</span>
+              <span className="text-sm font-bold text-primary sm:text-base">{t.brand}</span>
             ) : (
               <Image
                 src={assets.logo}
                 alt={t.brand}
-                width={220}
-                height={140}
+                width={160}
+                height={64}
                 priority
-                className="h-10 w-auto object-contain sm:h-12 lg:h-[3.25rem] dark:brightness-110"
+                className="h-8 w-auto max-h-9 object-contain object-left sm:h-9 dark:brightness-110"
               />
             )}
             <span className="sr-only">{t.platform.tagline}</span>
@@ -107,24 +107,24 @@ export function AppShell({ children, compact = false }: AppShellProps) {
           <div className="relative mx-1 hidden min-w-0 flex-1 md:block lg:mx-6">
             <Icon
               name="search"
-              className="absolute top-1/2 left-3 -translate-y-1/2 text-on-surface-variant"
+              className="absolute top-1/2 left-3 -translate-y-1/2 text-[18px] text-on-surface-variant"
             />
             <input
               type="search"
               placeholder={t.platform.searchPlaceholder}
-              className="w-full rounded-full border border-transparent bg-surface-container-low py-2.5 pr-4 pl-10 text-sm text-on-surface shadow-inner outline-none transition placeholder:text-on-surface-variant focus:border-primary/35 focus:bg-surface-container-lowest focus:shadow-[0_0_0_4px_rgba(30,79,158,0.12)] dark:focus:bg-surface-container-high dark:focus:shadow-[0_0_0_4px_rgba(91,141,239,0.2)]"
+              className="w-full rounded-full border border-transparent bg-surface-container-low py-2 pr-4 pl-9 text-sm text-on-surface shadow-inner outline-none transition placeholder:text-on-surface-variant focus:border-primary/35 focus:bg-surface-container-lowest focus:shadow-[0_0_0_4px_rgba(30,79,158,0.12)] dark:focus:bg-surface-container-high dark:focus:shadow-[0_0_0_4px_rgba(91,141,239,0.2)]"
             />
           </div>
 
-          <div className="ml-auto flex items-center gap-1 sm:gap-2">
+          <div className="ml-auto flex items-center gap-0.5 sm:gap-1.5">
             <button
               type="button"
               onClick={toggleTheme}
               aria-label={theme === "dark" ? t.settings.themeLight : t.settings.themeDark}
               title={theme === "dark" ? t.settings.themeLight : t.settings.themeDark}
-              className="rounded-full p-2 text-primary hover:bg-surface-container"
+              className="rounded-full p-1.5 text-primary hover:bg-surface-container"
             >
-              <Icon name={theme === "dark" ? "light_mode" : "dark_mode"} />
+              <Icon name={theme === "dark" ? "light_mode" : "dark_mode"} className="text-[20px]" />
             </button>
 
             <LanguageToggle size="sm" className="hidden sm:flex" />
@@ -133,24 +133,24 @@ export function AppShell({ children, compact = false }: AppShellProps) {
               type="button"
               aria-label={t.platform.notifications}
               onClick={() => setPanelOpen(true)}
-              className="relative rounded-full p-2 hover:bg-surface-container"
+              className="relative rounded-full p-1.5 hover:bg-surface-container"
             >
-              <Icon name="notifications" className="text-primary" />
+              <Icon name="notifications" className="text-[20px] text-primary" />
               {unread > 0 && (
-                <span className="absolute top-1 right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-error px-1 text-[10px] font-bold text-white">
+                <span className="absolute top-0.5 right-0.5 flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-error px-1 text-[9px] font-bold text-white">
                   {unread}
                 </span>
               )}
             </button>
 
             {isLoggedIn && user ? (
-              <div className="flex max-w-[42vw] items-center gap-1.5 rounded-full bg-surface-container-low py-1 pr-2 pl-1 sm:max-w-none sm:gap-2 sm:pr-3">
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-container text-xs font-bold text-on-primary-container shadow-sm sm:h-9 sm:w-9 sm:text-sm">
+              <div className="flex max-w-[42vw] items-center gap-1.5 rounded-full bg-surface-container-low py-0.5 pr-2 pl-0.5 sm:max-w-none sm:gap-2 sm:pr-2.5">
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-container text-[11px] font-bold text-on-primary-container shadow-sm sm:h-8 sm:w-8 sm:text-xs">
                   {user.initials}
                 </div>
                 <div className="hidden min-w-0 leading-tight md:block">
                   <div className="truncate text-sm font-semibold text-on-surface">{user.name}</div>
-                  <div className="truncate text-[11px] text-on-surface-variant">
+                  <div className="truncate text-[10px] text-on-surface-variant">
                     {user.role === "teacher" ? t.platform.roleTeacher : t.platform.roleStudent}
                     {saveLabel ? ` · ${saveLabel}` : ""}
                   </div>
@@ -158,7 +158,7 @@ export function AppShell({ children, compact = false }: AppShellProps) {
                 <button
                   type="button"
                   onClick={logout}
-                  className="rounded-full px-2 py-1 text-[11px] font-semibold text-on-surface-variant hover:bg-surface-container-high sm:text-xs"
+                  className="rounded-full px-2 py-0.5 text-[11px] font-semibold text-on-surface-variant hover:bg-surface-container-high sm:text-xs"
                 >
                   {t.platform.logout}
                 </button>
@@ -167,7 +167,7 @@ export function AppShell({ children, compact = false }: AppShellProps) {
               <button
                 type="button"
                 onClick={() => openLogin()}
-                className="btn-cute rounded-full bg-primary px-3 py-2 text-xs font-semibold text-on-primary sm:px-4 sm:text-sm"
+                className="btn-cute rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-on-primary sm:px-4 sm:text-sm"
               >
                 {t.platform.login}
               </button>
@@ -176,16 +176,16 @@ export function AppShell({ children, compact = false }: AppShellProps) {
         </div>
 
         {/* Mobile search */}
-        <div className="border-t border-surface-dim/40 px-3 py-2 md:hidden">
+        <div className="border-t border-surface-dim/40 px-3 py-1.5 md:hidden">
           <div className="relative">
             <Icon
               name="search"
-              className="absolute top-1/2 left-3 -translate-y-1/2 text-on-surface-variant"
+              className="absolute top-1/2 left-3 -translate-y-1/2 text-[18px] text-on-surface-variant"
             />
             <input
               type="search"
               placeholder={t.platform.searchPlaceholder}
-              className="w-full rounded-full bg-surface-container-low py-2 pr-4 pl-10 text-sm outline-none focus:ring-2 focus:ring-primary"
+              className="w-full rounded-full bg-surface-container-low py-1.5 pr-4 pl-9 text-sm outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
         </div>
@@ -194,7 +194,7 @@ export function AppShell({ children, compact = false }: AppShellProps) {
       <div className="mx-auto flex max-w-[1440px]">
         <nav
           aria-label="Main"
-          className="sticky top-[105px] hidden h-[calc(100dvh-105px)] w-56 shrink-0 flex-col overflow-y-auto border-r border-outline-variant/40 bg-white/70 px-2 py-5 backdrop-blur-md lg:flex lg:w-64 lg:px-3 dark:bg-surface/80"
+          className="sticky top-14 hidden h-[calc(100dvh-3.5rem)] w-56 shrink-0 flex-col overflow-y-auto border-r border-outline-variant/40 bg-white/70 px-2 py-4 backdrop-blur-md lg:top-16 lg:flex lg:h-[calc(100dvh-4rem)] lg:w-64 lg:px-3 dark:bg-surface/80"
         >
           <ul className="flex-1 space-y-1">
             {items.map((item) => {
