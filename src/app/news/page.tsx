@@ -18,7 +18,7 @@ type NewsResponse = {
 
 export default function NewsPage() {
   const { t, locale } = useI18n();
-  usePageScript(`${t.tools.newsTitle}. ${t.tools.newsBody}`, true);
+  usePageScript(t.tools.newsTitle, true);
 
   const [data, setData] = useState<NewsResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -78,12 +78,9 @@ export default function NewsPage() {
               </span>
               {locale === "th" ? "อัปเดตเรียลไทม์" : "Live updates"}
             </div>
-            <h1 className="text-balance text-2xl font-bold text-primary sm:text-3xl lg:text-4xl">
+    <h1 className="text-balance text-2xl font-bold text-primary sm:text-3xl lg:text-4xl">
               {t.tools.newsTitle}
             </h1>
-            <p className="mt-2 max-w-2xl text-sm text-on-surface-variant sm:text-base">
-              {t.tools.newsBody}
-            </p>
             <p className="mt-2 text-xs text-on-surface-variant">
               {locale === "th" ? "อัปเดตล่าสุด" : "Last updated"}: {updatedLabel}
             </p>
