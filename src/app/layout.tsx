@@ -14,6 +14,10 @@ export const metadata: Metadata = {
   title: "GuideLearn — AI Learning Coach",
   description:
     "GuideLearn helps Thai students prepare for university with missions, study buddy coaching, Thai/English UI, and voice accessibility.",
+  icons: {
+    icon: [{ url: "/brand/guidelearn-logo.png", type: "image/png" }],
+    apple: [{ url: "/brand/guidelearn-logo.png", type: "image/png" }],
+  },
 };
 
 export default function RootLayout({

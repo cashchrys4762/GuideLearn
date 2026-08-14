@@ -65,23 +65,20 @@ export function AppShell({ children, compact = false }: AppShellProps) {
 
       <header className="sticky top-0 z-40 border-b border-surface-dim/60 bg-white/90 backdrop-blur-md supports-[backdrop-filter]:bg-white/75">
         <div className="mx-auto flex max-w-[1440px] items-center gap-2 px-3 py-2.5 sm:gap-3 sm:px-5 sm:py-3 lg:px-6">
-          <Link href="/" className="flex min-w-0 shrink-0 items-center gap-2">
+          <Link
+            href="/"
+            className="flex min-w-0 shrink-0 items-center gap-2"
+            aria-label={t.brand}
+          >
             <Image
-              src={assets.tigerHoodie}
-              alt=""
-              width={40}
-              height={40}
-              className="h-9 w-9 rounded-full object-cover sm:h-10 sm:w-10"
-              unoptimized
+              src={assets.logo}
+              alt={t.brand}
+              width={220}
+              height={140}
+              priority
+              className="h-10 w-auto object-contain sm:h-12 lg:h-[3.25rem]"
             />
-            <div className="min-w-0">
-              <div className="truncate text-base leading-tight font-bold text-primary sm:text-lg">
-                {t.brand}
-              </div>
-              <div className="hidden truncate text-[11px] text-on-surface-variant xs:block sm:block">
-                {t.platform.tagline}
-              </div>
-            </div>
+            <span className="sr-only">{t.platform.tagline}</span>
           </Link>
 
           <div className="relative mx-1 hidden min-w-0 flex-1 md:block lg:mx-6">

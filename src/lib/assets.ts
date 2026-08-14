@@ -1,4 +1,5 @@
 export const assets = {
+  logo: "/brand/guidelearn-logo.png",
   tigerHoodie:
     "https://lh3.googleusercontent.com/aida-public/AB6AXuCIH59KR6jHzl6cp6GJzD8GnLc4WtRrO6hqlHJpmYhDVxjrlnGTx-Kg3L9uAB0dkSQAtda4jmbg1kMnQusiQUGaOaez7pW9CAm9tryhpbdl4fbuIcYI9jN0DU-yDLGAp7ccWihmGEzRhgaPtS8TWcR702kIJX9rEaZpJw5T5J-wVqxbJUXH6W4PHS-dsOSebfUPnEo9Dpz3lhX0aiT01zgUpBTT5tmkrQN2VcNj5azR_tHWxgYZ6uPu_A",
   studentAvatar:

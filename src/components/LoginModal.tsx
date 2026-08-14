@@ -1,7 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { assets } from "@/lib/assets";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 import { Icon } from "./Icon";
@@ -36,15 +38,15 @@ export function LoginModal() {
         aria-label={t.platform.loginTitle}
         className="w-full max-w-md rounded-[28px] bg-white p-6 shadow-2xl md:p-8"
       >
-        <div className="mb-6 flex items-start justify-between gap-3">
-          <div>
-            <h2 className="font-headline-md text-[24px] text-primary">
-              {mode === "login" ? t.platform.loginTitle : t.platform.signUp}
-            </h2>
-            <p className="font-body-md text-body-md text-on-surface-variant mt-1">
-              {t.platform.loginHint}
-            </p>
-          </div>
+        <div className="mb-5 flex items-start justify-between gap-3">
+          <Image
+            src={assets.logo}
+            alt={t.brand}
+            width={200}
+            height={128}
+            className="h-16 w-auto object-contain sm:h-[4.5rem]"
+            priority
+          />
           <button
             type="button"
             onClick={closeLogin}
@@ -53,6 +55,14 @@ export function LoginModal() {
           >
             <Icon name="close" />
           </button>
+        </div>
+        <div className="mb-6">
+          <h2 className="font-headline-md text-[24px] text-primary">
+            {mode === "login" ? t.platform.loginTitle : t.platform.signUp}
+          </h2>
+          <p className="font-body-md text-body-md text-on-surface-variant mt-1">
+            {t.platform.loginHint}
+          </p>
         </div>
 
         <div className="mb-4 flex gap-2 rounded-full bg-surface-container p-1">

@@ -1,11 +1,13 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { Icon } from "@/components/Icon";
 import { PageMain } from "@/components/PageMain";
 import { usePageScript } from "@/lib/a11y";
+import { assets } from "@/lib/assets";
 import { useAuth } from "@/lib/auth";
 import { useAutosave } from "@/lib/autosave";
 import { useI18n } from "@/lib/i18n";
@@ -68,34 +70,44 @@ export default function DashboardPage() {
       <PageMain>
         {/* Welcome banner */}
         <section className="relative mb-6 overflow-hidden rounded-[1.5rem] bg-gradient-to-r from-[#4f46e5] via-primary to-[#38bdf8] p-5 text-white shadow-lg sm:mb-8 sm:rounded-[2rem] sm:p-8 md:p-10">
-          <div className="relative z-10 max-w-2xl">
-            <p className="mb-2 font-label-md text-label-md text-white/80">
-              {t.dash.todayQuestion}
-            </p>
-            <h1 className="font-headline-lg-mobile text-headline-lg-mobile md:text-headline-lg mb-3">
-              {t.dashboard.greeting}
-            </h1>
-            <p className="mb-6 max-w-xl text-white/90">{t.dash.aiTip}</p>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                href="/tutor"
-                onClick={(e) => {
-                  if (!requireAuth("/tutor")) e.preventDefault();
-                }}
-                className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 font-label-md text-label-md text-primary"
-              >
-                <Icon name="photo_camera" /> {t.dash.ctaTutor}
-              </Link>
-              <Link
-                href="/plan"
-                onClick={(e) => {
-                  if (!requireAuth("/plan")) e.preventDefault();
-                }}
-                className="inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/10 px-5 py-3 font-label-md text-label-md text-white backdrop-blur"
-              >
-                <Icon name="school" /> {t.dash.ctaPlan}
-              </Link>
+          <div className="relative z-10 flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div className="max-w-2xl">
+              <p className="mb-2 font-label-md text-label-md text-white/80">
+                {t.dash.todayQuestion}
+              </p>
+              <h1 className="font-headline-lg-mobile text-headline-lg-mobile md:text-headline-lg mb-3">
+                {t.dashboard.greeting}
+              </h1>
+              <p className="mb-6 max-w-xl text-white/90">{t.dash.aiTip}</p>
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/tutor"
+                  onClick={(e) => {
+                    if (!requireAuth("/tutor")) e.preventDefault();
+                  }}
+                  className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 font-label-md text-label-md text-primary"
+                >
+                  <Icon name="photo_camera" /> {t.dash.ctaTutor}
+                </Link>
+                <Link
+                  href="/plan"
+                  onClick={(e) => {
+                    if (!requireAuth("/plan")) e.preventDefault();
+                  }}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/10 px-5 py-3 font-label-md text-label-md text-white backdrop-blur"
+                >
+                  <Icon name="school" /> {t.dash.ctaPlan}
+                </Link>
+              </div>
             </div>
+            <Image
+              src={assets.logo}
+              alt={t.brand}
+              width={280}
+              height={180}
+              priority
+              className="mx-auto h-28 w-auto drop-shadow-lg sm:h-36 lg:mx-0 lg:h-44"
+            />
           </div>
           <div className="pointer-events-none absolute -right-10 -bottom-16 h-56 w-56 rounded-full bg-white/15 blur-2xl" />
         </section>
