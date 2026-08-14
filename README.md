@@ -26,6 +26,6 @@ Open [http://localhost:3000](http://localhost:3000).
 
 - GitHub: [cashchrys4762/GuideLearn](https://github.com/cashchrys4762/GuideLearn)
 - Production: [https://guide-learn-zeta.vercel.app](https://guide-learn-zeta.vercel.app)
-- Vercel project: `guide-learn` (Vercel requires lowercase project names)
+- Vercel project: `guide-learn` (Vercel requires lowercase names; linked to GitHub `GuideLearn`)
 
 Push to `main` to redeploy.

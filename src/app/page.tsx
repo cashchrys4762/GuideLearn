@@ -2,63 +2,112 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { Icon } from "@/components/Icon";
+import { usePageScript } from "@/lib/a11y";
 import { assets } from "@/lib/assets";
-
-const activities = [
-  {
-    id: "calc",
-    subject: "Mathematics",
-    subjectClass: "bg-tertiary-fixed text-on-tertiary-fixed-variant",
-    title: "Calculus: Integration Techniques Practice",
-    due: "Due Today",
-    time: "45 mins",
-  },
-  {
-    id: "essay",
-    subject: "Language",
-    subjectClass: "bg-primary-fixed text-on-primary-fixed-variant",
-    title: "English: Essay Draft Review",
-    time: "30 mins",
-  },
-  {
-    id: "portfolio",
-    subject: "Portfolio",
-    subjectClass: "bg-secondary-fixed text-on-secondary-fixed-variant",
-    title: "Update Extracurricular Activities Log",
-    time: "15 mins",
-  },
-];
+import { useI18n } from "@/lib/i18n";
 
 export default function DashboardPage() {
+  const { t, locale } = useI18n();
   const [done, setDone] = useState<Record<string, boolean>>({});
+  usePageScript(t.dashboard.pageSummary, true);
+
+  const activities = useMemo(
+    () => [
+      {
+        id: "calc",
+        subject: t.dashboard.activities.calc.subject,
+        subjectClass: "bg-tertiary-fixed text-on-tertiary-fixed-variant",
+        title: t.dashboard.activities.calc.title,
+        due: t.dashboard.dueToday,
+        time: `45 ${t.dashboard.mins}`,
+      },
+      {
+        id: "essay",
+        subject: t.dashboard.activities.essay.subject,
+        subjectClass: "bg-primary-fixed text-on-primary-fixed-variant",
+        title: t.dashboard.activities.essay.title,
+        time: `30 ${t.dashboard.mins}`,
+      },
+      {
+        id: "portfolio",
+        subject: t.dashboard.activities.portfolio.subject,
+        subjectClass: "bg-secondary-fixed text-on-secondary-fixed-variant",
+        title: t.dashboard.activities.portfolio.title,
+        time: `15 ${t.dashboard.mins}`,
+      },
+    ],
+    [t],
+  );
+
+  const stats = [
+    {
+      value: locale === "th" ? "7 วัน" : "7 Days",
+      label: t.dashboard.streak,
+      icon: "local_fire_department",
+      border: "border-secondary-container",
+      iconBg: "bg-secondary-fixed text-secondary-container",
+      hover: "from-secondary-fixed/30",
+    },
+    {
+      value: locale === "th" ? "3 ชม. 45 น." : "3h 45m",
+      label: t.dashboard.weeklyTime,
+      icon: "schedule",
+      border: "border-primary",
+      iconBg: "bg-primary-fixed text-primary",
+      hover: "from-primary-fixed/30",
+    },
+    {
+      value: locale === "th" ? "18 รายการ" : "18 Items",
+      label: t.dashboard.completed,
+      icon: "task_alt",
+      border: "border-tertiary",
+      iconBg: "bg-tertiary-fixed text-tertiary",
+      hover: "from-tertiary-fixed/30",
+    },
+    {
+      value: "68%",
+      label: t.dashboard.readiness,
+      icon: "flag",
+      border: "border-tertiary-container",
+      iconBg: "bg-tertiary-fixed-dim text-on-tertiary-fixed-variant",
+      hover: "from-tertiary-fixed-dim/30",
+    },
+  ];
 
   return (
     <AppShell>
-      <main className="mx-auto w-full max-w-[1400px] flex-1 p-container-margin pb-24 md:ml-64 md:p-10 md:pb-10">
+      <main
+        className="mx-auto w-full max-w-[1400px] flex-1 p-container-margin pb-24 md:ml-64 md:p-10 md:pb-10"
+        role="main"
+      >
         <div className="cloud-shadow relative mb-10 flex flex-col items-center gap-8 overflow-hidden rounded-[2rem] border border-white bg-gradient-to-r from-primary-fixed to-secondary-fixed p-8 md:flex-row md:items-start md:p-12">
           <div className="z-10 flex-1 text-center md:text-left">
             <h1 className="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg mb-2 text-on-primary-fixed-variant">
-              สวัสดี กุลธิดา
+              {t.dashboard.greeting}
+              {locale === "th" && (
+                <span className="mt-1 block text-2xl font-normal opacity-70">
+                  {t.dashboard.greetingEn}
+                </span>
+              )}
             </h1>
             <p className="font-body-lg text-body-lg text-on-surface-variant mb-6 max-w-lg opacity-90">
-              You&apos;re doing great! Keep up the good work. I&apos;ve prepared some tailored
-              exercises for you today to help you conquer that Calculus module.
+              {t.dashboard.bannerBody}
             </p>
             <Link
               href="/missions"
-              className="mx-auto flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-label-md text-label-md text-on-primary shadow-[0_4px_0_0_rgba(0,0,0,0.1)] transition-all duration-200 hover:translate-y-[2px] hover:shadow-[0_2px_0_0_rgba(0,0,0,0.1)] md:mx-0"
+              className="mx-auto flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-label-md text-label-md text-on-primary shadow-[0_4px_0_0_rgba(0,0,0,0.1)] transition-all duration-200 hover:translate-y-[2px] hover:shadow-[0_2px_0_0_rgba(0,0,0,0.1)] focus:ring-4 focus:ring-primary-fixed focus:outline-none md:mx-0"
             >
               <Icon name="play_arrow" filled />
-              Start Today&apos;s Mission
+              {t.dashboard.startMission}
             </Link>
           </div>
-          <div className="relative z-10 h-48 w-48 shrink-0 md:h-64 md:w-64">
+          <div className="relative z-10 h-48 w-48 shrink-0 md:h-64 md:w-64" aria-hidden>
             <Image
               src={assets.tigerBounce}
-              alt="Tiger Mascot"
+              alt=""
               fill
               className="animate-bounce object-contain drop-shadow-xl"
               style={{ animationDuration: "3s" }}
@@ -72,43 +121,15 @@ export default function DashboardPage() {
           <div className="pointer-events-none absolute bottom-[-50px] left-[-50px] h-48 w-48 rounded-full bg-primary-fixed-dim opacity-40 blur-xl" />
         </div>
 
-        <div className="mb-12 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-          {[
-            {
-              value: "7 Days",
-              label: "Streak",
-              icon: "local_fire_department",
-              border: "border-secondary-container",
-              iconBg: "bg-secondary-fixed text-secondary-container",
-              hover: "from-secondary-fixed/30",
-            },
-            {
-              value: "3h 45m",
-              label: "Weekly Time",
-              icon: "schedule",
-              border: "border-primary",
-              iconBg: "bg-primary-fixed text-primary",
-              hover: "from-primary-fixed/30",
-            },
-            {
-              value: "18 Items",
-              label: "Completed",
-              icon: "task_alt",
-              border: "border-tertiary",
-              iconBg: "bg-tertiary-fixed text-tertiary",
-              hover: "from-tertiary-fixed/30",
-            },
-            {
-              value: "68%",
-              label: "Goal Readiness",
-              icon: "flag",
-              border: "border-tertiary-container",
-              iconBg: "bg-tertiary-fixed-dim text-on-tertiary-fixed-variant",
-              hover: "from-tertiary-fixed-dim/30",
-            },
-          ].map((stat) => (
+        <div
+          aria-label={t.dashboard.readiness}
+          className="mb-12 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6"
+        >
+          {stats.map((stat) => (
             <div
               key={stat.label}
+              tabIndex={0}
+              aria-label={`${stat.value} ${stat.label}`}
               className={`cloud-shadow group relative flex flex-col items-center justify-center overflow-hidden rounded-2xl border-t-8 bg-white p-6 text-center transition-transform duration-300 hover:scale-105 ${stat.border}`}
             >
               <div
@@ -116,6 +137,7 @@ export default function DashboardPage() {
               />
               <div
                 className={`mb-3 flex h-12 w-12 items-center justify-center rounded-full ${stat.iconBg}`}
+                aria-hidden
               >
                 <Icon name={stat.icon} className="text-2xl" filled />
               </div>
@@ -127,30 +149,40 @@ export default function DashboardPage() {
           ))}
         </div>
 
-        <section>
+        <section aria-labelledby="upcoming-heading">
           <div className="mb-6 flex items-end justify-between">
             <div>
-              <h2 className="font-headline-md text-headline-md text-on-surface">Upcoming Activities</h2>
+              <h2
+                id="upcoming-heading"
+                className="font-headline-md text-headline-md text-on-surface"
+              >
+                {t.dashboard.upcoming}
+              </h2>
               <p className="font-body-md text-body-md text-on-surface-variant">
-                Stay on top of your learning goals.
+                {t.dashboard.upcomingSub}
               </p>
             </div>
-            <button className="rounded-full bg-white px-4 py-2 font-label-md text-label-md text-primary shadow-sm hover:underline">
-              View All
+            <button
+              type="button"
+              className="rounded-full bg-white px-4 py-2 font-label-md text-label-md text-primary shadow-sm hover:underline focus:ring-2 focus:ring-primary focus:outline-none"
+            >
+              {t.dashboard.viewAll}
             </button>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-4" role="list">
             {activities.map((task) => {
               const checked = !!done[task.id];
               return (
                 <div
                   key={task.id}
+                  role="listitem"
                   className="cloud-shadow group flex items-center gap-4 rounded-[24px] bg-white p-4 transition-colors duration-200 hover:bg-surface-container-low md:gap-6 md:p-6"
                 >
                   <button
                     type="button"
-                    aria-label={`Mark ${task.title} complete`}
+                    aria-pressed={checked}
+                    aria-label={task.title}
                     onClick={() => setDone((prev) => ({ ...prev, [task.id]: !prev[task.id] }))}
                     className={`flex h-10 w-10 items-center justify-center rounded-xl border-2 transition-all duration-200 focus:ring-4 focus:ring-primary-fixed focus:outline-none ${
                       checked
@@ -167,7 +199,7 @@ export default function DashboardPage() {
                       >
                         {task.subject}
                       </span>
-                      {task.due && (
+                      {"due" in task && task.due && (
                         <span className="text-error flex items-center gap-1 font-label-sm text-label-sm">
                           <Icon name="schedule" className="text-sm" /> {task.due}
                         </span>

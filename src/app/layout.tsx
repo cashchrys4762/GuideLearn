@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Quicksand } from "next/font/google";
+import { Providers } from "@/components/Providers";
 import "./globals.css";
 
 const quicksand = Quicksand({
@@ -12,7 +13,7 @@ const quicksand = Quicksand({
 export const metadata: Metadata = {
   title: "GuideLearn — AI Learning Coach",
   description:
-    "GuideLearn helps Thai students prepare for university with missions, study buddy coaching, and a friendly dashboard.",
+    "GuideLearn helps Thai students prepare for university with missions, study buddy coaching, Thai/English UI, and voice accessibility.",
 };
 
 export default function RootLayout({
@@ -21,14 +22,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${quicksand.variable} h-full antialiased`}>
+    <html lang="th" className={`${quicksand.variable} h-full antialiased`}>
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0..1,0&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-full font-sans">{children}</body>
+      <body className="min-h-full font-sans">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

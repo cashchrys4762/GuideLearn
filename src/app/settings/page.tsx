@@ -1,20 +1,115 @@
-import Link from "next/link";
+"use client";
+
 import { AppShell } from "@/components/AppShell";
+import { Icon } from "@/components/Icon";
+import { LanguageToggle } from "@/components/LanguageToggle";
+import { usePageScript, useVoice } from "@/lib/a11y";
+import { useI18n } from "@/lib/i18n";
 
 export default function SettingsPage() {
+  const { t, locale } = useI18n();
+  const { voiceMode, setVoiceMode, speak, listening } = useVoice();
+  usePageScript(
+    `${t.settings.title}. ${t.settings.subtitle}. ${t.voiceHelp}`,
+    true,
+  );
+
   return (
     <AppShell>
-      <main className="flex min-h-[60vh] flex-1 flex-col items-center justify-center px-container-margin pb-24 md:ml-64 md:pb-10">
-        <h1 className="font-headline-md text-headline-md text-primary mb-2">Settings</h1>
-        <p className="font-body-md text-body-md text-on-surface-variant mb-6 text-center">
-          This page is coming soon.
+      <main className="mx-auto w-full max-w-3xl flex-1 p-container-margin pb-28 md:ml-64 md:p-10 md:pb-10">
+        <h1 className="font-headline-lg-mobile text-headline-lg-mobile md:text-headline-lg mb-2 text-primary">
+          {t.settings.title}
+        </h1>
+        <p className="font-body-md text-body-md text-on-surface-variant mb-10">
+          {t.settings.subtitle}
         </p>
-        <Link
-          href="/"
-          className="rounded-full bg-primary px-6 py-3 font-label-md text-label-md text-on-primary shadow-sm transition-opacity hover:opacity-90"
-        >
-          Back to Dashboard
-        </Link>
+
+        <section className="cloud-shadow mb-6 rounded-[24px] bg-white p-6 md:p-8">
+          <h2 className="font-headline-md text-[22px] text-on-surface mb-2">
+            {t.settings.language}
+          </h2>
+          <p className="font-body-md text-body-md text-on-surface-variant mb-4">
+            {t.settings.languageHint}
+          </p>
+          <LanguageToggle />
+          <p className="mt-3 font-label-sm text-label-sm text-on-surface-variant">
+            {locale === "th" ? "กำลังใช้ภาษาไทย" : "Currently using English"}
+          </p>
+        </section>
+
+        <section className="cloud-shadow mb-6 rounded-[24px] bg-white p-6 md:p-8">
+          <div className="mb-4 flex items-start justify-between gap-4">
+            <div>
+              <h2 className="font-headline-md text-[22px] text-on-surface mb-2">
+                {t.settings.voiceMode}
+              </h2>
+              <p className="font-body-md text-body-md text-on-surface-variant">
+                {t.settings.voiceHint}
+              </p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={voiceMode}
+              onClick={() => setVoiceMode(!voiceMode)}
+              className={`relative h-10 w-16 shrink-0 rounded-full transition-colors ${
+                voiceMode ? "bg-primary" : "bg-surface-variant"
+              }`}
+            >
+              <span
+                className={`absolute top-1 left-1 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow transition-transform ${
+                  voiceMode ? "translate-x-6" : ""
+                }`}
+              >
+                <Icon name="mic" className="text-[18px] text-primary" />
+              </span>
+            </button>
+          </div>
+          {voiceMode && (
+            <p className="mb-4 rounded-xl bg-secondary-fixed/40 px-4 py-3 font-label-md text-label-md text-on-secondary-fixed-variant">
+              {listening ? t.a11y.listening : t.a11y.voiceOn}
+            </p>
+          )}
+          <button
+            type="button"
+            onClick={() => speak(t.settings.testVoiceText)}
+            className="flex items-center gap-2 rounded-full bg-primary px-5 py-3 font-label-md text-label-md text-on-primary"
+          >
+            <Icon name="volume_up" /> {t.settings.testVoice}
+          </button>
+        </section>
+
+        <section className="cloud-shadow rounded-[24px] bg-white p-6 md:p-8">
+          <h2 className="font-headline-md text-[22px] text-on-surface mb-3">
+            {t.settings.commandsTitle}
+          </h2>
+          <p className="font-body-md text-body-md text-on-surface-variant whitespace-pre-wrap">
+            {t.voiceHelp}
+          </p>
+          <ul className="mt-4 space-y-2 font-body-md text-body-md text-on-surface">
+            {(locale === "th"
+              ? [
+                  "แดชบอร์ด / ภารกิจ / เพื่อนเรียน / การตั้งค่า",
+                  "อ่านหน้า — อธิบายเนื้อหาทั้งหน้า",
+                  "หยุด — หยุดพูด",
+                  "ไทย / อังกฤษ — เปลี่ยนภาษา",
+                  "ช่วยเหลือ — ฟังรายการคำสั่ง",
+                ]
+              : [
+                  "dashboard / missions / study buddy / settings",
+                  "read page — describe the whole screen",
+                  "stop — stop speaking",
+                  "Thai / English — switch language",
+                  "help — list commands",
+                ]
+            ).map((line) => (
+              <li key={line} className="flex items-start gap-2">
+                <Icon name="mic" className="mt-0.5 text-primary text-[18px]" />
+                <span>{line}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
       </main>
     </AppShell>
   );
