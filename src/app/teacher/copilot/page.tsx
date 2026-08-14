@@ -45,7 +45,6 @@ export default function TeacherCopilotPage() {
                   {t.classroom.copilotTitle}
                 </h1>
                 <p className="text-on-surface-variant">{t.classroom.copilotBody}</p>
-                <p className="mt-2 text-xs text-tertiary">{t.classroom.localFirst}</p>
               </header>
 
               <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">

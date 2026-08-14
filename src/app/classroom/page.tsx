@@ -53,7 +53,6 @@ export default function ClassroomHubPage() {
               <p className="max-w-2xl text-on-surface-variant">
                 {isTeacher ? t.classroom.bodyTeacher : t.classroom.bodyStudent}
               </p>
-              <p className="mt-2 text-xs text-tertiary">{t.classroom.localFirst}</p>
             </div>
             <div className="flex flex-wrap gap-2">
               {isTeacher ? (

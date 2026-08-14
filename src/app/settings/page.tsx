@@ -110,7 +110,6 @@ export default function SettingsPage() {
               </span>
             </button>
           </div>
-          <p className="mt-3 text-xs text-tertiary">{t.classroom.localFirst}</p>
         </section>
 
         <section className="cloud-shadow rounded-[24px] bg-white p-6 md:p-8 low-bw:shadow-none">
