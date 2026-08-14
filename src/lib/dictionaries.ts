@@ -639,7 +639,7 @@ const en: Dictionary = {
     readiness: "Portfolio readiness",
     newsTitle: "Education News",
     newsBody:
-      "Curated updates on admissions, scholarships, and exam calendars relevant to Thai university applicants.",
+      "Only student-useful updates: TCAS/admissions, exam calendars, and scholarships — filtered for relevance.",
     newsItems: [
       {
         title: "TCAS Round 1 portfolio window opens next week",
@@ -992,7 +992,7 @@ const th: Dictionary = {
     readiness: "ความพร้อมของพอร์ตโฟลิโอ",
     newsTitle: "ข่าวการศึกษา",
     newsBody:
-      "อัปเดตคัดสรรเรื่องการรับเข้า ทุนการศึกษา และปฏิทินสอบที่เกี่ยวกับผู้สมัครมหาวิทยาลัยไทย",
+      "คัดเฉพาะข่าวที่เป็นประโยชน์ต่อนักเรียน เช่น TCAS/รับเข้า ปฏิทินสอบ และทุนการศึกษา",
     newsItems: [
       {
         title: "เปิดรับพอร์ตโฟลิโอ TCAS รอบ 1 สัปดาห์หน้า",

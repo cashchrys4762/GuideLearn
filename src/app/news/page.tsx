@@ -82,10 +82,7 @@ export default function NewsPage() {
               {t.tools.newsTitle}
             </h1>
             <p className="mt-2 max-w-2xl text-sm text-on-surface-variant sm:text-base">
-              {t.tools.newsBody}{" "}
-              {locale === "th"
-                ? "ดึงจาก Google News ที่รวมสื่อน่าเชื่อถือ เช่น มติชน ไทยรัฐ Bangkok Post และข่าวการศึกษา"
-                : "Pulled via Google News aggregating credible outlets."}
+              {t.tools.newsBody}
             </p>
             <p className="mt-2 text-xs text-on-surface-variant">
               {locale === "th" ? "อัปเดตล่าสุด" : "Last updated"}: {updatedLabel}
