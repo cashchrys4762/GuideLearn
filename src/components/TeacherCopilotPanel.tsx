@@ -1,8 +1,13 @@
 "use client";
 
-import { useEffect, useState, type FormEvent, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from "react";
 import { Icon } from "@/components/Icon";
 import { useAutosave } from "@/lib/autosave";
+import {
+  type Classroom,
+  type CopilotInsightStudent,
+  buildCopilotInsights,
+} from "@/lib/classroom";
 
 type SoftSkill = { name: string; score: number };
 
@@ -19,9 +24,11 @@ type CopilotStudent = {
   weaknesses: string[];
   notes: string;
   evaluated: boolean;
+  /** True when profile came from a classroom roster (not manual-only). */
+  fromClass?: boolean;
 };
 
-const STORAGE = "guidelearn-copilot-students-v1";
+const STORAGE = "guidelearn-copilot-students-v2";
 
 const emptySoftSkills: SoftSkill[] = [
   { name: "การคิดเชิงวิเคราะห์", score: 0 },
@@ -32,6 +39,64 @@ const emptySoftSkills: SoftSkill[] = [
 
 const AVATARS = ["🧑‍🎓", "👦🏻", "👧🏻", "🧒🏻", "👨🏻‍🎓", "👩🏻‍🎓"];
 
+/** Seeded assessments aligned with demo classroom roster + work status. */
+const DEMO_PROFILES: Record<string, Omit<CopilotStudent, "id" | "fromClass">> = {
+  "stu-demo-1": {
+    name: "กุลธิดา ใจดี",
+    nickname: "น้องฟ้า",
+    age: 17,
+    avatar: "👩🏻‍🎓",
+    mathScore: 82,
+    aiScore: 74,
+    softSkills: [
+      { name: "การคิดเชิงวิเคราะห์", score: 85 },
+      { name: "การทำงานร่วมกัน", score: 78 },
+      { name: "ความคิดสร้างสรรค์", score: 70 },
+      { name: "การสื่อสาร", score: 72 },
+    ],
+    strengths: ["คิดวิเคราะห์เก่ง", "ขยันทบทวน"],
+    weaknesses: ["ยังมีงานค้าง ควรติดตามกำหนดส่ง"],
+    notes: "เรียนดีโดยรวม แต่ยังมีงานที่ยังไม่ส่ง — คุยเรื่องการจัดการเวลา",
+    evaluated: true,
+  },
+  "stu-demo-2": {
+    name: "ณัฐพล สุขใจ",
+    nickname: "น้องต้น",
+    age: 17,
+    avatar: "👨🏻‍🎓",
+    mathScore: 48,
+    aiScore: 40,
+    softSkills: [
+      { name: "การคิดเชิงวิเคราะห์", score: 45 },
+      { name: "การทำงานร่วมกัน", score: 55 },
+      { name: "ความคิดสร้างสรรค์", score: 50 },
+      { name: "การสื่อสาร", score: 42 },
+    ],
+    strengths: ["พยายามถามเมื่อไม่เข้าใจ"],
+    weaknesses: ["งานค้างหลายชิ้น", "ต้องการติวเพิ่ม"],
+    notes: "ควรติดตามใกล้ชิด — นัดคุยและช่วยวางแผนส่งงาน",
+    evaluated: true,
+  },
+  "stu-demo-3": {
+    name: "พิมพ์ใจ รุ่งเรือง",
+    nickname: "น้องพิมพ์",
+    age: 17,
+    avatar: "👧🏻",
+    mathScore: 94,
+    aiScore: 88,
+    softSkills: [
+      { name: "การคิดเชิงวิเคราะห์", score: 92 },
+      { name: "การทำงานร่วมกัน", score: 86 },
+      { name: "ความคิดสร้างสรรค์", score: 80 },
+      { name: "การสื่อสาร", score: 84 },
+    ],
+    strengths: ["ส่งงานครบ", "คะแนนสูง", "อธิบายขั้นตอนชัด"],
+    weaknesses: ["อาจท้าทายด้วยงานเสริมเพิ่มเติม"],
+    notes: "ไปได้ดี — พิจารณางานท้าทายหรือให้ช่วยเพื่อนที่ต้องการติดตาม",
+    evaluated: true,
+  },
+};
+
 function splitList(value: string) {
   return value
     .split(",")
@@ -39,7 +104,7 @@ function splitList(value: string) {
     .filter(Boolean);
 }
 
-function loadStudents(): CopilotStudent[] {
+function loadStored(): CopilotStudent[] {
   try {
     const raw = window.localStorage.getItem(STORAGE);
     if (!raw) return [];
@@ -48,6 +113,68 @@ function loadStudents(): CopilotStudent[] {
   } catch {
     return [];
   }
+}
+
+function stubFromRoster(id: string, name: string): CopilotStudent {
+  const demo = DEMO_PROFILES[id];
+  if (demo) return { id, ...demo, fromClass: true };
+  return {
+    id,
+    name,
+    nickname: "-",
+    age: 15,
+    avatar: AVATARS[0]!,
+    mathScore: 0,
+    aiScore: 0,
+    softSkills: emptySoftSkills.map((s) => ({ ...s, score: 0 })),
+    strengths: [],
+    weaknesses: [],
+    notes: "ยังไม่มีผลการประเมิน",
+    evaluated: false,
+    fromClass: true,
+  };
+}
+
+/** Merge classroom roster with saved assessments so IDs/names stay in sync. */
+function mergeWithRoster(stored: CopilotStudent[], classes: Classroom[]): CopilotStudent[] {
+  const byId = new Map(stored.map((s) => [s.id, s]));
+  const rosterIds = new Set<string>();
+  const merged: CopilotStudent[] = [];
+
+  for (const cls of classes) {
+    for (const m of cls.members) {
+      if (rosterIds.has(m.id)) continue;
+      rosterIds.add(m.id);
+      const existing = byId.get(m.id);
+      const seed = stubFromRoster(m.id, m.name);
+      if (existing) {
+        const keepDemoScores =
+          !existing.evaluated && DEMO_PROFILES[m.id] ? DEMO_PROFILES[m.id]! : null;
+        merged.push({
+          ...seed,
+          ...existing,
+          ...(keepDemoScores ?? {}),
+          id: m.id,
+          name: existing.evaluated
+            ? existing.name?.trim() || m.name
+            : seed.name || m.name,
+          fromClass: true,
+          evaluated: existing.evaluated || Boolean(keepDemoScores?.evaluated),
+        });
+        byId.delete(m.id);
+      } else {
+        merged.push(seed);
+      }
+    }
+  }
+
+  for (const extra of byId.values()) {
+    if (!rosterIds.has(extra.id)) {
+      merged.push({ ...extra, fromClass: false });
+    }
+  }
+
+  return merged;
 }
 
 function ScoreBar({ title, score, icon }: { title: string; score: number; icon: string }) {
@@ -75,11 +202,17 @@ function FieldLabel({ children }: { children: ReactNode }) {
 const inputClass =
   "w-full rounded-xl border border-outline-variant bg-white px-3 py-2.5 text-sm text-on-surface outline-none transition focus:border-primary focus:shadow-[0_0_0_3px_rgba(33,112,228,0.12)]";
 
-export function TeacherCopilotPanel() {
+type Props = {
+  classes: Classroom[];
+  focusStudentId?: string | null;
+  onFocusHandled?: () => void;
+};
+
+export function TeacherCopilotPanel({ classes, focusStudentId, onFocusHandled }: Props) {
   const { triggerSave } = useAutosave();
   const [students, setStudents] = useState<CopilotStudent[]>([]);
   const [ready, setReady] = useState(false);
-  const [selected, setSelected] = useState<CopilotStudent | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [editing, setEditing] = useState<CopilotStudent | null>(null);
 
@@ -94,10 +227,36 @@ export function TeacherCopilotPanel() {
   const [formNotes, setFormNotes] = useState("");
   const [formSoftSkills, setFormSoftSkills] = useState<SoftSkill[]>(emptySoftSkills);
 
+  const insightsById = useMemo(() => {
+    const map = new Map<string, CopilotInsightStudent>();
+    for (const s of buildCopilotInsights(classes).students) map.set(s.id, s);
+    return map;
+  }, [classes]);
+
   useEffect(() => {
-    setStudents(loadStudents());
+    const merged = mergeWithRoster(loadStored(), classes);
+    setStudents(merged);
+    try {
+      window.localStorage.setItem(STORAGE, JSON.stringify(merged));
+    } catch {
+      /* ignore */
+    }
     setReady(true);
-  }, []);
+  }, [classes]);
+
+  useEffect(() => {
+    if (!focusStudentId || !ready) return;
+    if (students.some((s) => s.id === focusStudentId)) {
+      setSelectedId(focusStudentId);
+      setIsAdding(false);
+      setEditing(null);
+      onFocusHandled?.();
+      document.getElementById("copilot-assess")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [focusStudentId, ready, students, onFocusHandled]);
+
+  const selected = students.find((s) => s.id === selectedId) ?? null;
+  const selectedInsight = selected ? insightsById.get(selected.id) : undefined;
 
   const persist = (next: CopilotStudent[]) => {
     setStudents(next);
@@ -125,7 +284,7 @@ export function TeacherCopilotPanel() {
   const openAddForm = () => {
     resetForm();
     setEditing(null);
-    setSelected(null);
+    setSelectedId(null);
     setIsAdding(true);
   };
 
@@ -141,7 +300,7 @@ export function TeacherCopilotPanel() {
     setFormWeakness(student.weaknesses.join(", "));
     setFormNotes(student.notes === "ยังไม่มีผลการประเมิน" ? "" : student.notes);
     setFormSoftSkills(student.softSkills.map((s) => ({ ...s })));
-    setSelected(null);
+    setSelectedId(null);
     setIsAdding(true);
   };
 
@@ -161,6 +320,7 @@ export function TeacherCopilotPanel() {
       weaknesses: [],
       notes: "ยังไม่มีผลการประเมิน",
       evaluated: false,
+      fromClass: false,
     };
     persist([student, ...students]);
     setIsAdding(false);
@@ -189,16 +349,23 @@ export function TeacherCopilotPanel() {
     persist(students.map((s) => (s.id === editing.id ? updated : s)));
     setEditing(null);
     setIsAdding(false);
+    setSelectedId(updated.id);
     resetForm();
   };
 
   const handleDelete = (student: CopilotStudent) => {
+    if (student.fromClass) {
+      window.alert(
+        "นักเรียนคนนี้อยู่ในชั้นเรียนแล้ว — ไม่สามารถลบจาก Co-pilot ได้ จัดการสมาชิกที่หน้าชั้นเรียน",
+      );
+      return;
+    }
     const ok = window.confirm(
       `ต้องการลบข้อมูลของ "${student.name}" ใช่หรือไม่?\nข้อมูลและผลการประเมินจะถูกลบ`,
     );
     if (!ok) return;
     persist(students.filter((s) => s.id !== student.id));
-    setSelected(null);
+    setSelectedId(null);
   };
 
   const updateSoftSkill = (index: number, score: number) => {
@@ -400,7 +567,7 @@ export function TeacherCopilotPanel() {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" id="copilot-assess">
       <section className="cloud-shadow rounded-[24px] border border-white/80 bg-gradient-to-r from-secondary-fixed/50 via-white to-primary-fixed/50 p-5 sm:p-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
@@ -412,7 +579,7 @@ export function TeacherCopilotPanel() {
                 วิเคราะห์ศักยภาพนักเรียน
               </h2>
               <p className="text-xs text-on-surface-variant sm:text-sm">
-                เพิ่มนักเรียน ประเมินทักษะ และดูจุดเด่น/จุดที่ควรพัฒนา
+                รายชื่อผูกกับชั้นเรียน · ประเมินทักษะ และดูจุดเด่น/จุดที่ควรพัฒนา
               </p>
             </div>
           </div>
@@ -450,22 +617,42 @@ export function TeacherCopilotPanel() {
               >
                 แก้ไข
               </button>
+              {!selected.fromClass && (
+                <button
+                  type="button"
+                  onClick={() => handleDelete(selected)}
+                  className="rounded-full bg-error-container px-4 py-2 text-sm font-bold text-on-error-container"
+                >
+                  ลบ
+                </button>
+              )}
               <button
                 type="button"
-                onClick={() => handleDelete(selected)}
-                className="rounded-full bg-error-container px-4 py-2 text-sm font-bold text-on-error-container"
-              >
-                ลบ
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelected(null)}
+                onClick={() => setSelectedId(null)}
                 className="rounded-full bg-surface-container px-4 py-2 text-sm font-bold"
               >
                 กลับ
               </button>
             </div>
           </div>
+
+          {selectedInsight && (
+            <div
+              className={`rounded-2xl px-4 py-3 text-sm ${
+                selectedInsight.missing > 0 || selectedInsight.progress < 50
+                  ? "bg-error-container/40"
+                  : selectedInsight.progress >= 75
+                    ? "bg-tertiary-fixed/50"
+                    : "bg-surface-container-low"
+              }`}
+            >
+              <p className="font-bold text-on-surface">สถานะจากชั้นเรียน</p>
+              <p className="mt-1 text-xs text-on-surface-variant">
+                {selectedInsight.classes.join(", ")} · ส่งงานแล้ว {selectedInsight.progress}% ·
+                งานค้าง {selectedInsight.missing} · ส่งแล้ว {selectedInsight.turnedIn}
+              </p>
+            </div>
+          )}
 
           {!selected.evaluated ? (
             <div className="rounded-2xl border border-primary/20 bg-primary-fixed/30 p-6 text-center">
@@ -545,7 +732,7 @@ export function TeacherCopilotPanel() {
           </div>
           <h3 className="text-xl font-extrabold text-on-surface">ยังไม่มีข้อมูลนักเรียน</h3>
           <p className="mt-2 text-sm text-on-surface-variant">
-            เริ่มต้นโดยกด “เพิ่มนักเรียน” เพื่อบันทึกและประเมินศักยภาพ
+            สร้างชั้นเรียนแล้วให้นักเรียนเข้า หรือกด “เพิ่มนักเรียน” เพื่อบันทึกและประเมินศักยภาพ
           </p>
           <button
             type="button"
@@ -557,43 +744,52 @@ export function TeacherCopilotPanel() {
         </section>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {students.map((student) => (
-            <button
-              key={student.id}
-              type="button"
-              onClick={() => setSelected(student)}
-              className="card-lift cloud-shadow rounded-[22px] border border-white/80 bg-white p-5 text-left"
-            >
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-surface-container-low text-3xl">
-                  {student.avatar}
-                </div>
-                <div className="min-w-0">
-                  <h3 className="truncate font-extrabold text-on-surface">{student.name}</h3>
-                  <p className="text-xs text-on-surface-variant">{student.nickname}</p>
-                </div>
-              </div>
-              <div className="mt-4 border-t border-surface-dim pt-3">
-                {!student.evaluated ? (
-                  <span className="inline-flex rounded-full bg-primary-fixed px-3 py-1 text-xs font-bold text-on-primary-fixed-variant">
-                    ยังไม่ประเมิน
-                  </span>
-                ) : (
-                  <div className="grid grid-cols-2 gap-3 text-xs">
-                    <div>
-                      <p className="text-on-surface-variant">วิชาการ</p>
-                      <p className="font-extrabold text-primary">{student.mathScore}%</p>
-                    </div>
-                    <div>
-                      <p className="text-on-surface-variant">AI</p>
-                      <p className="font-extrabold text-secondary">{student.aiScore}%</p>
-                    </div>
+          {students.map((student) => {
+            const insight = insightsById.get(student.id);
+            return (
+              <button
+                key={student.id}
+                type="button"
+                onClick={() => setSelectedId(student.id)}
+                className="card-lift cloud-shadow rounded-[22px] border border-white/80 bg-white p-5 text-left"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-surface-container-low text-3xl">
+                    {student.avatar}
                   </div>
+                  <div className="min-w-0">
+                    <h3 className="truncate font-extrabold text-on-surface">{student.name}</h3>
+                    <p className="text-xs text-on-surface-variant">{student.nickname}</p>
+                  </div>
+                </div>
+                {insight && (
+                  <p className="mt-3 text-[11px] text-on-surface-variant">
+                    {insight.classes[0] ?? "ชั้นเรียน"} · ส่งงาน {insight.progress}%
+                    {insight.missing > 0 ? ` · ค้าง ${insight.missing}` : ""}
+                  </p>
                 )}
-              </div>
-              <p className="mt-4 text-xs font-bold text-primary">ดูประวัติและรายละเอียด →</p>
-            </button>
-          ))}
+                <div className="mt-3 border-t border-surface-dim pt-3">
+                  {!student.evaluated ? (
+                    <span className="inline-flex rounded-full bg-primary-fixed px-3 py-1 text-xs font-bold text-on-primary-fixed-variant">
+                      ยังไม่ประเมิน
+                    </span>
+                  ) : (
+                    <div className="grid grid-cols-2 gap-3 text-xs">
+                      <div>
+                        <p className="text-on-surface-variant">วิชาการ</p>
+                        <p className="font-extrabold text-primary">{student.mathScore}%</p>
+                      </div>
+                      <div>
+                        <p className="text-on-surface-variant">AI</p>
+                        <p className="font-extrabold text-secondary">{student.aiScore}%</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <p className="mt-4 text-xs font-bold text-primary">ดูประวัติและรายละเอียด →</p>
+              </button>
+            );
+          })}
         </div>
       )}
     </div>

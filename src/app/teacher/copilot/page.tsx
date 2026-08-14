@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { Icon } from "@/components/Icon";
 import { PageMain } from "@/components/PageMain";
@@ -16,12 +16,14 @@ export default function TeacherCopilotPage() {
   const { t, locale } = useI18n();
   const { user, isTeacher } = useAuth();
   const { myTeaching } = useClassrooms();
+  const [focusStudentId, setFocusStudentId] = useState<string | null>(null);
 
   const classes = useMemo(
     () => (user ? myTeaching(user.id) : []),
     [user, myTeaching],
   );
   const insights = useMemo(() => buildCopilotInsights(classes), [classes]);
+  const clearFocus = useCallback(() => setFocusStudentId(null), []);
 
   usePageScript(
     `${t.classroom.copilotTitle}. ${locale === "th" ? insights.summaryTh : insights.summaryEn}`,
@@ -81,14 +83,17 @@ export default function TeacherCopilotPage() {
                     ) : (
                       <ul className="space-y-3">
                         {insights.atRisk.slice(0, 5).map((s) => (
-                          <li
-                            key={s.id}
-                            className="rounded-xl bg-error-container/40 px-3 py-3 text-sm"
-                          >
-                            <div className="font-semibold">{s.name}</div>
-                            <div className="text-xs text-on-surface-variant">
-                              {s.classes.join(", ")} · progress {s.progress}% · missing {s.missing}
-                            </div>
+                          <li key={s.id}>
+                            <button
+                              type="button"
+                              onClick={() => setFocusStudentId(s.id)}
+                              className="w-full rounded-xl bg-error-container/40 px-3 py-3 text-left text-sm transition hover:bg-error-container/60"
+                            >
+                              <div className="font-semibold">{s.name}</div>
+                              <div className="text-xs text-on-surface-variant">
+                                {s.classes.join(", ")} · ส่งงาน {s.progress}% · ค้าง {s.missing}
+                              </div>
+                            </button>
                           </li>
                         ))}
                       </ul>
@@ -103,14 +108,17 @@ export default function TeacherCopilotPage() {
                     ) : (
                       <ul className="space-y-3">
                         {insights.thriving.slice(0, 5).map((s) => (
-                          <li
-                            key={s.id}
-                            className="rounded-xl bg-tertiary-fixed/50 px-3 py-3 text-sm"
-                          >
-                            <div className="font-semibold">{s.name}</div>
-                            <div className="text-xs text-on-surface-variant">
-                              {s.classes.join(", ")} · progress {s.progress}%
-                            </div>
+                          <li key={s.id}>
+                            <button
+                              type="button"
+                              onClick={() => setFocusStudentId(s.id)}
+                              className="w-full rounded-xl bg-tertiary-fixed/50 px-3 py-3 text-left text-sm transition hover:bg-tertiary-fixed/80"
+                            >
+                              <div className="font-semibold">{s.name}</div>
+                              <div className="text-xs text-on-surface-variant">
+                                {s.classes.join(", ")} · ส่งงาน {s.progress}%
+                              </div>
+                            </button>
                           </li>
                         ))}
                       </ul>
@@ -119,7 +127,11 @@ export default function TeacherCopilotPage() {
                 </div>
               )}
 
-              <TeacherCopilotPanel />
+              <TeacherCopilotPanel
+                classes={classes}
+                focusStudentId={focusStudentId}
+                onFocusHandled={clearFocus}
+              />
 
               <div className="mt-8">
                 <Link href="/classroom" className="text-sm font-semibold text-primary underline">

@@ -516,7 +516,7 @@ const en: Dictionary = {
   },
   classroom: {
     title: "Classroom",
-    bodyStudent: "Join with a class code or link from your teacher—works offline-first on this device.",
+    bodyStudent: "Join with a class code or link from your teacher.",
     bodyTeacher: "Create classes, share a code/link, assign work, and review each student’s submissions.",
     create: "Create class",
     join: "Join class",
@@ -869,7 +869,7 @@ const th: Dictionary = {
   },
   classroom: {
     title: "ห้องเรียน",
-    bodyStudent: "เข้าชั้นด้วยรหัสหรือลิงก์จากครู — ข้อมูลเก็บในเครื่อง ใช้ได้แม้เน็ตไม่เสถียร",
+    bodyStudent: "เข้าชั้นด้วยรหัสหรือลิงก์จากครู",
     bodyTeacher: "สร้างชั้นเรียน แชร์รหัส/ลิงก์ สั่งงาน ดูงานนักเรียนแต่ละคน และแนบไฟล์หรือลิงก์",
     create: "สร้างชั้นเรียน",
     join: "เข้าร่วมชั้นเรียน",

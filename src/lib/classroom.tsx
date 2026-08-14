@@ -123,6 +123,32 @@ function makeCode() {
   return out;
 }
 
+/** Keep demo roster names consistent across stored classroom + Co-pilot data. */
+const DEMO_STUDENT_NAMES: Record<string, string> = {
+  "stu-demo-1": "กุลธิดา ใจดี",
+  "stu-demo-2": "ณัฐพล สุขใจ",
+  "stu-demo-3": "พิมพ์ใจ รุ่งเรือง",
+};
+
+function normalizeClasses(classes: Classroom[]): Classroom[] {
+  return classes.map((c) => ({
+    ...c,
+    members: c.members.map((m) => ({
+      ...m,
+      name: DEMO_STUDENT_NAMES[m.id] ?? m.name,
+      progress: Math.min(100, Math.max(0, Number(m.progress) || 0)),
+    })),
+    assignments: c.assignments.map((a) => ({
+      ...a,
+      submissions: a.submissions.map((s) => ({
+        ...s,
+        studentName: DEMO_STUDENT_NAMES[s.studentId] ?? s.studentName,
+        kind: s.kind ?? "text",
+      })),
+    })),
+  }));
+}
+
 function seedClasses(): Classroom[] {
   const now = new Date().toISOString();
   const dueSoon = new Date(Date.now() + 5 * 86400000).toISOString();
@@ -156,21 +182,21 @@ function seedClasses(): Classroom[] {
       members: [
         {
           id: "stu-demo-1",
-          name: "กุลธิดา",
+          name: "กุลธิดา ใจดี",
           email: "kulthida@guidelearn.app",
           joinedAt: now,
           progress: 78,
         },
         {
           id: "stu-demo-2",
-          name: "ณัฐพล",
+          name: "ณัฐพล สุขใจ",
           email: "nattapon@guidelearn.app",
           joinedAt: now,
           progress: 42,
         },
         {
           id: "stu-demo-3",
-          name: "พิมพ์ใจ",
+          name: "พิมพ์ใจ รุ่งเรือง",
           email: "pimjai@guidelearn.app",
           joinedAt: now,
           progress: 91,
@@ -187,7 +213,7 @@ function seedClasses(): Classroom[] {
           submissions: [
             {
               studentId: "stu-demo-1",
-              studentName: "กุลธิดา",
+              studentName: "กุลธิดา ใจดี",
               status: "turned_in",
               kind: "text",
               text: "ส่งครบ 10 ข้อแล้ว ขอ feedback จุดที่ใช้สูตรผิดได้ไหมครับ/ค่ะ",
@@ -195,14 +221,14 @@ function seedClasses(): Classroom[] {
             },
             {
               studentId: "stu-demo-2",
-              studentName: "ณัฐพล",
+              studentName: "ณัฐพล สุขใจ",
               status: "assigned",
               kind: "text",
               text: "",
             },
             {
               studentId: "stu-demo-3",
-              studentName: "พิมพ์ใจ",
+              studentName: "พิมพ์ใจ รุ่งเรือง",
               status: "returned",
               kind: "file",
               text: "ส่งครบแล้ว",
@@ -223,21 +249,21 @@ function seedClasses(): Classroom[] {
           submissions: [
             {
               studentId: "stu-demo-1",
-              studentName: "กุลธิดา",
+              studentName: "กุลธิดา ใจดี",
               status: "assigned",
               kind: "text",
               text: "",
             },
             {
               studentId: "stu-demo-2",
-              studentName: "ณัฐพล",
+              studentName: "ณัฐพล สุขใจ",
               status: "assigned",
               kind: "text",
               text: "",
             },
             {
               studentId: "stu-demo-3",
-              studentName: "พิมพ์ใจ",
+              studentName: "พิมพ์ใจ รุ่งเรือง",
               status: "turned_in",
               kind: "link",
               text: "สรุปเรียบร้อย",
@@ -260,19 +286,10 @@ export function ClassroomProvider({ children }: { children: ReactNode }) {
       const raw = window.localStorage.getItem(STORAGE);
       if (raw) {
         const parsed = JSON.parse(raw) as Classroom[];
-        const normalized = (Array.isArray(parsed) && parsed.length ? parsed : seedClasses()).map(
-          (c) => ({
-            ...c,
-            assignments: c.assignments.map((a) => ({
-              ...a,
-              submissions: a.submissions.map((s) => ({
-                ...s,
-                kind: s.kind ?? "text",
-              })),
-            })),
-          }),
-        );
+        const base = Array.isArray(parsed) && parsed.length ? parsed : seedClasses();
+        const normalized = normalizeClasses(base);
         setClasses(normalized);
+        window.localStorage.setItem(STORAGE, JSON.stringify(normalized));
       } else {
         const seeded = seedClasses();
         setClasses(seeded);
@@ -563,34 +580,42 @@ export function useClassrooms() {
   return ctx;
 }
 
+export type CopilotInsightStudent = {
+  id: string;
+  name: string;
+  email: string;
+  /** 0–100 from assignment completion (and readiness when no work yet) */
+  progress: number;
+  turnedIn: number;
+  missing: number;
+  classes: string[];
+};
+
 /** Teacher Co-pilot insights from local classroom data (no network). */
 export function buildCopilotInsights(classes: Classroom[]) {
   const students = new Map<
     string,
-    {
-      id: string;
-      name: string;
-      email: string;
-      progress: number;
-      turnedIn: number;
-      missing: number;
-      classes: string[];
-    }
+    CopilotInsightStudent & { readinessSum: number; readinessCount: number }
   >();
 
   for (const cls of classes) {
     for (const m of cls.members) {
       const row = students.get(m.id) ?? {
         id: m.id,
-        name: m.name,
+        name: DEMO_STUDENT_NAMES[m.id] ?? m.name,
         email: m.email,
-        progress: m.progress,
+        progress: 0,
         turnedIn: 0,
         missing: 0,
         classes: [] as string[],
+        readinessSum: 0,
+        readinessCount: 0,
       };
-      row.progress = Math.round((row.progress + m.progress) / (row.classes.length ? 2 : 1));
-      row.classes.push(cls.name);
+      row.name = DEMO_STUDENT_NAMES[m.id] ?? m.name;
+      row.email = m.email;
+      row.readinessSum += Math.min(100, Math.max(0, m.progress));
+      row.readinessCount += 1;
+      if (!row.classes.includes(cls.name)) row.classes.push(cls.name);
       for (const a of cls.assignments) {
         const sub = a.submissions.find((s) => s.studentId === m.id);
         if (!sub || sub.status === "assigned") row.missing += 1;
@@ -600,7 +625,22 @@ export function buildCopilotInsights(classes: Classroom[]) {
     }
   }
 
-  const list = [...students.values()];
+  const list: CopilotInsightStudent[] = [...students.values()].map((row) => {
+    const assigned = row.turnedIn + row.missing;
+    const readiness =
+      row.readinessCount > 0 ? Math.round(row.readinessSum / row.readinessCount) : 0;
+    const completion = assigned > 0 ? Math.round((row.turnedIn / assigned) * 100) : readiness;
+    return {
+      id: row.id,
+      name: row.name,
+      email: row.email,
+      progress: Math.min(100, Math.max(0, completion)),
+      turnedIn: row.turnedIn,
+      missing: row.missing,
+      classes: row.classes,
+    };
+  });
+
   const atRisk = list
     .filter((s) => s.missing > 0 || s.progress < 50)
     .sort((a, b) => a.progress - b.progress || b.missing - a.missing);
@@ -628,6 +668,7 @@ export function buildCopilotInsights(classes: Classroom[]) {
     classCount: classes.length,
     totalAssignments,
     turnInRate: totalSubs ? Math.round((turned / totalSubs) * 100) : 0,
+    students: list,
     atRisk,
     thriving,
     summaryTh:

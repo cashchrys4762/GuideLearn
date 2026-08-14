@@ -14,7 +14,7 @@ import { useI18n } from "@/lib/i18n";
 type DropStatus = "idle" | "analyzing";
 
 export default function TutorPage() {
-  const { t, locale } = useI18n();
+  const { t } = useI18n();
   const { speak } = useVoice();
   const { triggerSave } = useAutosave();
   usePageScript(`${t.tools.tutorTitle}. ${t.tools.tutorBody}`, true);
@@ -29,11 +29,6 @@ export default function TutorPage() {
     t.tools.tutorStep3,
     t.tools.tutorStep4,
   ];
-
-  const processNote =
-    locale === "th"
-      ? "AI สอนกระบวนการคิด ไม่เฉลยคำตอบทันที — ลองทีละขั้นก่อน"
-      : "AI teaches the process, not just answers — try each step before spoilers.";
 
   const preventDefaults = (e: DragEvent) => {
     e.preventDefault();
@@ -143,14 +138,6 @@ export default function TutorPage() {
                     </li>
                   ))}
                 </ol>
-                <button
-                  type="button"
-                  onClick={() => speak(processNote)}
-                  className="mt-5 inline-flex items-center gap-2 font-label-md text-label-md text-primary underline-offset-4 hover:underline"
-                >
-                  <Icon name="info" className="text-[18px]" />
-                  {processNote}
-                </button>
               </section>
             </div>
 
@@ -206,9 +193,6 @@ export default function TutorPage() {
                   </div>
                 </div>
               </div>
-              <p className="flex items-center justify-center gap-1 border-t border-surface-dim px-4 py-3 text-[11px] text-on-surface-variant/70">
-                <Icon name="lock" className="text-[14px]" /> {t.studyBuddy.safe}
-              </p>
             </aside>
           </div>
         </PageMain>
