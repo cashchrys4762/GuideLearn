@@ -6,7 +6,18 @@ import { Icon } from "./Icon";
 
 export function VoiceFab() {
   const { t } = useI18n();
-  const { voiceMode, listening, speaking, toggleVoiceMode, announcement } = useVoice();
+  const { voiceMode, listening, speaking, toggleVoiceMode, announcement, lastHeard } =
+    useVoice();
+
+  const status = !voiceMode
+    ? null
+    : speaking
+      ? t.a11y.readPage
+      : listening
+        ? lastHeard
+          ? `${t.a11y.listening} “${lastHeard}”`
+          : t.a11y.listening
+        : t.a11y.voiceMode;
 
   return (
     <>
@@ -33,9 +44,12 @@ export function VoiceFab() {
           />
         )}
       </button>
-      {voiceMode && (
-        <div className="safe-fab fixed right-[clamp(0.75rem,3vw,1.5rem)] bottom-[calc(var(--app-bottom-nav-h)+4.75rem)] z-50 max-w-[min(220px,70vw)] rounded-2xl bg-inverse-surface px-3 py-2 text-xs text-inverse-on-surface shadow-lg lg:bottom-28">
-          {listening ? t.a11y.listening : speaking ? t.a11y.readPage : t.a11y.voiceMode}
+      {voiceMode && status && (
+        <div className="safe-fab fixed right-[clamp(0.75rem,3vw,1.5rem)] bottom-[calc(var(--app-bottom-nav-h)+4.75rem)] z-50 max-w-[min(260px,72vw)] rounded-2xl bg-inverse-surface px-3 py-2 text-xs text-inverse-on-surface shadow-lg lg:bottom-28">
+          <p className="font-semibold">{status}</p>
+          {listening && !speaking && (
+            <p className="mt-1 opacity-80">{t.a11y.helpCommands}</p>
+          )}
         </div>
       )}
     </>

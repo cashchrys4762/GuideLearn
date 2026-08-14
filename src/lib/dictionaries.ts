@@ -341,7 +341,7 @@ const en: Dictionary = {
     readPage: "Reading this page.",
     stopSpeaking: "Stopped speaking.",
     helpCommands:
-      "Commands: dashboard, missions, study buddy, settings, read page, stop, Thai, English, help.",
+      "Commands: dashboard, classroom, tutor, plan, settings, read page, stop, Thai, English, help.",
     unsupported: "Speech features need Chrome or Edge on this device.",
     micDenied: "Microphone permission denied. Enable it in browser settings.",
     fabLabel: "Toggle voice command accessibility mode",
@@ -703,7 +703,7 @@ const th: Dictionary = {
     readPage: "กำลังอ่านหน้านี้ออกเสียง",
     stopSpeaking: "หยุดพูดแล้ว",
     helpCommands:
-      "คำสั่ง: แดชบอร์ด, ภารกิจ, เพื่อนเรียน, การตั้งค่า, อ่านหน้า, หยุด, ไทย, อังกฤษ, ช่วยเหลือ",
+      "คำสั่ง: แดชบอร์ด, ห้องเรียน, ติวการบ้าน, แผน, การตั้งค่า, อ่านหน้า, หยุด, ไทย, อังกฤษ, ช่วยเหลือ",
     unsupported: "ฟีเจอร์เสียงต้องใช้ Chrome หรือ Edge บนอุปกรณ์นี้",
     micDenied: "ไม่อนุญาตใช้ไมโครโฟน กรุณาเปิดในตั้งค่าเบราว์เซอร์",
     fabLabel: "เปิด/ปิดโหมดคำสั่งเสียงสำหรับผู้พิการทางสายตา",
