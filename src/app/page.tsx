@@ -107,7 +107,7 @@ export default function DashboardPage() {
                   onClick={(e) => {
                     if (!requireAuth("/classroom")) e.preventDefault();
                   }}
-                  className="btn-cute inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 font-label-md text-label-md text-primary"
+                  className="btn-cute inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 font-label-md text-label-md text-primary dark:bg-surface-container-lowest dark:text-primary"
                 >
                   <Icon name="groups" /> {t.navExtra.classroom}
                 </Link>
