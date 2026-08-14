@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRef, useState, type DragEvent, type KeyboardEvent } from "react";
 import { AppShell } from "@/components/AppShell";
 import { Icon } from "@/components/Icon";
+import { PageMain } from "@/components/PageMain";
 import { RequireAuth } from "@/components/RequireAuth";
 import { usePageScript, useVoice } from "@/lib/a11y";
 import { assets } from "@/lib/assets";
@@ -53,11 +54,7 @@ export default function TutorPage() {
   return (
     <AppShell>
       <RequireAuth>
-        <main
-          className="w-full flex-1 px-container-margin pt-6 pb-32 md:ml-64 md:px-12 md:pt-12 md:pb-12"
-          id="main-content"
-          role="main"
-        >
+        <PageMain id="main-content">
           <header className="mb-8 max-w-3xl">
             <h1 className="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg mb-2 flex items-center gap-3 text-primary">
               {t.tools.tutorTitle}
@@ -214,7 +211,7 @@ export default function TutorPage() {
               </p>
             </aside>
           </div>
-        </main>
+        </PageMain>
       </RequireAuth>
     </AppShell>
   );

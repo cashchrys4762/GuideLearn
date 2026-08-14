@@ -42,14 +42,14 @@ export function AICoachChat() {
         type="button"
         onClick={openCoach}
         aria-label={t.platform.coachFab}
-        className="fixed right-6 bottom-44 z-50 flex items-center gap-2 rounded-full bg-gradient-to-r from-[#5b4dff] to-primary px-4 py-3 text-white shadow-lg md:bottom-28"
+        className="safe-fab fixed right-3 bottom-[9.5rem] z-50 flex items-center gap-2 rounded-full bg-gradient-to-r from-[#5b4dff] to-primary px-3 py-2.5 text-sm text-white shadow-lg sm:right-5 sm:px-4 sm:py-3 lg:right-6 lg:bottom-28"
       >
         <Icon name="smart_toy" filled />
         <span className="hidden font-label-md text-label-md sm:inline">{t.platform.coachFab}</span>
       </button>
 
       {open && (
-        <div className="fixed right-4 bottom-28 z-[60] flex h-[420px] w-[min(100%-2rem,380px)] flex-col overflow-hidden rounded-[28px] border border-surface-dim bg-white shadow-2xl md:right-6 md:bottom-24">
+        <div className="safe-fab fixed right-3 bottom-[13.5rem] z-[60] flex h-[min(420px,55dvh)] w-[min(100%-1.5rem,380px)] flex-col overflow-hidden rounded-[28px] border border-surface-dim bg-white shadow-2xl sm:right-5 lg:right-6 lg:bottom-24 lg:h-[420px]">
           <div className="flex items-center justify-between bg-gradient-to-r from-[#5b4dff] to-primary px-4 py-3 text-white">
             <div className="flex items-center gap-2">
               <Icon name="smart_toy" filled />

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { Icon } from "@/components/Icon";
+import { PageMain } from "@/components/PageMain";
 import { RequireAuth } from "@/components/RequireAuth";
 import { usePageScript, useVoice } from "@/lib/a11y";
 import { assets } from "@/lib/assets";
@@ -58,11 +59,7 @@ export default function PlanPage() {
   return (
     <AppShell>
       <RequireAuth>
-        <main
-          className="w-full flex-1 px-container-margin pt-6 pb-32 md:ml-64 md:px-12 md:pt-12 md:pb-12"
-          id="main-content"
-          role="main"
-        >
+        <PageMain id="main-content">
           <div className="mb-12 flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
             <div>
               <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-secondary-fixed px-3 py-1 text-on-secondary-fixed">
@@ -345,7 +342,7 @@ export default function PlanPage() {
               </div>
             </section>
           </div>
-        </main>
+        </PageMain>
       </RequireAuth>
     </AppShell>
   );

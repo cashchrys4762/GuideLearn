@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { Icon } from "@/components/Icon";
+import { PageMain } from "@/components/PageMain";
 import { RequireAuth } from "@/components/RequireAuth";
 import { usePageScript } from "@/lib/a11y";
 import { useAutosave } from "@/lib/autosave";
@@ -48,11 +49,7 @@ export default function PortfolioPage() {
   return (
     <AppShell>
       <RequireAuth>
-        <main
-          className="w-full flex-1 px-container-margin pt-6 pb-32 md:ml-64 md:px-12 md:pt-12 md:pb-12"
-          id="main-content"
-          role="main"
-        >
+        <PageMain id="main-content">
           <header className="mb-8 max-w-3xl">
             <h1 className="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg mb-2 text-primary">
               {t.tools.portfolioTitle}
@@ -138,7 +135,7 @@ export default function PortfolioPage() {
               className="w-full rounded-2xl border-2 border-surface-dim bg-surface-container-low p-4 font-body-md text-body-md text-on-surface outline-none focus:border-primary focus:bg-white"
             />
           </section>
-        </main>
+        </PageMain>
       </RequireAuth>
     </AppShell>
   );

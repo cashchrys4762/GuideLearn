@@ -222,3 +222,27 @@ body {
   white-space: nowrap;
   border-width: 0;
 }
+
+.safe-bottom {
+  padding-bottom: max(0.35rem, env(safe-area-inset-bottom));
+}
+
+.safe-fab {
+  margin-bottom: env(safe-area-inset-bottom);
+}
+
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 640px) {
+  .font-headline-lg,
+  .text-headline-lg {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+    line-height: 1.2;
+  }
+}

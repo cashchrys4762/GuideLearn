@@ -3,6 +3,7 @@
 import { AppShell } from "@/components/AppShell";
 import { Icon } from "@/components/Icon";
 import { LanguageToggle } from "@/components/LanguageToggle";
+import { PageMain } from "@/components/PageMain";
 import { usePageScript, useVoice } from "@/lib/a11y";
 import { useI18n } from "@/lib/i18n";
 
@@ -16,7 +17,7 @@ export default function SettingsPage() {
 
   return (
     <AppShell>
-      <main className="mx-auto w-full max-w-3xl flex-1 p-container-margin pb-28 md:ml-64 md:p-10 md:pb-10">
+      <PageMain narrow>
         <h1 className="font-headline-lg-mobile text-headline-lg-mobile md:text-headline-lg mb-2 text-primary">
           {t.settings.title}
         </h1>
@@ -110,7 +111,7 @@ export default function SettingsPage() {
             ))}
           </ul>
         </section>
-      </main>
+      </PageMain>
     </AppShell>
   );
 }

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { Icon } from "@/components/Icon";
+import { PageMain } from "@/components/PageMain";
 import { usePageScript } from "@/lib/a11y";
 import { useAuth } from "@/lib/auth";
 import { useAutosave } from "@/lib/autosave";
@@ -64,9 +65,9 @@ export default function DashboardPage() {
 
   return (
     <AppShell>
-      <main className="p-4 md:p-8" role="main">
+      <PageMain>
         {/* Welcome banner */}
-        <section className="relative mb-8 overflow-hidden rounded-[2rem] bg-gradient-to-r from-[#4f46e5] via-primary to-[#38bdf8] p-8 text-white shadow-lg md:p-10">
+        <section className="relative mb-6 overflow-hidden rounded-[1.5rem] bg-gradient-to-r from-[#4f46e5] via-primary to-[#38bdf8] p-5 text-white shadow-lg sm:mb-8 sm:rounded-[2rem] sm:p-8 md:p-10">
           <div className="relative z-10 max-w-2xl">
             <p className="mb-2 font-label-md text-label-md text-white/80">
               {t.dash.todayQuestion}
@@ -106,7 +107,7 @@ export default function DashboardPage() {
         )}
 
         {/* Stats */}
-        <div className="mb-10 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className="mb-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           {[
             {
               icon: "local_fire_department",
@@ -227,7 +228,7 @@ export default function DashboardPage() {
         <p className="mt-8 font-label-sm text-label-sm text-on-surface-variant">
           {t.platform.xpHint}
         </p>
-      </main>
+      </PageMain>
     </AppShell>
   );
 }
