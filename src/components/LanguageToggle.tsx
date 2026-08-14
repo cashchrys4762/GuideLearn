@@ -24,7 +24,7 @@ export function LanguageToggle({ size = "md", className = "" }: Props) {
         onClick={() => setLocale("en")}
         className={`${pad} rounded-full font-label-sm text-label-sm transition-all ${
           locale === "en"
-            ? "bg-white text-on-surface shadow-sm"
+            ? "lang-pill-active bg-white text-on-surface shadow-sm"
             : "text-on-surface-variant hover:bg-surface-container-high"
         }`}
       >
@@ -37,7 +37,7 @@ export function LanguageToggle({ size = "md", className = "" }: Props) {
         onClick={() => setLocale("th")}
         className={`${pad} rounded-full font-label-sm text-label-sm transition-all ${
           locale === "th"
-            ? "bg-white text-on-surface shadow-sm"
+            ? "lang-pill-active bg-white text-on-surface shadow-sm"
             : "text-on-surface-variant hover:bg-surface-container-high"
         }`}
       >

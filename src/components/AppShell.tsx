@@ -82,7 +82,7 @@ export function AppShell({ children, compact = false }: AppShellProps) {
         </>
       )}
 
-      <header className="safe-top sticky top-0 z-40 border-b border-outline-variant/50 bg-white/85 shadow-[0_8px_30px_-18px_rgba(30,79,158,0.18)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/75 dark:border-outline-variant/60 dark:bg-surface/90 dark:shadow-[0_8px_30px_-18px_rgba(0,0,0,0.55)]">
+      <header className="safe-top sticky top-0 z-40 border-b border-outline-variant/50 bg-white/85 shadow-[0_8px_30px_-18px_rgba(30,79,158,0.18)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/75 dark:border-outline-variant/70 dark:bg-surface/95 dark:shadow-[0_8px_30px_-18px_rgba(0,0,0,0.65)]">
         <div className="mx-auto flex h-[var(--app-header-h)] w-full max-w-[1440px] items-center gap-2 px-[clamp(0.75rem,2.5vw,1.5rem)] sm:gap-3">
           <Link
             href="/"
@@ -98,7 +98,7 @@ export function AppShell({ children, compact = false }: AppShellProps) {
                 width={160}
                 height={64}
                 priority
-                className="app-logo dark:brightness-110"
+                className="app-logo dark:brightness-125"
               />
             )}
             <span className="sr-only">{t.platform.tagline}</span>
@@ -112,7 +112,7 @@ export function AppShell({ children, compact = false }: AppShellProps) {
             <input
               type="search"
               placeholder={t.platform.searchPlaceholder}
-              className="w-full min-w-0 rounded-full border border-transparent bg-surface-container-low py-1.5 pr-3 pl-8 text-sm text-on-surface shadow-inner outline-none transition placeholder:truncate placeholder:text-on-surface-variant focus:border-primary/35 focus:bg-surface-container-lowest focus:shadow-[0_0_0_4px_rgba(30,79,158,0.12)] sm:py-2 sm:pr-4 sm:pl-9 dark:focus:bg-surface-container-high dark:focus:shadow-[0_0_0_4px_rgba(91,141,239,0.2)]"
+              className="w-full min-w-0 rounded-full border border-transparent bg-surface-container-low py-1.5 pr-3 pl-8 text-sm text-on-surface shadow-inner outline-none transition placeholder:truncate placeholder:text-on-surface-variant focus:border-primary/35 focus:bg-surface-container-lowest focus:shadow-[0_0_0_4px_rgba(30,79,158,0.12)] sm:py-2 sm:pr-4 sm:pl-9 dark:bg-surface-container dark:focus:border-primary/50 dark:focus:bg-surface-bright dark:focus:shadow-[0_0_0_4px_rgba(123,163,245,0.22)]"
             />
           </div>
 
@@ -188,7 +188,7 @@ export function AppShell({ children, compact = false }: AppShellProps) {
       <div className="mx-auto flex w-full max-w-[1440px]">
         <nav
           aria-label="Main"
-          className="sticky top-[calc(var(--app-header-h)+env(safe-area-inset-top))] hidden h-[calc(100dvh-var(--app-header-h)-env(safe-area-inset-top))] w-[clamp(13rem,16vw,16rem)] shrink-0 flex-col overflow-y-auto border-r border-outline-variant/40 bg-white/70 px-2 py-4 backdrop-blur-md lg:flex lg:px-3 dark:bg-surface/80"
+          className="sticky top-[calc(var(--app-header-h)+env(safe-area-inset-top))] hidden h-[calc(100dvh-var(--app-header-h)-env(safe-area-inset-top))] w-[clamp(13rem,16vw,16rem)] shrink-0 flex-col overflow-y-auto border-r border-outline-variant/40 bg-white/70 px-2 py-4 backdrop-blur-md lg:flex lg:px-3 dark:border-outline-variant/60 dark:bg-surface/95"
         >
           <ul className="flex-1 space-y-1">
             {items.map((item) => {
@@ -238,7 +238,7 @@ export function AppShell({ children, compact = false }: AppShellProps) {
         </div>
       </div>
 
-      <nav className="safe-bottom fixed bottom-0 left-0 z-40 flex min-h-[var(--app-bottom-nav-h)] w-full items-stretch justify-around border-t border-outline-variant/50 bg-white/92 px-1 py-1 shadow-[0_-10px_30px_-20px_rgba(30,79,158,0.25)] backdrop-blur-xl sm:px-2 sm:py-1.5 lg:hidden dark:bg-surface/95 low-bw:backdrop-blur-none">
+      <nav className="safe-bottom fixed bottom-0 left-0 z-40 flex min-h-[var(--app-bottom-nav-h)] w-full items-stretch justify-around border-t border-outline-variant/50 bg-white/92 px-1 py-1 shadow-[0_-10px_30px_-20px_rgba(30,79,158,0.25)] backdrop-blur-xl sm:px-2 sm:py-1.5 lg:hidden dark:border-outline-variant/70 dark:bg-surface/98 low-bw:backdrop-blur-none">
         {mobileItems.map((item) => {
           const active = isActive(item.href);
           return (

@@ -35,29 +35,48 @@ export default function SettingsPage() {
         </p>
 
         <section className="cloud-shadow mb-6 rounded-[24px] bg-white p-6 md:p-8">
-          <h2 className="font-headline-md text-[22px] text-on-surface mb-2">
+          <h2 className="font-headline-md mb-2 text-[22px] text-on-surface">
             {t.settings.theme}
           </h2>
-          <p className="font-body-md text-body-md text-on-surface-variant mb-4">
+          <p className="font-body-md text-body-md mb-4 text-on-surface-variant">
             {t.settings.themeHint}
           </p>
           <div className="grid grid-cols-2 gap-3">
             {themes.map((opt) => {
               const active = theme === opt.id;
+              const isDarkOpt = opt.id === "dark";
               return (
                 <button
                   key={opt.id}
                   type="button"
                   onClick={() => setTheme(opt.id)}
                   aria-pressed={active}
-                  className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-left transition ${
+                  className={`flex flex-col overflow-hidden rounded-2xl border text-left transition ${
                     active
-                      ? "border-primary bg-primary-fixed text-on-primary-fixed-variant"
-                      : "border-outline-variant bg-surface-container-low text-on-surface"
+                      ? "border-primary ring-2 ring-primary/35"
+                      : "border-outline-variant hover:border-primary/40"
                   }`}
                 >
-                  <Icon name={opt.icon} className="text-[22px]" />
-                  <span className="font-semibold">{opt.label}</span>
+                  <div
+                    className={`flex h-14 items-center justify-center ${
+                      isDarkOpt
+                        ? "bg-[#121a2b] text-[#7ba3f5]"
+                        : "bg-[#f7f4ee] text-[#1e4f9e]"
+                    }`}
+                    aria-hidden
+                  >
+                    <Icon name={opt.icon} className="text-[28px]" />
+                  </div>
+                  <div
+                    className={`flex items-center gap-2 px-3 py-2.5 ${
+                      active
+                        ? "bg-primary-fixed text-on-primary-fixed-variant"
+                        : "bg-surface-container-low text-on-surface"
+                    }`}
+                  >
+                    <Icon name={opt.icon} className="text-[18px]" />
+                    <span className="font-semibold">{opt.label}</span>
+                  </div>
                 </button>
               );
             })}
@@ -65,14 +84,14 @@ export default function SettingsPage() {
         </section>
 
         <section className="cloud-shadow mb-6 rounded-[24px] bg-white p-6 md:p-8">
-          <h2 className="font-headline-md text-[22px] text-on-surface mb-2">
+          <h2 className="font-headline-md mb-2 text-[22px] text-on-surface">
             {t.settings.language}
           </h2>
-          <p className="font-body-md text-body-md text-on-surface-variant mb-4">
+          <p className="font-body-md text-body-md mb-4 text-on-surface-variant">
             {t.settings.languageHint}
           </p>
           <LanguageToggle />
-          <p className="mt-3 font-label-sm text-label-sm text-on-surface-variant">
+          <p className="font-label-sm text-label-sm mt-3 text-on-surface-variant">
             {locale === "th" ? "กำลังใช้ภาษาไทย" : "Currently using English"}
           </p>
         </section>
@@ -80,7 +99,7 @@ export default function SettingsPage() {
         <section className="cloud-shadow mb-6 rounded-[24px] bg-white p-6 md:p-8">
           <div className="mb-4 flex items-start justify-between gap-4">
             <div>
-              <h2 className="font-headline-md text-[22px] text-on-surface mb-2">
+              <h2 className="font-headline-md mb-2 text-[22px] text-on-surface">
                 {t.settings.voiceMode}
               </h2>
               <p className="font-body-md text-body-md text-on-surface-variant">
@@ -97,7 +116,7 @@ export default function SettingsPage() {
               }`}
             >
               <span
-                className={`absolute top-1 left-1 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow transition-transform ${
+                className={`switch-knob absolute top-1 left-1 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow transition-transform ${
                   voiceMode ? "translate-x-6" : ""
                 }`}
               >
@@ -106,14 +125,14 @@ export default function SettingsPage() {
             </button>
           </div>
           {voiceMode && (
-            <p className="mb-4 rounded-xl bg-secondary-fixed/40 px-4 py-3 font-label-md text-label-md text-on-secondary-fixed-variant">
+            <p className="font-label-md text-label-md mb-4 rounded-xl bg-secondary-fixed/40 px-4 py-3 text-on-secondary-fixed-variant">
               {listening ? t.a11y.listening : t.a11y.voiceOn}
             </p>
           )}
           <button
             type="button"
             onClick={() => speak(t.settings.testVoiceText)}
-            className="flex items-center gap-2 rounded-full bg-primary px-5 py-3 font-label-md text-label-md text-on-primary"
+            className="font-label-md text-label-md flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-on-primary"
           >
             <Icon name="volume_up" /> {t.settings.testVoice}
           </button>
@@ -122,7 +141,7 @@ export default function SettingsPage() {
         <section className="cloud-shadow mb-6 rounded-[24px] bg-white p-6 md:p-8 low-bw:shadow-none">
           <div className="mb-2 flex items-start justify-between gap-4">
             <div>
-              <h2 className="font-headline-md text-[22px] text-on-surface mb-2">
+              <h2 className="font-headline-md mb-2 text-[22px] text-on-surface">
                 {t.settings.lowBandwidth}
               </h2>
               <p className="font-body-md text-body-md text-on-surface-variant">
@@ -139,7 +158,7 @@ export default function SettingsPage() {
               }`}
             >
               <span
-                className={`absolute top-1 left-1 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow transition-transform ${
+                className={`switch-knob absolute top-1 left-1 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow transition-transform ${
                   lowBandwidth ? "translate-x-6" : ""
                 }`}
               >
@@ -150,13 +169,13 @@ export default function SettingsPage() {
         </section>
 
         <section className="cloud-shadow rounded-[24px] bg-white p-6 md:p-8 low-bw:shadow-none">
-          <h2 className="font-headline-md text-[22px] text-on-surface mb-3">
+          <h2 className="font-headline-md mb-3 text-[22px] text-on-surface">
             {t.settings.commandsTitle}
           </h2>
-          <p className="font-body-md text-body-md text-on-surface-variant whitespace-pre-wrap">
+          <p className="font-body-md text-body-md whitespace-pre-wrap text-on-surface-variant">
             {t.voiceHelp}
           </p>
-          <ul className="mt-4 space-y-2 font-body-md text-body-md text-on-surface">
+          <ul className="font-body-md text-body-md mt-4 space-y-2 text-on-surface">
             {(locale === "th"
               ? [
                   "แดชบอร์ด / ภารกิจ / เพื่อนเรียน / การตั้งค่า",
@@ -174,7 +193,7 @@ export default function SettingsPage() {
                 ]
             ).map((line) => (
               <li key={line} className="flex items-start gap-2">
-                <Icon name="mic" className="mt-0.5 text-primary text-[18px]" />
+                <Icon name="mic" className="mt-0.5 text-[18px] text-primary" />
                 <span>{line}</span>
               </li>
             ))}
