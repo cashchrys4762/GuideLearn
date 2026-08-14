@@ -1,31 +1,25 @@
 # GuideLearn
 
-AI learning coach for Thai students preparing for university — dashboard, missions (admission rounds), and Study Buddy homework tutor.
+AI Learning Coach สำหรับนักเรียนมัธยม — ติวโจทย์ วางแผนมหาวิทยาลัย จัดการงาน แจ้งเตือน Portfolio และข่าวการศึกษา ในที่เดียว
 
-Built from Stitch designs (Friendly Dashboard, University Plan, Homework Tutor) as a Next.js + Tailwind app.
+## Live
 
-## Routes
+- App: https://guide-learn-zeta.vercel.app
+- Repo: https://github.com/cashchrys4762/GuideLearn
 
-| Path | Screen |
-|------|--------|
-| `/` | Dashboard |
-| `/missions` | University Plan / Missions |
-| `/study-buddy` | Coach Toby homework tutor |
-| `/notebook`, `/settings`, `/help` | Placeholders |
+## Features
 
-## Local development
+- Dashboard สาธารณะ + เครื่องมือส่วนตัว (ล็อกอินเมื่อจำเป็น)
+- ภาษาไทย / อังกฤษ
+- โหมดเสียงสำหรับผู้พิการทางสายตา (TTS + คำสั่งเสียง)
+- แจ้งเตือน, บันทึกอัตโนมัติ (จำลอง), AI Coach chat
+- หน้า: `/` `/tutor` `/plan` `/files` `/listen` `/portfolio` `/news` `/settings`
+
+## Local
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
-
-## Deploy
-
-- GitHub: [cashchrys4762/GuideLearn](https://github.com/cashchrys4762/GuideLearn)
-- Production: [https://guide-learn-zeta.vercel.app](https://guide-learn-zeta.vercel.app)
-- Vercel project: `guide-learn` (Vercel requires lowercase names; linked to GitHub `GuideLearn`)
-
-Push to `main` to redeploy.
+หมายเหตุ: เป็น interactive prototype ที่เชื่อม UI ครบ — AI จริง / DB / OAuth ยังเป็นขั้นถัดไป

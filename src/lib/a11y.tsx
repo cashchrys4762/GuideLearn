@@ -63,21 +63,39 @@ function matchCommand(transcript: string, locale: Locale): string | null {
       action: "route:/",
     },
     {
-      keys: ["missions", "mission", "university", "ภารกิจ", "ไปภารกิจ", "แผนมหาวิทยาลัย"],
-      action: "route:/missions",
-    },
-    {
       keys: [
         "study buddy",
         "coach",
         "homework",
+        "tutor",
         "toby",
         "เพื่อนเรียน",
         "โค้ช",
+        "ติว",
         "ไปเพื่อนเรียน",
         "การบ้าน",
       ],
-      action: "route:/study-buddy",
+      action: "route:/tutor",
+    },
+    {
+      keys: ["missions", "mission", "university", "plan", "ภารกิจ", "ไปภารกิจ", "แผนมหาวิทยาลัย", "แผน"],
+      action: "route:/plan",
+    },
+    {
+      keys: ["news", "ข่าว", "ข่าวการศึกษา"],
+      action: "route:/news",
+    },
+    {
+      keys: ["portfolio", "พอร์ต", "แฟ้ม"],
+      action: "route:/portfolio",
+    },
+    {
+      keys: ["files", "ไฟล์", "สรุปไฟล์", "ข้อสอบ"],
+      action: "route:/files",
+    },
+    {
+      keys: ["listen", "เพื่อนรับฟัง", "รับฟัง"],
+      action: "route:/listen",
     },
     {
       keys: ["settings", "setting", "การตั้งค่า", "ตั้งค่า", "ไปตั้งค่า"],

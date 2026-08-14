@@ -138,6 +138,91 @@ export type Dictionary = {
     backHome: string;
   };
   voiceHelp: string;
+  platform: {
+    tagline: string;
+    searchPlaceholder: string;
+    login: string;
+    logout: string;
+    signIn: string;
+    signUp: string;
+    name: string;
+    email: string;
+    password: string;
+    showPassword: string;
+    hidePassword: string;
+    loginTitle: string;
+    loginHint: string;
+    continueAs: string;
+    saving: string;
+    saved: string;
+    notifications: string;
+    markAllRead: string;
+    openCalendar: string;
+    private: string;
+    readinessShort: string;
+    addActivity: string;
+    needLogin: string;
+    toolsLocked: string;
+    coachFab: string;
+    coachTitle: string;
+    coachPlaceholder: string;
+    coachWelcome: string;
+    xpHint: string;
+  };
+  navExtra: {
+    tutor: string;
+    plan: string;
+    files: string;
+    listen: string;
+    portfolio: string;
+    news: string;
+  };
+  dash: {
+    todayQuestion: string;
+    aiTip: string;
+    ctaTutor: string;
+    ctaPlan: string;
+    streakBest: string;
+    weeklyGoal: string;
+    vsLastWeek: string;
+    readinessUp: string;
+    scheduleTitle: string;
+    scheduleSub: string;
+    typeStudy: string;
+    typeExam: string;
+    typeDeadline: string;
+    act1: string;
+    act2: string;
+    act3: string;
+    newActivity: string;
+  };
+  tools: {
+    tutorTitle: string;
+    tutorBody: string;
+    tutorStep1: string;
+    tutorStep2: string;
+    tutorStep3: string;
+    tutorStep4: string;
+    planTitle: string;
+    planBody: string;
+    filesTitle: string;
+    filesBody: string;
+    uploadCta: string;
+    listenTitle: string;
+    listenBody: string;
+    listenDisclaimer: string;
+    portfolioTitle: string;
+    portfolioBody: string;
+    readiness: string;
+    newsTitle: string;
+    newsBody: string;
+    newsItems: Array<{
+      title: string;
+      cat: string;
+      date: string;
+      deadline: string;
+    }>;
+  };
 };
 
 const en: Dictionary = {
@@ -295,6 +380,114 @@ const en: Dictionary = {
   },
   voiceHelp:
     "Say: dashboard, missions, study buddy, settings, read page, stop, Thai, or English.",
+  platform: {
+    tagline: "AI Learning Coach",
+    searchPlaceholder: "Search lessons, tools, or deadlines…",
+    login: "Log in",
+    logout: "Log out",
+    signIn: "Sign in",
+    signUp: "Sign up",
+    name: "Name",
+    email: "Email",
+    password: "Password",
+    showPassword: "Show password",
+    hidePassword: "Hide password",
+    loginTitle: "Welcome back",
+    loginHint: "Sign in to unlock personal tools",
+    continueAs: "Continue as Kulthida",
+    saving: "Saving…",
+    saved: "Saved",
+    notifications: "Notifications",
+    markAllRead: "Mark all as read",
+    openCalendar: "Open calendar",
+    private: "Private",
+    readinessShort: "Goal readiness 68%",
+    addActivity: "Add activity",
+    needLogin: "Please sign in to continue",
+    toolsLocked: "Sign in to unlock these tools",
+    coachFab: "Ask Coach Toby",
+    coachTitle: "Coach Toby",
+    coachPlaceholder: "Ask anything about your study plan…",
+    coachWelcome:
+      "Hi! I'm Coach Toby. Ask me about homework, your university plan, or what to do next today.",
+    xpHint: "Earn XP by finishing activities and keeping your streak",
+  },
+  navExtra: {
+    tutor: "Homework Tutor",
+    plan: "University Plan",
+    files: "Files & Exam Summaries",
+    listen: "Listening Buddy",
+    portfolio: "Portfolio",
+    news: "Education News",
+  },
+  dash: {
+    todayQuestion: "What should you do next today?",
+    aiTip:
+      "Prioritize Calculus review tonight, skim your English mock outline, then polish one portfolio entry before the weekend.",
+    ctaTutor: "Open Homework Tutor",
+    ctaPlan: "View University Plan",
+    streakBest: "Best streak: 12 days",
+    weeklyGoal: "of 5h goal",
+    vsLastWeek: "vs last week",
+    readinessUp: "Readiness up this week",
+    scheduleTitle: "Today's schedule",
+    scheduleSub: "Study blocks, mocks, and deadlines at a glance.",
+    typeStudy: "Study",
+    typeExam: "Exam",
+    typeDeadline: "Deadline",
+    act1: "Calculus review · today 17:30",
+    act2: "English mock · tomorrow 19:00",
+    act3: "Portfolio due · Aug 18 23:59",
+    newActivity: "New activity",
+  },
+  tools: {
+    tutorTitle: "Homework Tutor",
+    tutorBody:
+      "Snap or upload a problem and walk through it step by step with Coach Toby—no spoilers until you're ready.",
+    tutorStep1: "Upload a photo or paste the question",
+    tutorStep2: "Confirm the subject and difficulty",
+    tutorStep3: "Try each hint before revealing the next step",
+    tutorStep4: "Save the worked solution to your notebook",
+    planTitle: "University Plan",
+    planBody:
+      "Map admission rounds, required scores, and weekly milestones toward your target faculty.",
+    filesTitle: "Files & Exam Summaries",
+    filesBody:
+      "Upload notes and past papers. GuideLearn turns them into concise summaries and practice sets.",
+    uploadCta: "Upload files",
+    listenTitle: "Listening Buddy",
+    listenBody:
+      "A calm space to vent study stress, practice speaking, or rehearse interview answers out loud.",
+    listenDisclaimer:
+      "Not a substitute for professional counseling. If you need urgent help, contact a trusted adult or local support line.",
+    portfolioTitle: "Portfolio Builder",
+    portfolioBody:
+      "Collect activities, reflections, and evidence so your admission portfolio stays interview-ready.",
+    readiness: "Portfolio readiness",
+    newsTitle: "Education News",
+    newsBody:
+      "Curated updates on admissions, scholarships, and exam calendars relevant to Thai university applicants.",
+    newsItems: [
+      {
+        title: "TCAS Round 1 portfolio window opens next week",
+        cat: "Admissions",
+        date: "Aug 12, 2026",
+        deadline: "Sep 5, 2026",
+      },
+      {
+        title: "New English mock exam schedule for Grade 12",
+        cat: "Exams",
+        date: "Aug 10, 2026",
+        deadline: "Aug 22, 2026",
+      },
+      {
+        title: "STEM scholarship shortlist announced",
+        cat: "Scholarships",
+        date: "Aug 8, 2026",
+        deadline: "Aug 30, 2026",
+      },
+    ],
+  },
 };
 
 const th: Dictionary = {
@@ -452,6 +645,114 @@ const th: Dictionary = {
   },
   voiceHelp:
     "พูดว่า: แดชบอร์ด, ภารกิจ, เพื่อนเรียน, การตั้งค่า, อ่านหน้า, หยุด, ไทย, หรือ อังกฤษ",
+  platform: {
+    tagline: "โค้ชการเรียนรู้ด้วย AI",
+    searchPlaceholder: "ค้นหาบทเรียน เครื่องมือ หรือกำหนดส่ง…",
+    login: "เข้าสู่ระบบ",
+    logout: "ออกจากระบบ",
+    signIn: "เข้าสู่ระบบ",
+    signUp: "สมัครสมาชิก",
+    name: "ชื่อ",
+    email: "อีเมล",
+    password: "รหัสผ่าน",
+    showPassword: "แสดงรหัสผ่าน",
+    hidePassword: "ซ่อนรหัสผ่าน",
+    loginTitle: "ยินดีต้อนรับกลับมา",
+    loginHint: "เข้าสู่ระบบเพื่อใช้เครื่องมือส่วนตัว",
+    continueAs: "ทดลองใช้ในชื่อ กุลธิดา",
+    saving: "กำลังบันทึก…",
+    saved: "บันทึกแล้ว",
+    notifications: "การแจ้งเตือน",
+    markAllRead: "อ่านทั้งหมดแล้ว",
+    openCalendar: "เปิดปฏิทิน",
+    private: "ส่วนตัว",
+    readinessShort: "ความพร้อมสู่เป้าหมาย 68%",
+    addActivity: "เพิ่มกิจกรรม",
+    needLogin: "กรุณาเข้าสู่ระบบเพื่อดำเนินการต่อ",
+    toolsLocked: "เข้าสู่ระบบเพื่อปลดล็อกเครื่องมือเหล่านี้",
+    coachFab: "ถามโค้ชโทบี้",
+    coachTitle: "โค้ชโทบี้",
+    coachPlaceholder: "ถามอะไรก็ได้เกี่ยวกับแผนเรียนของคุณ…",
+    coachWelcome:
+      "สวัสดี! ฉันคือโค้ชโทบี้ ถามได้ทั้งเรื่องการบ้าน แผนสู่มหาวิทยาลัย หรือวันนี้ควรทำอะไรต่อ",
+    xpHint: "สะสม XP ได้เมื่อทำกิจกรรมสำเร็จและรักษาสถิติต่อเนื่อง",
+  },
+  navExtra: {
+    tutor: "ติวการบ้าน",
+    plan: "แผนสู่มหาวิทยาลัย",
+    files: "สรุปไฟล์และข้อสอบ",
+    listen: "เพื่อนรับฟัง",
+    portfolio: "แฟ้มสะสมผลงาน",
+    news: "ข่าวการศึกษา",
+  },
+  dash: {
+    todayQuestion: "วันนี้ควรทำอะไรต่อ",
+    aiTip:
+      "คืนนี้น่าจะทบทวนแคลคูลัสก่อน แล้วไล่โครงข้อสอบจำลองอังกฤษ จากนั้นเก็บงานพอร์ตโฟลิโอให้อีกนิดก่อนสุดสัปดาห์",
+    ctaTutor: "เปิดติวการบ้าน",
+    ctaPlan: "ดูแผนสู่มหาวิทยาลัย",
+    streakBest: "สถิติดีสุด: 12 วัน",
+    weeklyGoal: "จากเป้า 5 ชม.",
+    vsLastWeek: "เทียบสัปดาห์ก่อน",
+    readinessUp: "ความพร้อมเพิ่มขึ้นสัปดาห์นี้",
+    scheduleTitle: "ตารางวันนี้",
+    scheduleSub: "บล็อกเรียน ข้อสอบจำลอง และกำหนดส่งแบบดูครบในที่เดียว",
+    typeStudy: "เรียน",
+    typeExam: "สอบ",
+    typeDeadline: "กำหนดส่ง",
+    act1: "ทบทวนแคลคูลัส · วันนี้ 17:30",
+    act2: "ข้อสอบจำลองอังกฤษ · พรุ่งนี้ 19:00",
+    act3: "ส่งพอร์ตโฟลิโอ · 18 ส.ค. 23:59",
+    newActivity: "กิจกรรมใหม่",
+  },
+  tools: {
+    tutorTitle: "ติวการบ้าน",
+    tutorBody:
+      "ถ่ายหรืออัปโหลดโจทย์ แล้วให้โค้ชโทบี้พาคิดทีละขั้น—ไม่เฉลยก่อนจนกว่าคุณจะพร้อม",
+    tutorStep1: "อัปโหลดรูปหรือวางข้อความโจทย์",
+    tutorStep2: "ยืนยันวิชาและความยาก",
+    tutorStep3: "ลองตามคำใบ้ก่อนเปิดขั้นถัดไป",
+    tutorStep4: "บันทึกวิธีทำลงสมุดโน้ต",
+    planTitle: "แผนสู่มหาวิทยาลัย",
+    planBody:
+      "จัดรอบรับเข้า คะแนนที่ต้องได้ และเป้าหมายรายสัปดาห์สู่คณะที่คุณตั้งใจ",
+    filesTitle: "สรุปไฟล์และข้อสอบ",
+    filesBody:
+      "อัปโหลดโน้ตและข้อสอบเก่า GuideLearn จะสรุปสั้น ๆ และสร้างชุดฝึกให้",
+    uploadCta: "อัปโหลดไฟล์",
+    listenTitle: "เพื่อนรับฟัง",
+    listenBody:
+      "พื้นที่สงบสำหรับระบายความเครียดจากการเรียน ฝึกพูด หรือซ้อมสัมภาษณ์ออกเสียง",
+    listenDisclaimer:
+      "ไม่ใช่การให้คำปรึกษาวิชาชีพ หากต้องการความช่วยเหลือเร่งด่วน ให้ติดต่อผู้ใหญ่ที่ไว้ใจหรือสายด่วนในพื้นที่",
+    portfolioTitle: "แฟ้มสะสมผลงาน",
+    portfolioBody:
+      "รวบรวมกิจกรรม การสะท้อนคิด และหลักฐานให้พอร์ตโฟลิโอพร้อมสัมภาษณ์อยู่เสมอ",
+    readiness: "ความพร้อมของพอร์ตโฟลิโอ",
+    newsTitle: "ข่าวการศึกษา",
+    newsBody:
+      "อัปเดตคัดสรรเรื่องการรับเข้า ทุนการศึกษา และปฏิทินสอบที่เกี่ยวกับผู้สมัครมหาวิทยาลัยไทย",
+    newsItems: [
+      {
+        title: "เปิดรับพอร์ตโฟลิโอ TCAS รอบ 1 สัปดาห์หน้า",
+        cat: "รับเข้า",
+        date: "12 ส.ค. 2569",
+        deadline: "5 ก.ย. 2569",
+      },
+      {
+        title: "ประกาศตารางสอบจำลองอังกฤษ ม.6",
+        cat: "สอบ",
+        date: "10 ส.ค. 2569",
+        deadline: "22 ส.ค. 2569",
+      },
+      {
+        title: "ประกาศรายชื่อรอบคัดเลือกทุน STEM",
+        cat: "ทุนการศึกษา",
+        date: "8 ส.ค. 2569",
+        deadline: "30 ส.ค. 2569",
+      },
+    ],
+  },
 };
 
 export const dictionaries: Record<Locale, Dictionary> = { en, th };
