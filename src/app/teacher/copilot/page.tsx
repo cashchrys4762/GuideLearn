@@ -6,6 +6,7 @@ import { AppShell } from "@/components/AppShell";
 import { Icon } from "@/components/Icon";
 import { PageMain } from "@/components/PageMain";
 import { RequireAuth } from "@/components/RequireAuth";
+import { TeacherCopilotPanel } from "@/components/TeacherCopilotPanel";
 import { usePageScript } from "@/lib/a11y";
 import { useAuth } from "@/lib/auth";
 import { buildCopilotInsights, useClassrooms } from "@/lib/classroom";
@@ -37,7 +38,7 @@ export default function TeacherCopilotPage() {
             </p>
           ) : (
             <>
-              <header className="mb-8 max-w-3xl">
+              <header className="mb-6 max-w-3xl sm:mb-8">
                 <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-primary-fixed px-3 py-1 text-sm font-semibold text-on-primary-fixed-variant">
                   <Icon name="psychology" /> Teacher Co-pilot
                 </div>
@@ -47,7 +48,7 @@ export default function TeacherCopilotPage() {
                 <p className="text-on-surface-variant">{t.classroom.copilotBody}</p>
               </header>
 
-              <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              <div className="mb-6 grid grid-cols-2 gap-3 sm:mb-8 sm:grid-cols-4">
                 {[
                   { label: t.classroom.title, value: insights.classCount },
                   { label: t.classroom.members, value: insights.studentCount },
@@ -56,7 +57,7 @@ export default function TeacherCopilotPage() {
                 ].map((s) => (
                   <div
                     key={s.label}
-                    className="rounded-[20px] border border-outline-variant bg-white p-4"
+                    className="card-lift cloud-shadow rounded-[20px] border border-white/80 bg-white p-4"
                   >
                     <div className="text-xs text-on-surface-variant">{s.label}</div>
                     <div className="mt-1 text-2xl font-bold text-primary">{s.value}</div>
@@ -71,50 +72,54 @@ export default function TeacherCopilotPage() {
                 </p>
               </section>
 
-              <div className="grid gap-6 lg:grid-cols-2">
-                <section className="rounded-[20px] border border-outline-variant bg-white p-5">
-                  <h2 className="mb-4 text-lg font-bold text-error">{t.classroom.copilotAtRisk}</h2>
-                  {insights.atRisk.length === 0 ? (
-                    <p className="text-sm text-on-surface-variant">—</p>
-                  ) : (
-                    <ul className="space-y-3">
-                      {insights.atRisk.map((s) => (
-                        <li
-                          key={s.id}
-                          className="rounded-xl bg-error-container/40 px-3 py-3 text-sm"
-                        >
-                          <div className="font-semibold">{s.name}</div>
-                          <div className="text-xs text-on-surface-variant">
-                            {s.classes.join(", ")} · progress {s.progress}% · missing {s.missing}
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </section>
-                <section className="rounded-[20px] border border-outline-variant bg-white p-5">
-                  <h2 className="mb-4 text-lg font-bold text-tertiary">
-                    {t.classroom.copilotThriving}
-                  </h2>
-                  {insights.thriving.length === 0 ? (
-                    <p className="text-sm text-on-surface-variant">—</p>
-                  ) : (
-                    <ul className="space-y-3">
-                      {insights.thriving.map((s) => (
-                        <li
-                          key={s.id}
-                          className="rounded-xl bg-tertiary-fixed/50 px-3 py-3 text-sm"
-                        >
-                          <div className="font-semibold">{s.name}</div>
-                          <div className="text-xs text-on-surface-variant">
-                            {s.classes.join(", ")} · progress {s.progress}%
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </section>
-              </div>
+              {(insights.atRisk.length > 0 || insights.thriving.length > 0) && (
+                <div className="mb-8 grid gap-6 lg:grid-cols-2">
+                  <section className="rounded-[20px] border border-outline-variant bg-white p-5">
+                    <h2 className="mb-4 text-lg font-bold text-error">{t.classroom.copilotAtRisk}</h2>
+                    {insights.atRisk.length === 0 ? (
+                      <p className="text-sm text-on-surface-variant">—</p>
+                    ) : (
+                      <ul className="space-y-3">
+                        {insights.atRisk.slice(0, 5).map((s) => (
+                          <li
+                            key={s.id}
+                            className="rounded-xl bg-error-container/40 px-3 py-3 text-sm"
+                          >
+                            <div className="font-semibold">{s.name}</div>
+                            <div className="text-xs text-on-surface-variant">
+                              {s.classes.join(", ")} · progress {s.progress}% · missing {s.missing}
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </section>
+                  <section className="rounded-[20px] border border-outline-variant bg-white p-5">
+                    <h2 className="mb-4 text-lg font-bold text-tertiary">
+                      {t.classroom.copilotThriving}
+                    </h2>
+                    {insights.thriving.length === 0 ? (
+                      <p className="text-sm text-on-surface-variant">—</p>
+                    ) : (
+                      <ul className="space-y-3">
+                        {insights.thriving.slice(0, 5).map((s) => (
+                          <li
+                            key={s.id}
+                            className="rounded-xl bg-tertiary-fixed/50 px-3 py-3 text-sm"
+                          >
+                            <div className="font-semibold">{s.name}</div>
+                            <div className="text-xs text-on-surface-variant">
+                              {s.classes.join(", ")} · progress {s.progress}%
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </section>
+                </div>
+              )}
+
+              <TeacherCopilotPanel />
 
               <div className="mt-8">
                 <Link href="/classroom" className="text-sm font-semibold text-primary underline">
