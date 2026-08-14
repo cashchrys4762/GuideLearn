@@ -42,33 +42,42 @@ export function NotificationPanel() {
           </button>
         </div>
         <div className="flex-1 space-y-3 overflow-y-auto p-4">
-          {notices.map((n) => (
-            <button
-              key={n.id}
-              type="button"
-              onClick={() => markRead(n.id)}
-              className={`w-full rounded-2xl border p-4 text-left transition-colors ${
-                n.read
-                  ? "border-surface-dim bg-surface"
-                  : "border-primary-fixed bg-primary-fixed/20"
-              }`}
-            >
-              <div className="mb-2 flex items-center justify-between gap-2">
-                <span
-                  className={`rounded-full px-2 py-0.5 font-label-sm text-[11px] ${kindColor[n.kind]}`}
-                >
-                  {n.kind}
-                </span>
-                <span className="font-label-sm text-label-sm text-on-surface-variant">{n.time}</span>
-              </div>
-              <p className="font-body-lg text-[16px] font-semibold text-on-surface">
-                {locale === "th" ? n.titleTh : n.title}
+          {notices.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-outline-variant bg-surface-container-low p-6 text-center">
+              <Icon name="notifications_off" className="mb-2 text-[28px] text-on-surface-variant" />
+              <p className="font-body-md text-body-md text-on-surface-variant">
+                {t.dash.guestLockedBody}
               </p>
-              <p className="font-body-md text-body-md text-on-surface-variant mt-1">
-                {locale === "th" ? n.bodyTh : n.body}
-              </p>
-            </button>
-          ))}
+            </div>
+          ) : (
+            notices.map((n) => (
+              <button
+                key={n.id}
+                type="button"
+                onClick={() => markRead(n.id)}
+                className={`w-full rounded-2xl border p-4 text-left transition-colors ${
+                  n.read
+                    ? "border-surface-dim bg-surface"
+                    : "border-primary-fixed bg-primary-fixed/20"
+                }`}
+              >
+                <div className="mb-2 flex items-center justify-between gap-2">
+                  <span
+                    className={`rounded-full px-2 py-0.5 font-label-sm text-[11px] ${kindColor[n.kind]}`}
+                  >
+                    {n.kind}
+                  </span>
+                  <span className="font-label-sm text-label-sm text-on-surface-variant">{n.time}</span>
+                </div>
+                <p className="font-body-lg text-[16px] font-semibold text-on-surface">
+                  {locale === "th" ? n.titleTh : n.title}
+                </p>
+                <p className="font-body-md text-body-md mt-1 text-on-surface-variant">
+                  {locale === "th" ? n.bodyTh : n.body}
+                </p>
+              </button>
+            ))
+          )}
         </div>
         <div className="flex gap-2 border-t border-surface-dim p-4">
           <button

@@ -217,14 +217,16 @@ export function AppShell({ children, compact = false }: AppShellProps) {
               );
             })}
           </ul>
-          <div className="mt-4 rounded-2xl border border-outline-variant/40 bg-surface-container-low p-4 dark:bg-surface-container">
-            <p className="text-xs font-semibold text-on-surface-variant">
-              {t.platform.readinessShort}
-            </p>
-            <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-surface-container-highest/60 dark:bg-surface-dim">
-              <div className="h-full w-[68%] rounded-full bg-gradient-to-r from-primary to-secondary" />
+          {isLoggedIn && (
+            <div className="mt-4 rounded-2xl border border-outline-variant/40 bg-surface-container-low p-4 dark:bg-surface-container">
+              <p className="text-xs font-semibold text-on-surface-variant">
+                {t.platform.readinessShort}
+              </p>
+              <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-surface-container-highest/60 dark:bg-surface-dim">
+                <div className="h-full w-[68%] rounded-full bg-gradient-to-r from-primary to-secondary" />
+              </div>
             </div>
-          </div>
+          )}
         </nav>
 
         <div

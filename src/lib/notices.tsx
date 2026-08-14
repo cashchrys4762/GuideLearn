@@ -8,6 +8,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { useAuth } from "@/lib/auth";
 
 export type Notice = {
   id: string;
@@ -65,8 +66,11 @@ type NoticeContextValue = {
 const NoticeContext = createContext<NoticeContextValue | null>(null);
 
 export function NoticeProvider({ children }: { children: ReactNode }) {
+  const { isLoggedIn } = useAuth();
   const [notices, setNotices] = useState(seed);
   const [panelOpen, setPanelOpen] = useState(false);
+
+  const visible = isLoggedIn ? notices : [];
 
   const markRead = useCallback((id: string) => {
     setNotices((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
@@ -78,14 +82,14 @@ export function NoticeProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo(
     () => ({
-      notices,
-      unread: notices.filter((n) => !n.read).length,
+      notices: visible,
+      unread: visible.filter((n) => !n.read).length,
       panelOpen,
       setPanelOpen,
       markRead,
       markAllRead,
     }),
-    [notices, panelOpen, markRead, markAllRead],
+    [visible, panelOpen, markRead, markAllRead],
   );
 
   return <NoticeContext.Provider value={value}>{children}</NoticeContext.Provider>;

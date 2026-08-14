@@ -270,6 +270,10 @@ export type Dictionary = {
     act2: string;
     act3: string;
     newActivity: string;
+    guestToday: string;
+    guestTip: string;
+    guestLockedTitle: string;
+    guestLockedBody: string;
     teachScheduleTitle: string;
     teachScheduleSub: string;
     addPeriod: string;
@@ -344,10 +348,10 @@ const en: Dictionary = {
     liveRegion: "Accessibility announcements",
   },
   dashboard: {
-    greeting: "Hello, Kulthida",
-    greetingEn: "Hello, Kulthida",
+    greeting: "Welcome to GuideLearn",
+    greetingEn: "Welcome to GuideLearn",
     bannerBody:
-      "You're doing great! Keep up the good work. I've prepared some tailored exercises for you today to help you conquer that Calculus module.",
+      "Sign in to unlock your missions, classrooms, and personalized study plan.",
     startMission: "Start Today's Mission",
     streak: "Streak",
     weeklyTime: "Weekly Time",
@@ -370,7 +374,7 @@ const en: Dictionary = {
       },
     },
     pageSummary:
-      "Dashboard. Hello Kulthida. Goal readiness sixty-eight percent. Streak seven days. Weekly study time three hours forty-five minutes. Eighteen items completed. Upcoming: Calculus practice due today, English essay review, and portfolio log update.",
+      "GuideLearn dashboard. Sign in to see your readiness, streak, study time, classrooms, and upcoming activities.",
   },
   missions: {
     targetGoal: "Target Goal",
@@ -590,7 +594,7 @@ const en: Dictionary = {
     todayQuestionTeacher: "What should you focus on as a teacher today?",
     aiTipTeacher:
       "Check submissions that are due soon, open Teacher Co-pilot for students who need attention, then prep tomorrow’s periods in your timetable.",
-    greetingTeacher: "Hello, Teacher Somchai",
+    greetingTeacher: "Hello, Teacher",
     ctaTutor: "Open Homework Tutor",
     ctaPlan: "View University Plan",
     streakBest: "Best streak: 12 days",
@@ -606,6 +610,12 @@ const en: Dictionary = {
     act2: "English mock · tomorrow 19:00",
     act3: "Portfolio due · Aug 18 23:59",
     newActivity: "New activity",
+    guestToday: "Start learning with GuideLearn",
+    guestTip:
+      "Sign in to see your classrooms, assignments, schedule, and progress. Guests can still browse education news.",
+    guestLockedTitle: "Your classes & tasks appear after sign-in",
+    guestLockedBody:
+      "Names, classrooms, homework, and personal stats stay private until you log in.",
     teachScheduleTitle: "Teaching timetable & calendar",
     teachScheduleSub: "Plan your week, add or remove class periods anytime.",
     addPeriod: "Add period",
@@ -700,10 +710,10 @@ const th: Dictionary = {
     liveRegion: "ประกาศเพื่อการเข้าถึง",
   },
   dashboard: {
-    greeting: "สวัสดี กุลธิดา",
-    greetingEn: "Hello, Kulthida",
+    greeting: "ยินดีต้อนรับสู่ GuideLearn",
+    greetingEn: "Welcome to GuideLearn",
     bannerBody:
-      "คุณทำได้เยี่ยมมาก! พยายามต่อไป วันนี้ฉันได้เตรียมแบบฝึกหัดที่ปรับให้เหมาะกับคุณ เพื่อช่วยพิชิตบทแคลคูลัส",
+      "เข้าสู่ระบบเพื่อปลดล็อกภารกิจ ห้องเรียน และแผนเรียนส่วนตัวของคุณ",
     startMission: "เริ่มภารกิจวันนี้",
     streak: "สถิติต่อเนื่อง",
     weeklyTime: "เวลาเรียนสัปดาห์นี้",
@@ -726,7 +736,7 @@ const th: Dictionary = {
       },
     },
     pageSummary:
-      "หน้าแดชบอร์ด สวัสดีกุลธิดา ความพร้อมสู่เป้าหมายหกสิบแปดเปอร์เซ็นต์ สถิติต่อเนื่องเจ็ดวัน เวลาเรียนสัปดาห์นี้สามชั่วโมงสี่สิบห้านาที สำเร็จแล้วสิบแปดรายการ กิจกรรมถัดไป ได้แก่ ฝึกแคลคูลัสครบกำหนดวันนี้ ตรวจร่างเรียงความ และอัปเดตพอร์ตโฟลิโอ",
+      "แดชบอร์ด GuideLearn เข้าสู่ระบบเพื่อดูความพร้อม สถิติต่อเนื่อง เวลาเรียน ห้องเรียน และกิจกรรมถัดไป",
   },
   missions: {
     targetGoal: "เป้าหมาย",
@@ -946,7 +956,7 @@ const th: Dictionary = {
     todayQuestionTeacher: "วันนี้ครูควรโฟกัสอะไรต่อ",
     aiTipTeacher:
       "ลองเช็กงานที่ใกล้กำหนดส่งก่อน แล้วเปิด Teacher Co-pilot ดูเด็กที่ควรติดตาม จากนั้นจัดคาบสอนในตารางให้พร้อมวันพรุ่งนี้",
-    greetingTeacher: "สวัสดี ครูสมชาย",
+    greetingTeacher: "สวัสดี ครู",
     ctaTutor: "เปิดติวการบ้าน",
     ctaPlan: "ดูแผนสู่มหาวิทยาลัย",
     streakBest: "สถิติดีสุด: 12 วัน",
@@ -962,6 +972,12 @@ const th: Dictionary = {
     act2: "ข้อสอบจำลองอังกฤษ · พรุ่งนี้ 19:00",
     act3: "ส่งพอร์ตโฟลิโอ · 18 ส.ค. 23:59",
     newActivity: "กิจกรรมใหม่",
+    guestToday: "เริ่มเรียนรู้กับ GuideLearn",
+    guestTip:
+      "เข้าสู่ระบบเพื่อดูห้องเรียน งาน ตารางเรียน และความคืบหน้าของคุณ ผู้เยี่ยมชมยังดูข่าวการศึกษาได้",
+    guestLockedTitle: "ห้องเรียนและงานจะโชว์หลังเข้าสู่ระบบ",
+    guestLockedBody:
+      "ชื่อ ห้องเรียน การบ้าน และสถิติส่วนตัวจะถูกซ่อนไว้จนกว่าคุณจะล็อกอิน",
     teachScheduleTitle: "ตารางสอนและปฏิทิน",
     teachScheduleSub: "ดูตารางรายสัปดาห์ เพิ่มหรือลดคาบเรียนได้ทันที",
     addPeriod: "เพิ่มคาบ",
