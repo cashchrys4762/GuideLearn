@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Mitr, Prompt } from "next/font/google";
 import { Providers } from "@/components/Providers";
 import "./globals.css";
@@ -25,6 +25,16 @@ export const metadata: Metadata = {
     icon: [{ url: "/brand/guidelearn-logo.png", type: "image/png" }],
     apple: [{ url: "/brand/guidelearn-logo.png", type: "image/png" }],
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f7f4ee" },
+    { media: "(prefers-color-scheme: dark)", color: "#0c1018" },
+  ],
 };
 
 export default function RootLayout({

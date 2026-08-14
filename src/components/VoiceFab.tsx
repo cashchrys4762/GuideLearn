@@ -19,7 +19,7 @@ export function VoiceFab() {
         aria-label={t.a11y.fabLabel}
         aria-pressed={voiceMode}
         onClick={toggleVoiceMode}
-        className={`cloud-shadow safe-fab fixed right-3 z-50 flex h-12 w-12 items-center justify-center rounded-full border-4 border-white shadow-lg transition-transform duration-300 hover:scale-105 focus:ring-4 focus:outline-none sm:right-5 sm:h-14 sm:w-14 lg:right-6 lg:h-16 lg:w-16 bottom-[5.5rem] lg:bottom-8 ${
+        className={`cloud-shadow safe-fab fixed right-[clamp(0.75rem,3vw,1.5rem)] z-50 flex h-12 w-12 items-center justify-center rounded-full border-4 border-white shadow-lg transition-transform duration-300 hover:scale-105 focus:ring-4 focus:outline-none sm:h-14 sm:w-14 lg:h-16 lg:w-16 bottom-[calc(var(--app-bottom-nav-h)+0.75rem)] lg:bottom-8 ${
           voiceMode
             ? "voice-pulse bg-secondary text-on-secondary focus:ring-secondary"
             : "bg-secondary-container text-on-secondary-container focus:ring-secondary"
@@ -34,7 +34,7 @@ export function VoiceFab() {
         )}
       </button>
       {voiceMode && (
-        <div className="safe-fab fixed right-3 bottom-[9.25rem] z-50 max-w-[min(220px,70vw)] rounded-2xl bg-inverse-surface px-3 py-2 text-xs text-inverse-on-surface shadow-lg sm:right-5 lg:right-6 lg:bottom-28">
+        <div className="safe-fab fixed right-[clamp(0.75rem,3vw,1.5rem)] bottom-[calc(var(--app-bottom-nav-h)+4.75rem)] z-50 max-w-[min(220px,70vw)] rounded-2xl bg-inverse-surface px-3 py-2 text-xs text-inverse-on-surface shadow-lg lg:bottom-28">
           {listening ? t.a11y.listening : speaking ? t.a11y.readPage : t.a11y.voiceMode}
         </div>
       )}

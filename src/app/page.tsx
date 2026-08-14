@@ -152,7 +152,7 @@ export default function DashboardPage() {
                 width={280}
                 height={180}
                 priority
-                className="brand-hero-img h-28 w-auto drop-shadow-[0_18px_30px_rgba(0,0,0,0.18)] sm:h-36 lg:h-44"
+                className="brand-hero-img drop-shadow-[0_18px_30px_rgba(0,0,0,0.18)]"
               />
             </div>
           </div>

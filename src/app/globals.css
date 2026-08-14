@@ -63,6 +63,10 @@
   --spacing-container-margin: 24px;
   --spacing-section-gap: 64px;
 
+  /* Shell chrome — shared across header / sidebar / bottom nav / FAB */
+  --spacing-app-header: 3.5rem;
+  --spacing-app-bottom-nav: 4.5rem;
+
   --font-sans: var(--font-prompt), ui-sans-serif, system-ui, sans-serif;
   --font-label-md: var(--font-prompt), ui-sans-serif, system-ui, sans-serif;
   --font-body-lg: var(--font-prompt), ui-sans-serif, system-ui, sans-serif;
@@ -95,6 +99,27 @@
   --text-body-md: 16px;
   --text-body-md--line-height: 24px;
   --text-body-md--font-weight: 400;
+}
+
+:root {
+  --app-header-h: 3.5rem;
+  --app-bottom-nav-h: 4.5rem;
+  --app-page-x: clamp(1rem, 3vw, 2rem);
+  --app-page-y: clamp(1.15rem, 2.4vw, 2rem);
+}
+
+@media (min-width: 640px) {
+  :root {
+    --app-header-h: 3.75rem;
+    --app-bottom-nav-h: 4.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --app-header-h: 4rem;
+    --app-bottom-nav-h: 0rem;
+  }
 }
 
 body {
@@ -468,12 +493,52 @@ html.dark.low-bandwidth body {
   margin-bottom: env(safe-area-inset-bottom);
 }
 
-img,
-video,
-canvas,
-svg {
-  max-width: 100%;
-  height: auto;
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* Keep in @layer base so Tailwind h-* / w-* utilities can override */
+@layer base {
+  img,
+  video,
+  canvas,
+  svg {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.app-logo {
+  width: auto;
+  max-width: min(42vw, 9.5rem);
+  height: 1.85rem;
+  max-height: 1.85rem;
+  object-fit: contain;
+  object-position: left center;
+}
+
+@media (min-width: 640px) {
+  .app-logo {
+    max-width: min(28vw, 10.5rem);
+    height: 2.1rem;
+    max-height: 2.1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .app-logo {
+    max-width: 11rem;
+    height: 2.25rem;
+    max-height: 2.25rem;
+  }
+}
+
+.brand-hero-img {
+  width: auto;
+  max-width: min(70vw, 16rem);
+  height: clamp(5.5rem, 18vw, 11rem);
+  max-height: none;
+  object-fit: contain;
 }
 
 @media (max-width: 640px) {

@@ -13,7 +13,7 @@ export function PageMain({ children, className = "", narrow = false, id }: PageM
     <main
       id={id}
       role="main"
-      className={`mx-auto w-full px-4 py-5 sm:px-6 sm:py-7 lg:px-8 lg:py-8 pb-28 md:pb-10 ${
+      className={`mx-auto w-full px-[var(--app-page-x)] pt-[var(--app-page-y)] pb-[calc(var(--app-page-y)+0.5rem)] lg:pb-[var(--app-page-y)] ${
         narrow ? "max-w-3xl" : "max-w-6xl"
       } ${className}`}
     >

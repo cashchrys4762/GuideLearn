@@ -82,11 +82,11 @@ export function AppShell({ children, compact = false }: AppShellProps) {
         </>
       )}
 
-      <header className="sticky top-0 z-40 border-b border-outline-variant/50 bg-white/85 shadow-[0_8px_30px_-18px_rgba(30,79,158,0.18)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/75 dark:border-outline-variant/60 dark:bg-surface/90 dark:shadow-[0_8px_30px_-18px_rgba(0,0,0,0.55)]">
-        <div className="mx-auto flex h-14 max-w-[1440px] items-center gap-2 px-3 sm:gap-3 sm:px-5 lg:h-16 lg:px-6">
+      <header className="safe-top sticky top-0 z-40 border-b border-outline-variant/50 bg-white/85 shadow-[0_8px_30px_-18px_rgba(30,79,158,0.18)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/75 dark:border-outline-variant/60 dark:bg-surface/90 dark:shadow-[0_8px_30px_-18px_rgba(0,0,0,0.55)]">
+        <div className="mx-auto flex h-[var(--app-header-h)] w-full max-w-[1440px] items-center gap-2 px-[clamp(0.75rem,2.5vw,1.5rem)] sm:gap-3">
           <Link
             href="/"
-            className="flex h-full min-w-0 shrink-0 items-center gap-2 transition hover:opacity-90"
+            className="flex h-full min-w-0 shrink-0 items-center transition hover:opacity-90"
             aria-label={t.brand}
           >
             {lowBandwidth ? (
@@ -98,25 +98,25 @@ export function AppShell({ children, compact = false }: AppShellProps) {
                 width={160}
                 height={64}
                 priority
-                className="h-8 w-auto max-h-9 object-contain object-left sm:h-9 dark:brightness-110"
+                className="app-logo dark:brightness-110"
               />
             )}
             <span className="sr-only">{t.platform.tagline}</span>
           </Link>
 
-          <div className="relative mx-1 hidden min-w-0 flex-1 md:block lg:mx-6">
+          <div className="relative mx-0.5 min-w-0 flex-1 sm:mx-2 lg:mx-6">
             <Icon
               name="search"
-              className="absolute top-1/2 left-3 -translate-y-1/2 text-[18px] text-on-surface-variant"
+              className="pointer-events-none absolute top-1/2 left-2.5 -translate-y-1/2 text-[18px] text-on-surface-variant sm:left-3"
             />
             <input
               type="search"
               placeholder={t.platform.searchPlaceholder}
-              className="w-full rounded-full border border-transparent bg-surface-container-low py-2 pr-4 pl-9 text-sm text-on-surface shadow-inner outline-none transition placeholder:text-on-surface-variant focus:border-primary/35 focus:bg-surface-container-lowest focus:shadow-[0_0_0_4px_rgba(30,79,158,0.12)] dark:focus:bg-surface-container-high dark:focus:shadow-[0_0_0_4px_rgba(91,141,239,0.2)]"
+              className="w-full min-w-0 rounded-full border border-transparent bg-surface-container-low py-1.5 pr-3 pl-8 text-sm text-on-surface shadow-inner outline-none transition placeholder:truncate placeholder:text-on-surface-variant focus:border-primary/35 focus:bg-surface-container-lowest focus:shadow-[0_0_0_4px_rgba(30,79,158,0.12)] sm:py-2 sm:pr-4 sm:pl-9 dark:focus:bg-surface-container-high dark:focus:shadow-[0_0_0_4px_rgba(91,141,239,0.2)]"
             />
           </div>
 
-          <div className="ml-auto flex items-center gap-0.5 sm:gap-1.5">
+          <div className="flex shrink-0 items-center gap-0.5 sm:gap-1.5">
             <button
               type="button"
               onClick={toggleTheme}
@@ -144,7 +144,7 @@ export function AppShell({ children, compact = false }: AppShellProps) {
             </button>
 
             {isLoggedIn && user ? (
-              <div className="flex max-w-[42vw] items-center gap-1.5 rounded-full bg-surface-container-low py-0.5 pr-2 pl-0.5 sm:max-w-none sm:gap-2 sm:pr-2.5">
+              <div className="flex max-w-[min(40vw,11rem)] items-center gap-1 rounded-full bg-surface-container-low py-0.5 pr-1.5 pl-0.5 sm:max-w-none sm:gap-2 sm:pr-2.5">
                 <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-container text-[11px] font-bold text-on-primary-container shadow-sm sm:h-8 sm:w-8 sm:text-xs">
                   {user.initials}
                 </div>
@@ -158,7 +158,16 @@ export function AppShell({ children, compact = false }: AppShellProps) {
                 <button
                   type="button"
                   onClick={logout}
-                  className="rounded-full px-2 py-0.5 text-[11px] font-semibold text-on-surface-variant hover:bg-surface-container-high sm:text-xs"
+                  aria-label={t.platform.logout}
+                  title={t.platform.logout}
+                  className="rounded-full p-1.5 text-on-surface-variant hover:bg-surface-container-high sm:hidden"
+                >
+                  <Icon name="logout" className="text-[18px]" />
+                </button>
+                <button
+                  type="button"
+                  onClick={logout}
+                  className="hidden rounded-full px-2 py-0.5 text-xs font-semibold text-on-surface-variant hover:bg-surface-container-high sm:inline"
                 >
                   {t.platform.logout}
                 </button>
@@ -174,27 +183,12 @@ export function AppShell({ children, compact = false }: AppShellProps) {
             )}
           </div>
         </div>
-
-        {/* Mobile search */}
-        <div className="border-t border-surface-dim/40 px-3 py-1.5 md:hidden">
-          <div className="relative">
-            <Icon
-              name="search"
-              className="absolute top-1/2 left-3 -translate-y-1/2 text-[18px] text-on-surface-variant"
-            />
-            <input
-              type="search"
-              placeholder={t.platform.searchPlaceholder}
-              className="w-full rounded-full bg-surface-container-low py-1.5 pr-4 pl-9 text-sm outline-none focus:ring-2 focus:ring-primary"
-            />
-          </div>
-        </div>
       </header>
 
-      <div className="mx-auto flex max-w-[1440px]">
+      <div className="mx-auto flex w-full max-w-[1440px]">
         <nav
           aria-label="Main"
-          className="sticky top-14 hidden h-[calc(100dvh-3.5rem)] w-56 shrink-0 flex-col overflow-y-auto border-r border-outline-variant/40 bg-white/70 px-2 py-4 backdrop-blur-md lg:top-16 lg:flex lg:h-[calc(100dvh-4rem)] lg:w-64 lg:px-3 dark:bg-surface/80"
+          className="sticky top-[calc(var(--app-header-h)+env(safe-area-inset-top))] hidden h-[calc(100dvh-var(--app-header-h)-env(safe-area-inset-top))] w-[clamp(13rem,16vw,16rem)] shrink-0 flex-col overflow-y-auto border-r border-outline-variant/40 bg-white/70 px-2 py-4 backdrop-blur-md lg:flex lg:px-3 dark:bg-surface/80"
         >
           <ul className="flex-1 space-y-1">
             {items.map((item) => {
@@ -235,14 +229,16 @@ export function AppShell({ children, compact = false }: AppShellProps) {
 
         <div
           className={`min-w-0 flex-1 ${
-            compact ? "h-[calc(100dvh-105px)] overflow-hidden lg:h-[calc(100dvh-73px)]" : "pb-24 lg:pb-8"
+            compact
+              ? "h-[calc(100dvh-var(--app-header-h)-env(safe-area-inset-top))] overflow-hidden"
+              : "pb-[calc(var(--app-bottom-nav-h)+0.5rem)] lg:pb-8"
           }`}
         >
           {children}
         </div>
       </div>
 
-      <nav className="safe-bottom fixed bottom-0 left-0 z-40 flex w-full justify-around border-t border-outline-variant/50 bg-white/92 px-1 py-1.5 shadow-[0_-10px_30px_-20px_rgba(30,79,158,0.25)] backdrop-blur-xl sm:px-2 sm:py-2 lg:hidden dark:bg-surface/95 low-bw:backdrop-blur-none">
+      <nav className="safe-bottom fixed bottom-0 left-0 z-40 flex min-h-[var(--app-bottom-nav-h)] w-full items-stretch justify-around border-t border-outline-variant/50 bg-white/92 px-1 py-1 shadow-[0_-10px_30px_-20px_rgba(30,79,158,0.25)] backdrop-blur-xl sm:px-2 sm:py-1.5 lg:hidden dark:bg-surface/95 low-bw:backdrop-blur-none">
         {mobileItems.map((item) => {
           const active = isActive(item.href);
           return (
@@ -250,14 +246,14 @@ export function AppShell({ children, compact = false }: AppShellProps) {
               key={item.href}
               href={item.href}
               onClick={go(item.href, item.public)}
-              className={`flex min-w-0 flex-1 flex-col items-center gap-0.5 rounded-2xl px-1 py-1.5 transition ${
+              className={`flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-2xl px-1 py-1 transition ${
                 active
                   ? "bg-primary-fixed text-primary dark:bg-primary-container dark:text-on-primary-container"
                   : "text-on-surface-variant"
               }`}
             >
               <Icon name={item.icon} filled={active} />
-              <span className="w-full truncate text-center text-[9px] font-semibold sm:text-[10px]">
+              <span className="w-full truncate text-center text-[clamp(0.5625rem,2.4vw,0.6875rem)] font-semibold leading-tight">
                 {item.label}
               </span>
             </Link>
