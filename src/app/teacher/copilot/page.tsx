@@ -67,9 +67,9 @@ export default function TeacherCopilotPage() {
                 ))}
               </div>
 
-              <section className="mb-8 rounded-[24px] bg-gradient-to-r from-primary to-primary-container p-5 text-white sm:p-6 low-bw:bg-primary">
-                <h2 className="mb-2 font-semibold">{t.classroom.advise}</h2>
-                <p className="text-white/95">
+              <section className="mb-8 rounded-[24px] bg-primary p-5 text-on-primary shadow-[0_14px_32px_-16px_rgba(30,79,158,0.5)] sm:p-6">
+                <h2 className="mb-2 text-lg font-bold text-on-primary">{t.classroom.advise}</h2>
+                <p className="text-base leading-relaxed text-on-primary/95">
                   {locale === "th" ? insights.summaryTh : insights.summaryEn}
                 </p>
               </section>
