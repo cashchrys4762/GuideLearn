@@ -24,4 +24,8 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Deploy
 
-Connected to Vercel project **GuideLearn**. Push to `main` to redeploy.
+- GitHub: [cashchrys4762/GuideLearn](https://github.com/cashchrys4762/GuideLearn)
+- Production: [https://guide-learn-zeta.vercel.app](https://guide-learn-zeta.vercel.app)
+- Vercel project: `guide-learn` (Vercel requires lowercase project names)
+
+Push to `main` to redeploy.
