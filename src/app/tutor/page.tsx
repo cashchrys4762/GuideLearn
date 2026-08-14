@@ -72,7 +72,8 @@ export default function TutorPage() {
         ? `${message}\n[${locale === "th" ? "แนบรูปโจทย์" : "Attached homework photo"}]`
         : locale === "th"
           ? "อัปโหลดรูปโจทย์การบ้านแล้ว ช่วยพาคิดทีละขั้นหน่อย"
-          : "Uploaded a homework photo — please guide me step by step.";
+          : "Uploaded a homework photo — please guide me step by step."
+      : message;
 
     const historyForModel = messages
       .filter((m) => m.role === "user" || m.role === "assistant")
