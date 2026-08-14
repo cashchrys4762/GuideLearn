@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { assets } from "@/lib/assets";
 import { useAuth } from "@/lib/auth";
 import { useAutosave } from "@/lib/autosave";
+import { useBandwidth } from "@/lib/bandwidth";
 import { useI18n } from "@/lib/i18n";
 import { useNotices } from "@/lib/notices";
 import { Icon } from "./Icon";
@@ -21,20 +22,36 @@ export function AppShell({ children, compact = false }: AppShellProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { t } = useI18n();
-  const { user, isLoggedIn, openLogin, logout, requireAuth } = useAuth();
+  const { user, isLoggedIn, isTeacher, openLogin, logout, requireAuth } = useAuth();
+  const { lowBandwidth } = useBandwidth();
   const { status } = useAutosave();
   const { unread, setPanelOpen } = useNotices();
 
-  const items = [
-    { href: "/", label: t.nav.dashboard, icon: "dashboard", public: true },
-    { href: "/tutor", label: t.navExtra.tutor, icon: "photo_camera", public: false },
-    { href: "/plan", label: t.navExtra.plan, icon: "school", public: false },
-    { href: "/files", label: t.navExtra.files, icon: "description", public: false },
-    { href: "/listen", label: t.navExtra.listen, icon: "hearing", public: false },
-    { href: "/portfolio", label: t.navExtra.portfolio, icon: "folder_special", public: false },
-    { href: "/news", label: t.navExtra.news, icon: "newspaper", public: true },
-    { href: "/settings", label: t.nav.settings, icon: "settings", public: true },
-  ] as const;
+  const items = (
+    isTeacher
+      ? [
+          { href: "/", label: t.nav.dashboard, icon: "dashboard", public: true },
+          { href: "/classroom", label: t.navExtra.classroom, icon: "groups", public: false },
+          { href: "/teacher/copilot", label: t.navExtra.copilot, icon: "psychology", public: false },
+          { href: "/news", label: t.navExtra.news, icon: "newspaper", public: true },
+          { href: "/settings", label: t.nav.settings, icon: "settings", public: true },
+        ]
+      : [
+          { href: "/", label: t.nav.dashboard, icon: "dashboard", public: true },
+          { href: "/classroom", label: t.navExtra.classroom, icon: "groups", public: false },
+          { href: "/tutor", label: t.navExtra.tutor, icon: "photo_camera", public: false },
+          { href: "/plan", label: t.navExtra.plan, icon: "school", public: false },
+          { href: "/files", label: t.navExtra.files, icon: "description", public: false },
+          { href: "/listen", label: t.navExtra.listen, icon: "hearing", public: false },
+          { href: "/portfolio", label: t.navExtra.portfolio, icon: "folder_special", public: false },
+          { href: "/news", label: t.navExtra.news, icon: "newspaper", public: true },
+          { href: "/settings", label: t.nav.settings, icon: "settings", public: true },
+        ]
+  ) as Array<{ href: string; label: string; icon: string; public: boolean }>;
+
+  const mobileItems = isTeacher
+    ? [items[0], items[1], items[2], items[3], items[4]]
+    : [items[0], items[1], items[2], items[7], items[8]];
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
@@ -56,7 +73,7 @@ export function AppShell({ children, compact = false }: AppShellProps) {
 
   return (
     <div className="bg-background text-on-background relative min-h-dvh overflow-x-hidden font-body-md text-body-md">
-      {!compact && (
+      {!compact && !lowBandwidth && (
         <>
           <div className="blob-bg-1 pointer-events-none fixed inset-0 z-[-1]" />
           <div className="blob-bg-2 pointer-events-none fixed inset-0 z-[-1]" />
@@ -70,14 +87,18 @@ export function AppShell({ children, compact = false }: AppShellProps) {
             className="flex min-w-0 shrink-0 items-center gap-2"
             aria-label={t.brand}
           >
-            <Image
-              src={assets.logo}
-              alt={t.brand}
-              width={220}
-              height={140}
-              priority
-              className="h-10 w-auto object-contain sm:h-12 lg:h-[3.25rem]"
-            />
+            {lowBandwidth ? (
+              <span className="text-base font-bold text-primary sm:text-lg">{t.brand}</span>
+            ) : (
+              <Image
+                src={assets.logo}
+                alt={t.brand}
+                width={220}
+                height={140}
+                priority
+                className="h-10 w-auto object-contain sm:h-12 lg:h-[3.25rem]"
+              />
+            )}
             <span className="sr-only">{t.platform.tagline}</span>
           </Link>
 
@@ -117,9 +138,10 @@ export function AppShell({ children, compact = false }: AppShellProps) {
                 </div>
                 <div className="hidden min-w-0 leading-tight md:block">
                   <div className="truncate text-sm font-semibold text-on-surface">{user.name}</div>
-                  {saveLabel && (
-                    <div className="truncate text-[11px] text-tertiary">{saveLabel}</div>
-                  )}
+                  <div className="truncate text-[11px] text-on-surface-variant">
+                    {user.role === "teacher" ? t.platform.roleTeacher : t.platform.roleStudent}
+                    {saveLabel ? ` · ${saveLabel}` : ""}
+                  </div>
                 </div>
                 <button
                   type="button"
@@ -203,8 +225,8 @@ export function AppShell({ children, compact = false }: AppShellProps) {
         </div>
       </div>
 
-      <nav className="safe-bottom fixed bottom-0 left-0 z-40 flex w-full justify-around border-t border-surface-dim bg-white/95 px-1 py-1.5 backdrop-blur sm:px-2 sm:py-2 lg:hidden">
-        {[items[0], items[1], items[2], items[6], items[7]].map((item) => {
+      <nav className="safe-bottom fixed bottom-0 left-0 z-40 flex w-full justify-around border-t border-surface-dim bg-white/95 px-1 py-1.5 backdrop-blur sm:px-2 sm:py-2 lg:hidden low-bw:backdrop-blur-none">
+        {mobileItems.map((item) => {
           const active = isActive(item.href);
           return (
             <Link

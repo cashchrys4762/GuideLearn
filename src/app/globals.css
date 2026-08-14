@@ -246,3 +246,60 @@ svg {
     line-height: 1.2;
   }
 }
+
+/* Low-bandwidth / equity mode — less data & motion */
+html.low-bandwidth .blob-bg-1,
+html.low-bandwidth .blob-bg-2 {
+  display: none !important;
+}
+
+html.low-bandwidth .cloud-shadow,
+html.low-bandwidth .shadow-lg,
+html.low-bandwidth .shadow-2xl,
+html.low-bandwidth .shadow-md,
+html.low-bandwidth .shadow-sm {
+  box-shadow: none !important;
+}
+
+html.low-bandwidth * {
+  animation: none !important;
+  transition: none !important;
+}
+
+html.low-bandwidth .backdrop-blur,
+html.low-bandwidth .backdrop-blur-md,
+html.low-bandwidth .backdrop-blur-sm,
+html.low-bandwidth [class*="backdrop-blur"] {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+html.low-bandwidth .brand-hero-img {
+  display: none !important;
+}
+
+.low-bw\:backdrop-blur-none {
+  backdrop-filter: none;
+}
+
+.low-bw\:shadow-none {
+  box-shadow: none;
+}
+
+.low-bw\:bg-primary {
+  background-image: none;
+}
+
+html.low-bandwidth .low-bw\:backdrop-blur-none {
+  backdrop-filter: none !important;
+}
+
+html.low-bandwidth .low-bw\:shadow-none {
+  box-shadow: none !important;
+}
+
+html.low-bandwidth .low-bw\:bg-primary {
+  background-image: none !important;
+  background-color: var(--color-primary);
+}
+

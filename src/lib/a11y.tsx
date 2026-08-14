@@ -86,6 +86,14 @@ function matchCommand(transcript: string, locale: Locale): string | null {
       action: "route:/news",
     },
     {
+      keys: ["classroom", "class", "ห้องเรียน", "ชั้นเรียน", "คลาส"],
+      action: "route:/classroom",
+    },
+    {
+      keys: ["copilot", "ครู", "teacher", "โค้ชครู"],
+      action: "route:/teacher/copilot",
+    },
+    {
       keys: ["portfolio", "พอร์ต", "แฟ้ม"],
       action: "route:/portfolio",
     },

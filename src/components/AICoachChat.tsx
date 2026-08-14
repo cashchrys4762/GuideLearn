@@ -8,12 +8,17 @@ import { Icon } from "./Icon";
 
 export function AICoachChat() {
   const { t, locale } = useI18n();
-  const { isLoggedIn, openLogin } = useAuth();
+  const { isLoggedIn, isTeacher, openLogin } = useAuth();
   const { triggerSave } = useAutosave();
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
+  const welcome = isTeacher
+    ? locale === "th"
+      ? "สวัสดีครับครู ฉันช่วยสรุปความก้าวหน้าของชั้นเรียนและแนะนำว่าควรคุยกับนักเรียนคนไหนก่อนได้"
+      : "Hi teacher — I can summarize class progress and suggest who to coach next."
+    : t.platform.coachWelcome;
   const [msgs, setMsgs] = useState<{ role: "ai" | "user"; text: string }[]>([
-    { role: "ai", text: t.platform.coachWelcome },
+    { role: "ai", text: welcome },
   ]);
 
   const openCoach = () => {
@@ -27,8 +32,11 @@ export function AICoachChat() {
   const send = () => {
     const text = input.trim();
     if (!text) return;
-    const reply =
-      locale === "th"
+    const reply = isTeacher
+      ? locale === "th"
+        ? "เปิด Teacher Co-pilot เพื่อดูกลุ่มที่ควรติดตาม และดูงานที่ยังไม่ส่งในแต่ละชั้นเรียนก่อนนะครับ"
+        : "Open Teacher Co-pilot for at-risk students, then check missing turn-ins in each class."
+      : locale === "th"
         ? "ลองแบ่งงานใหญ่เป็นขั้นเล็ก ๆ นะ — วันนี้เริ่มจากวิชาที่ใกล้กำหนดส่งก่อน แล้วค่อยทบทวน 25 นาที พัก 5 นาที"
         : "Let's break it down — start with the nearest deadline, then do a 25-minute focus block and a 5-minute break.";
     setMsgs((m) => [...m, { role: "user", text }, { role: "ai", text: reply }]);

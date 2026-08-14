@@ -5,13 +5,15 @@ import { Icon } from "@/components/Icon";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { PageMain } from "@/components/PageMain";
 import { usePageScript, useVoice } from "@/lib/a11y";
+import { useBandwidth } from "@/lib/bandwidth";
 import { useI18n } from "@/lib/i18n";
 
 export default function SettingsPage() {
   const { t, locale } = useI18n();
   const { voiceMode, setVoiceMode, speak, listening } = useVoice();
+  const { lowBandwidth, setLowBandwidth } = useBandwidth();
   usePageScript(
-    `${t.settings.title}. ${t.settings.subtitle}. ${t.voiceHelp}`,
+    `${t.settings.title}. ${t.settings.subtitle}. ${t.settings.lowBandwidth}. ${t.voiceHelp}`,
     true,
   );
 
@@ -80,7 +82,38 @@ export default function SettingsPage() {
           </button>
         </section>
 
-        <section className="cloud-shadow rounded-[24px] bg-white p-6 md:p-8">
+        <section className="cloud-shadow mb-6 rounded-[24px] bg-white p-6 md:p-8 low-bw:shadow-none">
+          <div className="mb-2 flex items-start justify-between gap-4">
+            <div>
+              <h2 className="font-headline-md text-[22px] text-on-surface mb-2">
+                {t.settings.lowBandwidth}
+              </h2>
+              <p className="font-body-md text-body-md text-on-surface-variant">
+                {t.settings.lowBandwidthHint}
+              </p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={lowBandwidth}
+              onClick={() => setLowBandwidth(!lowBandwidth)}
+              className={`relative h-10 w-16 shrink-0 rounded-full transition-colors ${
+                lowBandwidth ? "bg-primary" : "bg-surface-variant"
+              }`}
+            >
+              <span
+                className={`absolute top-1 left-1 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow transition-transform ${
+                  lowBandwidth ? "translate-x-6" : ""
+                }`}
+              >
+                <Icon name="speed" className="text-[18px] text-primary" />
+              </span>
+            </button>
+          </div>
+          <p className="mt-3 text-xs text-tertiary">{t.classroom.localFirst}</p>
+        </section>
+
+        <section className="cloud-shadow rounded-[24px] bg-white p-6 md:p-8 low-bw:shadow-none">
           <h2 className="font-headline-md text-[22px] text-on-surface mb-3">
             {t.settings.commandsTitle}
           </h2>

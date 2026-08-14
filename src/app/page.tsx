@@ -81,11 +81,20 @@ export default function DashboardPage() {
               <p className="mb-6 max-w-xl text-white/90">{t.dash.aiTip}</p>
               <div className="flex flex-wrap gap-3">
                 <Link
+                  href="/classroom"
+                  onClick={(e) => {
+                    if (!requireAuth("/classroom")) e.preventDefault();
+                  }}
+                  className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 font-label-md text-label-md text-primary"
+                >
+                  <Icon name="groups" /> {t.navExtra.classroom}
+                </Link>
+                <Link
                   href="/tutor"
                   onClick={(e) => {
                     if (!requireAuth("/tutor")) e.preventDefault();
                   }}
-                  className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 font-label-md text-label-md text-primary"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/10 px-5 py-3 font-label-md text-label-md text-white backdrop-blur low-bw:backdrop-blur-none"
                 >
                   <Icon name="photo_camera" /> {t.dash.ctaTutor}
                 </Link>
@@ -94,7 +103,7 @@ export default function DashboardPage() {
                   onClick={(e) => {
                     if (!requireAuth("/plan")) e.preventDefault();
                   }}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/10 px-5 py-3 font-label-md text-label-md text-white backdrop-blur"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/10 px-5 py-3 font-label-md text-label-md text-white"
                 >
                   <Icon name="school" /> {t.dash.ctaPlan}
                 </Link>
@@ -106,7 +115,7 @@ export default function DashboardPage() {
               width={280}
               height={180}
               priority
-              className="mx-auto h-28 w-auto drop-shadow-lg sm:h-36 lg:mx-0 lg:h-44"
+              className="brand-hero-img mx-auto h-28 w-auto drop-shadow-lg sm:h-36 lg:mx-0 lg:h-44"
             />
           </div>
           <div className="pointer-events-none absolute -right-10 -bottom-16 h-56 w-56 rounded-full bg-white/15 blur-2xl" />

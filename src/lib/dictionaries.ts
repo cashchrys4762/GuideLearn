@@ -131,6 +131,8 @@ export type Dictionary = {
     testVoiceText: string;
     commandsTitle: string;
     comingSoon: string;
+    lowBandwidth: string;
+    lowBandwidthHint: string;
   };
   placeholders: {
     notebook: string;
@@ -168,6 +170,10 @@ export type Dictionary = {
     coachPlaceholder: string;
     coachWelcome: string;
     xpHint: string;
+    roleStudent: string;
+    roleTeacher: string;
+    roleHint: string;
+    continueAsTeacher: string;
   };
   navExtra: {
     tutor: string;
@@ -176,6 +182,61 @@ export type Dictionary = {
     listen: string;
     portfolio: string;
     news: string;
+    classroom: string;
+    copilot: string;
+  };
+  classroom: {
+    title: string;
+    bodyStudent: string;
+    bodyTeacher: string;
+    create: string;
+    join: string;
+    joinCode: string;
+    joinLink: string;
+    copyCode: string;
+    copyLink: string;
+    copied: string;
+    className: string;
+    subject: string;
+    section: string;
+    emptyTeacher: string;
+    emptyStudent: string;
+    members: string;
+    assignments: string;
+    materials: string;
+    addWork: string;
+    addMaterial: string;
+    materialTitle: string;
+    materialUrl: string;
+    materialFile: string;
+    materialLink: string;
+    workTitle: string;
+    workDesc: string;
+    dueDate: string;
+    submit: string;
+    yourWork: string;
+    viewStudent: string;
+    score: string;
+    feedback: string;
+    returnWork: string;
+    statusAssigned: string;
+    statusTurnedIn: string;
+    statusReturned: string;
+    notFound: string;
+    joinSuccess: string;
+    joinFail: string;
+    demoCode: string;
+    openClass: string;
+    teacherOnly: string;
+    studentWork: string;
+    noSubmissions: string;
+    copilotTitle: string;
+    copilotBody: string;
+    copilotAtRisk: string;
+    copilotThriving: string;
+    turnInRate: string;
+    advise: string;
+    localFirst: string;
   };
   dash: {
     todayQuestion: string;
@@ -372,6 +433,9 @@ const en: Dictionary = {
     testVoiceText: "Hello from GuideLearn. Voice accessibility is working.",
     commandsTitle: "Voice commands",
     comingSoon: "More settings coming soon.",
+    lowBandwidth: "Low-bandwidth mode",
+    lowBandwidthHint:
+      "Faster loads and less data: hide decorative images, blur, and motion. Best for unstable networks.",
   },
   placeholders: {
     notebook: "Notebook is coming soon.",
@@ -411,6 +475,10 @@ const en: Dictionary = {
     coachWelcome:
       "Hi! I'm Coach Toby. Ask me about homework, your university plan, or what to do next today.",
     xpHint: "Earn XP by finishing activities and keeping your streak",
+    roleStudent: "Student",
+    roleTeacher: "Teacher",
+    roleHint: "Choose your role when signing up. Teachers can create classes like Google Classroom.",
+    continueAsTeacher: "Continue as Teacher Somchai",
   },
   navExtra: {
     tutor: "Homework Tutor",
@@ -419,6 +487,62 @@ const en: Dictionary = {
     listen: "Listening Buddy",
     portfolio: "Portfolio",
     news: "Education News",
+    classroom: "Classroom",
+    copilot: "Teacher Co-pilot",
+  },
+  classroom: {
+    title: "Classroom",
+    bodyStudent: "Join with a class code or link from your teacher—works offline-first on this device.",
+    bodyTeacher: "Create classes, share a code/link, assign work, and review each student’s submissions.",
+    create: "Create class",
+    join: "Join class",
+    joinCode: "Class code",
+    joinLink: "Invite link",
+    copyCode: "Copy code",
+    copyLink: "Copy link",
+    copied: "Copied",
+    className: "Class name",
+    subject: "Subject",
+    section: "Section",
+    emptyTeacher: "No classes yet. Create one and share the code with students.",
+    emptyStudent: "You are not in a class yet. Ask your teacher for a code or open their invite link.",
+    members: "Students",
+    assignments: "Assignments",
+    materials: "Materials & links",
+    addWork: "Create assignment",
+    addMaterial: "Add file or link",
+    materialTitle: "Title",
+    materialUrl: "URL or file note",
+    materialFile: "File / document",
+    materialLink: "Link",
+    workTitle: "Assignment title",
+    workDesc: "Instructions",
+    dueDate: "Due date",
+    submit: "Turn in",
+    yourWork: "Your work",
+    viewStudent: "View student work",
+    score: "Score",
+    feedback: "Feedback",
+    returnWork: "Return",
+    statusAssigned: "Assigned",
+    statusTurnedIn: "Turned in",
+    statusReturned: "Returned",
+    notFound: "Class not found. Check the code and try again.",
+    joinSuccess: "Joined the class",
+    joinFail: "Could not join this class",
+    demoCode: "Demo class code: KLM4NP",
+    openClass: "Open class",
+    teacherOnly: "Teachers only",
+    studentWork: "Student submissions",
+    noSubmissions: "No submissions yet",
+    copilotTitle: "Teacher Co-pilot",
+    copilotBody:
+      "Back-office summaries of student progress so you can coach the right learner next—less admin, more guidance.",
+    copilotAtRisk: "Needs attention",
+    copilotThriving: "On track",
+    turnInRate: "Turn-in rate",
+    advise: "Suggested next step",
+    localFirst: "Saved on this device · low data · works when the network is weak",
   },
   dash: {
     todayQuestion: "What should you do next today?",
@@ -637,6 +761,9 @@ const th: Dictionary = {
     testVoiceText: "สวัสดีจาก GuideLearn ระบบเสียงพร้อมใช้งานแล้ว",
     commandsTitle: "คำสั่งเสียง",
     comingSoon: "การตั้งค่าเพิ่มเติมกำลังมาเร็วๆ นี้",
+    lowBandwidth: "โหมดประหยัดเน็ต",
+    lowBandwidthHint:
+      "โหลดเร็ว กินดาต้าน้อย: ซ่อนภาพตกแต่ง เบลอ และแอนิเมชัน เหมาะกับสัญญาณไม่เสถียร",
   },
   placeholders: {
     notebook: "สมุดโน้ตกำลังจะมาเร็วๆ นี้",
@@ -676,6 +803,10 @@ const th: Dictionary = {
     coachWelcome:
       "สวัสดี! ฉันคือโค้ชโทบี้ ถามได้ทั้งเรื่องการบ้าน แผนสู่มหาวิทยาลัย หรือวันนี้ควรทำอะไรต่อ",
     xpHint: "สะสม XP ได้เมื่อทำกิจกรรมสำเร็จและรักษาสถิติต่อเนื่อง",
+    roleStudent: "นักเรียน",
+    roleTeacher: "ครู",
+    roleHint: "เลือกบทบาทตอนสมัคร ครูสามารถสร้างชั้นเรียนแบบ Google Classroom ได้",
+    continueAsTeacher: "ทดลองใช้ในชื่อ ครูสมชาย",
   },
   navExtra: {
     tutor: "ติวการบ้าน",
@@ -684,6 +815,62 @@ const th: Dictionary = {
     listen: "เพื่อนรับฟัง",
     portfolio: "แฟ้มสะสมผลงาน",
     news: "ข่าวการศึกษา",
+    classroom: "ห้องเรียน",
+    copilot: "Teacher Co-pilot",
+  },
+  classroom: {
+    title: "ห้องเรียน",
+    bodyStudent: "เข้าชั้นด้วยรหัสหรือลิงก์จากครู — ข้อมูลเก็บในเครื่อง ใช้ได้แม้เน็ตไม่เสถียร",
+    bodyTeacher: "สร้างชั้นเรียน แชร์รหัส/ลิงก์ สั่งงาน ดูงานนักเรียนแต่ละคน และแนบไฟล์หรือลิงก์",
+    create: "สร้างชั้นเรียน",
+    join: "เข้าร่วมชั้นเรียน",
+    joinCode: "รหัสชั้นเรียน",
+    joinLink: "ลิงก์เชิญ",
+    copyCode: "คัดลอกรหัส",
+    copyLink: "คัดลอกลิงก์",
+    copied: "คัดลอกแล้ว",
+    className: "ชื่อชั้นเรียน",
+    subject: "วิชา",
+    section: "ห้อง / กลุ่ม",
+    emptyTeacher: "ยังไม่มีชั้นเรียน สร้างชั้นแล้วแชร์รหัสให้นักเรียน",
+    emptyStudent: "ยังไม่ได้เข้าชั้นเรียน ขอรหัสจากครู หรือเปิดลิงก์เชิญ",
+    members: "นักเรียน",
+    assignments: "งานที่มอบหมาย",
+    materials: "เอกสารและลิงก์",
+    addWork: "สร้างงาน",
+    addMaterial: "เพิ่มไฟล์หรือลิงก์",
+    materialTitle: "ชื่อรายการ",
+    materialUrl: "URL หรือบันทึกชื่อไฟล์",
+    materialFile: "ไฟล์ / เอกสาร",
+    materialLink: "ลิงก์",
+    workTitle: "ชื่องาน",
+    workDesc: "รายละเอียด / คำสั่ง",
+    dueDate: "กำหนดส่ง",
+    submit: "ส่งงาน",
+    yourWork: "งานของคุณ",
+    viewStudent: "ดูงานนักเรียน",
+    score: "คะแนน",
+    feedback: "ความคิดเห็น",
+    returnWork: "ส่งคืน",
+    statusAssigned: "ยังไม่ส่ง",
+    statusTurnedIn: "ส่งแล้ว",
+    statusReturned: "ตรวจแล้ว",
+    notFound: "ไม่พบชั้นเรียน ตรวจรหัสแล้วลองใหม่",
+    joinSuccess: "เข้าร่วมชั้นเรียนแล้ว",
+    joinFail: "เข้าร่วมชั้นเรียนไม่สำเร็จ",
+    demoCode: "รหัสตัวอย่าง: KLM4NP",
+    openClass: "เปิดชั้นเรียน",
+    teacherOnly: "สำหรับครูเท่านั้น",
+    studentWork: "งานของนักเรียน",
+    noSubmissions: "ยังไม่มีการส่งงาน",
+    copilotTitle: "Teacher Co-pilot",
+    copilotBody:
+      "สรุปความก้าวหน้าของเด็กส่งตรงถึงมือครู เพื่อแนะนำต่อได้แม่นยำ — ลดภาระหลังบ้าน ให้โฟกัสเด็กที่ต้องการความช่วยเหลือ",
+    copilotAtRisk: "ควรติดตาม",
+    copilotThriving: "ไปได้ดี",
+    turnInRate: "อัตราการส่งงาน",
+    advise: "แนะนำขั้นถัดไป",
+    localFirst: "บันทึกในเครื่อง · กินดาต้าน้อย · ใช้ได้เมื่อเน็ตอ่อน",
   },
   dash: {
     todayQuestion: "วันนี้ควรทำอะไรต่อ",
