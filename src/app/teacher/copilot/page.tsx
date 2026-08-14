@@ -67,7 +67,7 @@ export default function TeacherCopilotPage() {
                 ))}
               </div>
 
-              <section className="mb-8 rounded-[24px] bg-gradient-to-r from-primary to-[#f4a231] p-5 text-white sm:p-6 low-bw:bg-primary">
+              <section className="mb-8 rounded-[24px] bg-gradient-to-r from-primary to-primary-container p-5 text-white sm:p-6 low-bw:bg-primary">
                 <h2 className="mb-2 font-semibold">{t.classroom.advise}</h2>
                 <p className="text-white/95">
                   {locale === "th" ? insights.summaryTh : insights.summaryEn}
