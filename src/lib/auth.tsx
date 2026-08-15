@@ -82,8 +82,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const persist = useCallback((next: User | null) => {
     setUser(next);
-    if (next) window.localStorage.setItem(STORAGE, JSON.stringify(next));
-    else window.localStorage.removeItem(STORAGE);
+    try {
+      if (next) window.localStorage.setItem(STORAGE, JSON.stringify(next));
+      else window.localStorage.removeItem(STORAGE);
+    } catch {
+      /* ignore storage failures in restricted WebViews */
+    }
   }, []);
 
   const openLogin = useCallback((path?: string) => {

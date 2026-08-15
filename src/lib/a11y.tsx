@@ -279,7 +279,11 @@ export function VoiceProvider({ children }: { children: ReactNode }) {
 
   const stopSpeaking = useCallback(() => {
     if (typeof window === "undefined") return;
-    window.speechSynthesis.cancel();
+    try {
+      window.speechSynthesis?.cancel();
+    } catch {
+      /* ignore */
+    }
     speakingRef.current = false;
     setSpeaking(false);
   }, []);
@@ -301,24 +305,34 @@ export function VoiceProvider({ children }: { children: ReactNode }) {
   const speak = useCallback(
     (text: string) => {
       if (typeof window === "undefined" || !text.trim()) return;
+      const synth = window.speechSynthesis;
+      if (!synth || typeof SpeechSynthesisUtterance === "undefined") return;
 
       // Pause mic while TTS plays so commands aren't drowned by echo.
       speakingRef.current = true;
       setSpeaking(true);
       stopRecognition();
 
-      window.speechSynthesis.cancel();
+      try {
+        synth.cancel();
+      } catch {
+        /* ignore */
+      }
       const utter = new SpeechSynthesisUtterance(text);
       utter.lang = locale === "th" ? "th-TH" : "en-US";
       utter.rate = locale === "th" ? 0.95 : 1;
-      const voices = window.speechSynthesis.getVoices();
-      const preferred =
-        voices.find((v) =>
-          locale === "th"
-            ? v.lang.toLowerCase().startsWith("th")
-            : v.lang.toLowerCase().startsWith("en"),
-        ) ?? null;
-      if (preferred) utter.voice = preferred;
+      try {
+        const voices = synth.getVoices();
+        const preferred =
+          voices.find((v) =>
+            locale === "th"
+              ? v.lang.toLowerCase().startsWith("th")
+              : v.lang.toLowerCase().startsWith("en"),
+          ) ?? null;
+        if (preferred) utter.voice = preferred;
+      } catch {
+        /* ignore */
+      }
 
       const resume = () => {
         speakingRef.current = false;
@@ -332,7 +346,12 @@ export function VoiceProvider({ children }: { children: ReactNode }) {
       };
       utter.onend = resume;
       utter.onerror = resume;
-      window.speechSynthesis.speak(utter);
+      try {
+        synth.speak(utter);
+      } catch {
+        resume();
+        return;
+      }
       announce(text);
     },
     [announce, locale, scheduleListen, stopRecognition],
@@ -496,7 +515,11 @@ export function VoiceProvider({ children }: { children: ReactNode }) {
         speak(t.a11y.micDenied);
         setVoiceModeState(false);
         voiceModeRef.current = false;
-        window.localStorage.setItem(STORAGE_KEY, "0");
+        try {
+          window.localStorage.setItem(STORAGE_KEY, "0");
+        } catch {
+          /* ignore */
+        }
         stopRecognition();
         return;
       }
@@ -550,7 +573,11 @@ export function VoiceProvider({ children }: { children: ReactNode }) {
     (on: boolean) => {
       setVoiceModeState(on);
       voiceModeRef.current = on;
-      window.localStorage.setItem(STORAGE_KEY, on ? "1" : "0");
+      try {
+        window.localStorage.setItem(STORAGE_KEY, on ? "1" : "0");
+      } catch {
+        /* ignore */
+      }
       if (on) {
         setLastHeard("");
         speak(t.a11y.voiceOn);
@@ -579,19 +606,41 @@ export function VoiceProvider({ children }: { children: ReactNode }) {
   }, [setVoiceMode, voiceMode]);
 
   useEffect(() => {
-    const saved = window.localStorage.getItem(STORAGE_KEY);
-    if (saved === "1") {
-      setVoiceModeState(true);
-      voiceModeRef.current = true;
-      scheduleListen(600);
+    try {
+      const saved = window.localStorage.getItem(STORAGE_KEY);
+      if (saved === "1") {
+        setVoiceModeState(true);
+        voiceModeRef.current = true;
+        scheduleListen(600);
+      }
+    } catch {
+      /* private / in-app browsers may block storage */
     }
-    const warm = () => window.speechSynthesis.getVoices();
+
+    const synth = typeof window !== "undefined" ? window.speechSynthesis : undefined;
+    if (!synth) return;
+
+    const warm = () => {
+      try {
+        synth.getVoices();
+      } catch {
+        /* ignore */
+      }
+    };
     warm();
-    window.speechSynthesis.onvoiceschanged = warm;
+    try {
+      synth.onvoiceschanged = warm;
+    } catch {
+      /* ignore */
+    }
     return () => {
       clearRestartTimer();
       stopRecognition();
-      window.speechSynthesis.cancel();
+      try {
+        synth.cancel();
+      } catch {
+        /* ignore */
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

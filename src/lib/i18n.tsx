@@ -27,14 +27,22 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const saved = window.localStorage.getItem(STORAGE_KEY) as Locale | null;
-    if (saved === "th" || saved === "en") setLocaleState(saved);
+    try {
+      const saved = window.localStorage.getItem(STORAGE_KEY) as Locale | null;
+      if (saved === "th" || saved === "en") setLocaleState(saved);
+    } catch {
+      /* ignore */
+    }
     setReady(true);
   }, []);
 
   const setLocale = useCallback((next: Locale) => {
     setLocaleState(next);
-    window.localStorage.setItem(STORAGE_KEY, next);
+    try {
+      window.localStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      /* ignore */
+    }
     document.documentElement.lang = next === "th" ? "th" : "en";
   }, []);
 

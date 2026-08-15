@@ -12,6 +12,7 @@ import { ThemeProvider } from "@/lib/theme";
 import { LoginModal } from "@/components/LoginModal";
 import { NotificationPanel } from "@/components/NotificationPanel";
 import { AICoachChat } from "@/components/AICoachChat";
+import { InAppBrowserGate } from "@/components/InAppBrowserGate";
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
@@ -23,6 +24,7 @@ export function Providers({ children }: { children: ReactNode }) {
               <AutosaveProvider>
                 <NoticeProvider>
                   <VoiceProvider>
+                    <InAppBrowserGate />
                     {children}
                     <LoginModal />
                     <NotificationPanel />
