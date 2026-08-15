@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { aiConfigured, chatCompletion, type ChatMessage } from "@/lib/ai";
+import { aiConfigured, chatCompletion, toPlainChatText, type ChatMessage } from "@/lib/ai";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -49,12 +49,14 @@ export async function POST(req: Request) {
 - ช่วยนักเรียนไทยคิดทีละขั้น แบบโซเครติก ห้ามเฉลยคำตอบสุดท้ายทันที
 - อ่านโจทย์จากรูป/ข้อความ อธิบายแนวคิดสั้น ๆ แล้วถามคำถามนำ
 - ถ้าเป็นคณิต ชี้แนวคิดสำคัญและขั้นถัดไป 1–2 ขั้น
-- ตอบภาษาไทย กระชับ อ่านง่าย ใช้ markdown สั้น ๆ ได้
+- ตอบภาษาไทย กระชับ อ่านง่าย เป็นข้อความธรรมดาเท่านั้น
+- ห้ามใช้อิโมจิ ห้ามใช้ markdown ทุกชนิด (เช่น # ** __ \` --- * - หัวข้อแบบ markdown)
 - ห้ามสร้างข้อมูลเท็จ และอย่าเปิดเผยคำตอบเต็มจนกว่านักเรียนจะขอชัดเจนว่า "เฉลยเลย"`
         : `You are Coach Toby, GuideLearn's homework tutor.
 - Be Socratic: guide step-by-step; do not give the final answer immediately.
 - Read the problem from image/text, explain the idea briefly, then ask a leading question.
 - Keep replies concise in English (Thai ok if student uses Thai).
+- Use plain text only. No emojis. No markdown of any kind (no # ** __ \` --- bullet markers as formatting).
 - Never invent facts. Only reveal a full solution if the student clearly asks for the final answer.`;
 
     const messages: ChatMessage[] = [{ role: "system", content: system }];
@@ -84,7 +86,9 @@ export async function POST(req: Request) {
       messages.push({ role: "user", content: message });
     }
 
-    const reply = await chatCompletion({ messages, temperature: 0.35, maxTokens: 1600 });
+    const reply = toPlainChatText(
+      await chatCompletion({ messages, temperature: 0.35, maxTokens: 1600 }),
+    );
     return NextResponse.json({ ok: true, reply });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Tutor AI failed";

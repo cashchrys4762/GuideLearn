@@ -16,24 +16,21 @@ export function LoginModal() {
   const router = useRouter();
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [role, setRole] = useState<UserRole>("student");
-  const [name, setName] = useState("กุลธิดา");
-  const [email, setEmail] = useState("kulthida@guidelearn.app");
-  const [password, setPassword] = useState("••••••••");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
 
   useEffect(() => {
-    if (!loginOpen) setMode("login");
-  }, [loginOpen]);
-
-  useEffect(() => {
-    if (role === "teacher") {
-      setName("ครูสมชาย");
-      setEmail("teacher@guidelearn.app");
-    } else {
-      setName("กุลธิดา");
-      setEmail("kulthida@guidelearn.app");
+    if (!loginOpen) {
+      setMode("login");
+      setRole("student");
+      setName("");
+      setEmail("");
+      setPassword("");
+      setShowPw(false);
     }
-  }, [role]);
+  }, [loginOpen]);
 
   if (!loginOpen) return null;
 
@@ -46,8 +43,11 @@ export function LoginModal() {
   };
 
   const submit = () => {
-    if (mode === "signup") register(name, email, role);
-    else login(name || (role === "teacher" ? "ครูสมชาย" : "กุลธิดา"), email, role);
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    if (!trimmedName || !trimmedEmail) return;
+    if (mode === "signup") register(trimmedName, trimmedEmail, role);
+    else login(trimmedName, trimmedEmail, role);
     afterAuth();
   };
 
@@ -146,6 +146,8 @@ export function LoginModal() {
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
+            placeholder={t.platform.name}
+            autoComplete="name"
             className="mt-1 w-full rounded-2xl border border-outline-variant bg-surface-container-low px-4 py-3 outline-none focus:border-primary"
           />
         </label>
@@ -155,6 +157,8 @@ export function LoginModal() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            placeholder={t.platform.email}
+            autoComplete="email"
             className="mt-1 w-full rounded-2xl border border-outline-variant bg-surface-container-low px-4 py-3 outline-none focus:border-primary"
           />
         </label>
@@ -167,6 +171,8 @@ export function LoginModal() {
               type={showPw ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              placeholder={t.platform.password}
+              autoComplete={mode === "signup" ? "new-password" : "current-password"}
               className="w-full rounded-2xl border border-outline-variant bg-surface-container-low px-4 py-3 pr-12 outline-none focus:border-primary"
             />
             <button
@@ -183,7 +189,8 @@ export function LoginModal() {
         <button
           type="button"
           onClick={submit}
-          className="w-full rounded-full bg-primary py-3.5 font-label-md text-label-md text-on-primary shadow-md low-bw:shadow-none"
+          disabled={!name.trim() || !email.trim()}
+          className="w-full rounded-full bg-primary py-3.5 font-label-md text-label-md text-on-primary shadow-md disabled:opacity-50 low-bw:shadow-none"
         >
           {mode === "login" ? t.platform.signIn : t.platform.signUp}
         </button>

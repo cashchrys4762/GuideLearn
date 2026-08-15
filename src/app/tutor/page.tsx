@@ -9,7 +9,6 @@ import { RequireAuth } from "@/components/RequireAuth";
 import { usePageScript, useVoice } from "@/lib/a11y";
 import { assets } from "@/lib/assets";
 import { useAutosave } from "@/lib/autosave";
-import { puterChat } from "@/lib/puter-ai";
 import { useI18n } from "@/lib/i18n";
 
 type Msg = { role: "user" | "assistant"; content: string };
@@ -41,19 +40,6 @@ export default function TutorPage() {
     t.tools.tutorStep4,
   ];
 
-  const system =
-    locale === "th"
-      ? `คุณคือโค้ชโทบี้ (Coach Toby) ติวเตอร์ AI ของ GuideLearn
-- ช่วยนักเรียนไทยคิดทีละขั้น แบบโซเครติก ห้ามเฉลยคำตอบสุดท้ายทันที
-- อ่านโจทย์จากรูป/ข้อความ อธิบายแนวคิดสั้น ๆ แล้วถามคำถามนำ
-- ถ้าเป็นคณิต ชี้แนวคิดสำคัญและขั้นถัดไป 1–2 ขั้น
-- ตอบภาษาไทย กระชับ อ่านง่าย
-- ห้ามสร้างข้อมูลเท็จ และอย่าเปิดเผยคำตอบเต็มจนกว่านักเรียนจะขอชัดเจนว่า "เฉลยเลย"`
-      : `You are Coach Toby, GuideLearn's homework tutor.
-- Be Socratic: guide step-by-step; do not give the final answer immediately.
-- Read the problem from image/text, explain briefly, then ask a leading question.
-- Keep replies concise. Only reveal a full solution if the student clearly asks for the final answer.`;
-
   const preventDefaults = (e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -81,50 +67,34 @@ export default function TutorPage() {
 
     setMessages((prev) => [...prev, { role: "user", content: userLabel }]);
     if (message) setInput("");
-    speak(t.studyBuddy.analyzing);
 
     try {
-      let reply = "";
-      try {
-        reply = await puterChat({
-          system,
-          messages: historyForModel,
-          userText:
-            message ||
-            (locale === "th"
-              ? "นี่คือรูปโจทย์การบ้าน ช่วยอ่านแล้วพาคิดทีละขั้น โดยยังไม่เฉลยคำตอบสุดท้าย"
-              : "Here is my homework photo. Guide me step-by-step without the final answer."),
-          imageFile: file,
-        });
-      } catch {
-        // Fallback to server route (Gemini / free providers) if Puter is blocked.
-        const imageDataUrl = file
-          ? await new Promise<string>((resolve, reject) => {
-              const reader = new FileReader();
-              reader.onload = () => resolve(String(reader.result || ""));
-              reader.onerror = () => reject(new Error("read failed"));
-              reader.readAsDataURL(file);
-            })
-          : null;
-        const res = await fetch("/api/ai/tutor", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            locale,
-            message,
-            imageDataUrl,
-            history: historyForModel,
-          }),
-        });
-        const data = (await res.json()) as { ok?: boolean; reply?: string; error?: string };
-        if (!res.ok || !data.ok || !data.reply) {
-          throw new Error(data.error || (locale === "th" ? "ติวไม่สำเร็จ" : "Tutor request failed"));
-        }
-        reply = data.reply;
+      const imageDataUrl = file
+        ? await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(String(reader.result || ""));
+            reader.onerror = () => reject(new Error("read failed"));
+            reader.readAsDataURL(file);
+          })
+        : null;
+
+      const res = await fetch("/api/ai/tutor", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          locale,
+          message,
+          imageDataUrl,
+          history: historyForModel,
+        }),
+      });
+      const data = (await res.json()) as { ok?: boolean; reply?: string; error?: string };
+      if (!res.ok || !data.ok || !data.reply) {
+        throw new Error(data.error || (locale === "th" ? "ติวไม่สำเร็จ" : "Tutor request failed"));
       }
 
+      const reply = data.reply;
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
-      speak(`${t.studyBuddy.analysisComplete}. ${reply.slice(0, 180)}`);
       triggerSave();
       setPendingFile(null);
     } catch (err) {

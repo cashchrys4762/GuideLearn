@@ -7,12 +7,52 @@ export type ChatMessage = {
   content: string | ChatContentPart[];
 };
 
+/** Strip markdown markers and emojis so chat replies stay plain text. */
+export function toPlainChatText(input: string): string {
+  let text = input.replace(/\r\n/g, "\n");
+
+  // Fenced code blocks → keep inner text
+  text = text.replace(/```[\w-]*\n?([\s\S]*?)```/g, "$1");
+  // Inline code
+  text = text.replace(/`([^`]+)`/g, "$1");
+  // Headings
+  text = text.replace(/^\s{0,3}#{1,6}\s+/gm, "");
+  // Bold / italic / underline markers
+  text = text.replace(/\*\*\*(.+?)\*\*\*/g, "$1");
+  text = text.replace(/___(.+?)___/g, "$1");
+  text = text.replace(/\*\*(.+?)\*\*/g, "$1");
+  text = text.replace(/__(.+?)__/g, "$1");
+  text = text.replace(/(?<!\w)\*(?!\s)(.+?)(?<!\s)\*(?!\w)/g, "$1");
+  text = text.replace(/(?<!\w)_(?!\s)(.+?)(?<!\s)_(?!\w)/g, "$1");
+  // Strikethrough / links / images
+  text = text.replace(/~~(.+?)~~/g, "$1");
+  text = text.replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1");
+  text = text.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
+  // Horizontal rules
+  text = text.replace(/^\s{0,3}([-*_]){3,}\s*$/gm, "");
+  // Quote markers
+  text = text.replace(/^\s{0,3}>\s?/gm, "");
+  // Emoji / pictographs (keep Thai, Latin, math symbols, punctuation)
+  text = text.replace(/\p{Extended_Pictographic}/gu, "");
+  text = text.replace(/\uFE0F/g, "");
+
+  return text
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 type ChatCompletionResponse = {
   choices?: Array<{ message?: { content?: string | null } }>;
   error?: { message?: string };
 };
 
 type ResolvedAuth =
+  | {
+      kind: "anthropic";
+      apiKey: string;
+      model: string;
+    }
   | {
       kind: "openai-compatible";
       apiKey: string;
@@ -27,6 +67,13 @@ type ResolvedAuth =
   | {
       kind: "pollinations";
       model: string;
+    };
+
+type AnthropicContentPart =
+  | { type: "text"; text: string }
+  | {
+      type: "image";
+      source: { type: "base64"; media_type: string; data: string };
     };
 
 function parseDataUrl(dataUrl: string): { mime: string; data: string } | null {
@@ -90,6 +137,8 @@ async function ocrImageDataUrl(dataUrl: string): Promise<string> {
 }
 
 async function resolveAuth(): Promise<ResolvedAuth | null> {
+  const anthropicKey =
+    process.env.ANTHROPIC_API_KEY?.trim() || process.env.CLAUDE_API_KEY?.trim();
   const gatewayKey = process.env.AI_GATEWAY_API_KEY?.trim();
   const openaiKey = process.env.OPENAI_API_KEY?.trim();
   const geminiKey =
@@ -97,6 +146,18 @@ async function resolveAuth(): Promise<ResolvedAuth | null> {
     process.env.GOOGLE_GENERATIVE_AI_API_KEY?.trim() ||
     process.env.GOOGLE_API_KEY?.trim();
   const forceOidc = process.env.AI_GATEWAY_FORCE_OIDC === "1";
+
+  // Claude (Anthropic) — preferred when ANTHROPIC_API_KEY / CLAUDE_API_KEY is set
+  if (anthropicKey) {
+    return {
+      kind: "anthropic",
+      apiKey: anthropicKey,
+      model:
+        process.env.GUIDELEARN_AI_MODEL?.trim() ||
+        process.env.ANTHROPIC_MODEL?.trim() ||
+        "claude-haiku-4-5",
+    };
+  }
 
   if (gatewayKey) {
     return {
@@ -161,6 +222,113 @@ async function resolveAuth(): Promise<ResolvedAuth | null> {
 
 export async function aiConfigured() {
   return (await resolveAuth()) !== null;
+}
+
+function toAnthropicParts(content: ChatMessage["content"]): AnthropicContentPart[] {
+  if (typeof content === "string") {
+    return content.trim() ? [{ type: "text", text: content }] : [];
+  }
+
+  const parts: AnthropicContentPart[] = [];
+  for (const part of content) {
+    if (part.type === "text") {
+      if (part.text.trim()) parts.push({ type: "text", text: part.text });
+      continue;
+    }
+    const parsed = parseDataUrl(part.image_url.url);
+    if (parsed) {
+      parts.push({
+        type: "image",
+        source: {
+          type: "base64",
+          media_type: parsed.mime,
+          data: parsed.data,
+        },
+      });
+    }
+  }
+  return parts;
+}
+
+async function chatViaAnthropic(
+  auth: Extract<ResolvedAuth, { kind: "anthropic" }>,
+  messages: ChatMessage[],
+  options: { temperature?: number; maxTokens?: number },
+) {
+  const system = messages
+    .filter((m) => m.role === "system")
+    .map((m) => flattenText(m.content))
+    .filter(Boolean)
+    .join("\n\n");
+
+  const anthropicMessages: Array<{
+    role: "user" | "assistant";
+    content: string | AnthropicContentPart[];
+  }> = [];
+
+  for (const message of messages) {
+    if (message.role === "system") continue;
+    const role = message.role === "assistant" ? "assistant" : "user";
+    const parts = toAnthropicParts(message.content);
+    if (!parts.length) continue;
+
+    const content: string | AnthropicContentPart[] =
+      parts.length === 1 && parts[0].type === "text" ? parts[0].text : parts;
+
+    const last = anthropicMessages[anthropicMessages.length - 1];
+    if (last && last.role === role) {
+      // Anthropic requires strict user/assistant alternation — merge consecutive turns.
+      const prevParts: AnthropicContentPart[] =
+        typeof last.content === "string"
+          ? [{ type: "text", text: last.content }]
+          : last.content;
+      const nextParts: AnthropicContentPart[] =
+        typeof content === "string" ? [{ type: "text", text: content }] : content;
+      last.content = [...prevParts, ...nextParts];
+    } else {
+      anthropicMessages.push({ role, content });
+    }
+  }
+
+  if (!anthropicMessages.length) {
+    throw new Error("No messages to send to Claude.");
+  }
+  if (anthropicMessages[0].role !== "user") {
+    anthropicMessages.unshift({ role: "user", content: "(continue)" });
+  }
+
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "x-api-key": auth.apiKey,
+      "anthropic-version": "2023-06-01",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: auth.model,
+      max_tokens: options.maxTokens ?? 1800,
+      temperature: options.temperature ?? 0.4,
+      system: system || undefined,
+      messages: anthropicMessages,
+    }),
+  });
+
+  const data = (await res.json()) as {
+    content?: Array<{ type?: string; text?: string }>;
+    error?: { message?: string; type?: string };
+  };
+
+  if (!res.ok) {
+    throw new Error(data.error?.message || `Claude request failed (${res.status})`);
+  }
+
+  const text = (data.content || [])
+    .filter((block) => block.type === "text" && block.text)
+    .map((block) => block.text || "")
+    .join("")
+    .trim();
+  if (!text) throw new Error("AI returned an empty response.");
+  return text;
 }
 
 async function chatViaGemini(auth: Extract<ResolvedAuth, { kind: "gemini" }>, messages: ChatMessage[]) {
@@ -327,6 +495,9 @@ export async function chatCompletion(options: {
     throw new Error("AI is not available.");
   }
 
+  if (auth.kind === "anthropic") {
+    return chatViaAnthropic(auth, options.messages, options);
+  }
   if (auth.kind === "gemini") {
     return chatViaGemini(auth, options.messages);
   }

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { aiConfigured, chatCompletion, type ChatMessage } from "@/lib/ai";
+import { aiConfigured, chatCompletion, toPlainChatText, type ChatMessage } from "@/lib/ai";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -81,10 +81,12 @@ export async function POST(req: Request) {
       locale === "th"
         ? `คุณคือผู้ช่วยเรียน GuideLearn ช่วยสรุปโน้ตและสร้างแบบฝึกจากเอกสารนักเรียน
 - ยึดเฉพาะเนื้อหาที่ให้มา ห้ามแต่งข้อมูลนอกเอกสาร
-- จัดรูปแบบอ่านง่าย ชัดเจน สำหรับนักเรียนมัธยม–มหาวิทยาลัย`
+- จัดรูปแบบอ่านง่าย ชัดเจน สำหรับนักเรียนมัธยม–มหาวิทยาลัย
+- ตอบเป็นข้อความธรรมดาเท่านั้น ห้ามใช้อิโมจิและห้ามใช้ markdown (เช่น # ** ---)`
         : `You are GuideLearn's study assistant. Summarize notes and generate practice from the student's material.
 - Use only the provided content; do not invent facts.
-- Keep formatting clear for high-school / early university students.`;
+- Keep formatting clear for high-school / early university students.
+- Plain text only. No emojis and no markdown (no # ** ---).`;
 
     const userText = `${task}
 
@@ -105,7 +107,9 @@ ${text ? text.slice(0, 14000) : "(content is in the attached image/PDF preview)"
       messages.push({ role: "user", content: userText });
     }
 
-    const result = await chatCompletion({ messages, temperature: 0.3, maxTokens: 2200 });
+    const result = toPlainChatText(
+      await chatCompletion({ messages, temperature: 0.3, maxTokens: 2200 }),
+    );
     return NextResponse.json({ ok: true, kind, text: result });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Study AI failed";

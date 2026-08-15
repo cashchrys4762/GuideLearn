@@ -8,29 +8,9 @@ import { RequireAuth } from "@/components/RequireAuth";
 import { usePageScript } from "@/lib/a11y";
 import { useAutosave } from "@/lib/autosave";
 import { fileToStudyPayload } from "@/lib/client-files";
-import { puterChat } from "@/lib/puter-ai";
 import { useI18n } from "@/lib/i18n";
 
 type GenKind = "summary" | "flashcards" | "mcq" | "tf";
-
-const KIND_PROMPTS: Record<GenKind, { th: string; en: string }> = {
-  summary: {
-    th: "สรุปเนื้อหาเป็นจุดสั้น ๆ 5–8 ข้อ เน้นสิ่งที่ควรจำก่อนสอบ ใช้ภาษาไทย",
-    en: "Summarize into 5–8 concise bullet points focused on exam-ready takeaways.",
-  },
-  flashcards: {
-    th: "สร้างบัตรคำ 6–10 ใบ รูปแบบแต่ละบรรทัด: Q: ... | A: ... ใช้ภาษาไทย",
-    en: "Create 6–10 flashcards. One per line as: Q: ... | A: ...",
-  },
-  mcq: {
-    th: "สร้างข้อสอบปรนัย 5 ข้อ แต่ละข้อมีตัวเลือก A–D และเฉลยท้ายข้อ รูปแบบชัดเจน ภาษาไทย",
-    en: "Create 5 multiple-choice questions with options A–D and the answer after each question.",
-  },
-  tf: {
-    th: "สร้างข้อถูก/ผิด 8 ข้อ แต่ละข้อตามด้วยคำว่า ถูก หรือ ผิด และเหตุผลสั้น ๆ ภาษาไทย",
-    en: "Create 8 true/false items. After each statement write True or False plus a one-line reason.",
-  },
-};
 
 export default function FilesPage() {
   const { t, locale } = useI18n();
@@ -113,50 +93,24 @@ export default function FilesPage() {
     setError(null);
     setResult(null);
 
-    const task = KIND_PROMPTS[kind][locale];
-    const system =
-      locale === "th"
-        ? `คุณคือผู้ช่วยเรียน GuideLearn ช่วยสรุปโน้ตและสร้างแบบฝึกจากเอกสารนักเรียน
-- ยึดเฉพาะเนื้อหาที่ให้มา ห้ามแต่งข้อมูลนอกเอกสาร
-- จัดรูปแบบอ่านง่าย ชัดเจน`
-        : `You are GuideLearn's study assistant. Use only the provided content. Keep formatting clear.`;
-
-    const userText = `${task}\n\nFile: ${payload?.fileName || fileName || "notes"}\n---\n${text || "(see attached file)"}`;
-
     try {
-      let out = "";
-      try {
-        const imageLike =
-          rawFile &&
-          (rawFile.type.startsWith("image/") || /\.(png|jpe?g|webp|gif)$/i.test(rawFile.name))
-            ? rawFile
-            : null;
-        out = await puterChat({
-          system,
-          messages: [],
-          userText,
-          imageFile: imageLike,
-        });
-      } catch {
-        const res = await fetch("/api/ai/study", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            locale,
-            kind,
-            text,
-            imageDataUrl,
-            fileName: payload?.fileName || fileName || "notes",
-          }),
-        });
-        const data = (await res.json()) as { ok?: boolean; text?: string; error?: string };
-        if (!res.ok || !data.ok || !data.text) {
-          throw new Error(data.error || (locale === "th" ? "สร้างไม่สำเร็จ" : "Generation failed"));
-        }
-        out = data.text;
+      const res = await fetch("/api/ai/study", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          locale,
+          kind,
+          text,
+          imageDataUrl,
+          fileName: payload?.fileName || fileName || "notes",
+        }),
+      });
+      const data = (await res.json()) as { ok?: boolean; text?: string; error?: string };
+      if (!res.ok || !data.ok || !data.text) {
+        throw new Error(data.error || (locale === "th" ? "สร้างไม่สำเร็จ" : "Generation failed"));
       }
 
-      setResult({ kind, text: out });
+      setResult({ kind, text: data.text });
       triggerSave();
     } catch (err) {
       setError(err instanceof Error ? err.message : "AI error");
