@@ -33,7 +33,7 @@ def ch1():
     <tr><td>ไมโคร</td><td>µ</td><td>10⁻⁶</td></tr>
     <tr><td>เมกะ</td><td>M</td><td>10⁶</td></tr>
   </table>
-  <div class="box tip keep"><div class="box-label">แปลงที่เจอบ่อย (จากเลคเชอร์)</div>
+  <div class="box tip keep"><div class="box-label">แปลงหน่วยที่เจอบ่อย</div>
   2 kg = 2000 g · 30 ms = 0.030 s · 20 km/h = 20/3.6 ≈ 5.56 m/s<br/>
   72 km/h = 20 m/s · 100 km/h = 27.78 m/s · 1 ชม. = 3600 s · g ≈ 9.8 m/s²
   </div>
@@ -56,8 +56,8 @@ def ch1():
     <li>รวมแกน: R<sub>x</sub>=ΣF<sub>x</sub>, R<sub>y</sub>=ΣF<sub>y</sub></li>
     <li>ขนาด |R|=√(R<sub>x</sub>²+R<sub>y</sub>²) · ทิศ tanθ=R<sub>y</sub>/R<sub>x</sub></li>
   </ol>
-  <div class="box example keep"><div class="box-label">ตัวอย่าง · รวมเวกเตอร์ (แนวเลคเชอร์)</div>
-  เวกเตอร์ขนาด 3 กับ 5 ทำมุม 30° กัน (กางออก) หาผลลัพธ์โดยแยกแกน
+  <div class="box example keep"><div class="box-label">ตัวอย่าง · รวมเวกเตอร์</div>
+  มีเวกเตอร์ขนาด 3 หน่วย และ 5 หน่วย ทำมุม 30° กัน จงหาเวกเตอร์ลัพธ์โดยแยกแกน
   </div>
   <div class="box answer keep"><div class="box-label">เฉลยทีละขั้น</div>
   <ol class="steps">
@@ -75,7 +75,7 @@ def ch1():
   <table class="keep">
     <tr><th>ปริมาณ</th><th>นิยาม / สูตร</th><th>หมายเหตุ</th></tr>
     <tr><td>ตำแหน่ง x(t)</td><td>ที่อยู่เทียบจุดอ้างอิง</td><td>ฟังก์ชันของเวลา</td></tr>
-    <tr><td>ความเร็ว</td><td>v = dx/dt</td><td>瞬时ดีกว่าค่าเฉลี่ยตอนสอบ</td></tr>
+    <tr><td>ความเร็ว</td><td>v = dx/dt</td><td>ค่าขณะหนึ่งละเอียดกว่าค่าเฉลี่ยตอนสอบ</td></tr>
     <tr><td>ความเร่ง</td><td>a = dv/dt = d²x/dt²</td><td></td></tr>
     <tr><td>ความเร็วเฉลี่ย</td><td>v<sub>avg</sub> = Δx/Δt</td><td></td></tr>
     <tr><td>ความเร่งเฉลี่ย</td><td>a<sub>avg</sub> = Δv/Δt</td><td></td></tr>
@@ -93,16 +93,16 @@ def ch1():
   ระยะทาง ≠ การกระจัด · รู้ x(t) แล้วหา v,a ได้ด้วยอนุพันธ์
   </div>
 
-  <h2>ตัวอย่างจากเลคเชอร์ + เฉลย</h2>
+  <h2>ตัวอย่างพร้อมเฉลย</h2>
 
   <div class="box example keep"><div class="box-label">ตัวอย่าง 1 · หุ่นยนต์ x(t) → หา v</div>
   หุ่นยนต์วิ่งตรง ตำแหน่งเป็นฟังก์ชันของเวลา (ม., วินาที)
   หาความเร็วที่ t=1,2,3,4 s และวาดกราฟ v–t<br/>
-  <em>แนวจากเลคเชอร์:</em> ถ้า v(t)=4t+4 (ได้จากดิฟ x)
+  <em>แนวทำ:</em> ถ้า v(t)=4t+4 (ได้จากการหาอนุพันธ์ของ x)
   </div>
   <div class="box answer keep"><div class="box-label">เฉลย</div>
   <ol class="steps">
-    <li>v = dx/dt (เอาเลขยกกำลังลงมาคูณ)</li>
+    <li>v = dx/dt (หาอนุพันธ์ตามกฎกำลัง)</li>
     <li>ถ้า v=4t+4: v(0)=4, v(1)=8, v(2)=12, v(3)=16, v(4)=20 m/s</li>
     <li>a = dv/dt = 4 m/s² (คงที่) · วาดกราฟ v–t เป็นเส้นตรงชันขึ้น</li>
   </ol></div>
@@ -118,21 +118,21 @@ def ch1():
   </ol></div>
 
   <div class="box example keep"><div class="box-label">ตัวอย่าง 3 · ณเดชขับรถจากหยุด</div>
-  จากหยุด อัตราเร็วเพิ่ม 2 m/s ทุกวินาที วินาทีที่ 5 ความเร็วเท่าไร?
+  รถยนต์เริ่มเคลื่อนที่จากหยุดนิ่ง โดยอัตราเร็วเพิ่มขึ้น 2 m/s ในทุก ๆ วินาที เมื่อครบวินาทีที่ 5 รถจะมีความเร็วเท่าใด
   </div>
-  <div class="box answer keep"><div class="box-label">เฉลย</div>
+  <div class="box answer keep"><div class="box-label">เฉลย</div><p class="a">
   u=0, a=2, t=5 → v=u+at=<span class="hl mint">10 m/s</span>
-  </div>
+  </p></div>
 
   <div class="box example keep"><div class="box-label">ตัวอย่าง 4 · นายเอหา a</div>
-  จากหยุด ผ่าน 4 s มีความเร็ว 8 m/s เร่งสม่ำเสมอ a=?
+  รถยนต์เคลื่อนที่จากหยุดนิ่งบนเส้นทางตรง ผ่านไป 4 วินาที มีความเร็ว 8 m/s ถ้าเร่งอย่างสม่ำเสมอ จงหาความเร่ง
   </div>
-  <div class="box answer keep"><div class="box-label">เฉลย</div>
+  <div class="box answer keep"><div class="box-label">เฉลย</div><p class="a">
   8=0+a·4 → a=<span class="hl mint">2 m/s²</span>
-  </div>
+  </p></div>
 
   <div class="box example keep"><div class="box-label">ตัวอย่าง 5 · รถสองคันพบกัน</div>
-  A คงที่ 50 km/h ผ่าน B ที่ 40 km/h เร่ง 20 km/h² ทางเดียวกัน อีกนานพบกัน?
+  รถยนต์ A วิ่งด้วยความเร็วคงที่ 50 km/h ผ่านรถยนต์ B ซึ่งวิ่งทางเดียวกันด้วยความเร็ว 40 km/h และมีความเร่งคงที่ 20 km/h² อีกนานเท่าใดรถทั้งสองจะพบกันอีกครั้ง
   </div>
   <div class="box answer keep"><div class="box-label">เฉลย</div>
   <ol class="steps">
@@ -142,7 +142,7 @@ def ch1():
   </ol></div>
 
   <div class="box example keep"><div class="box-label">ตัวอย่าง 6 · เบรกก่อนสิ่งกีดขวาง</div>
-  รถ 10 m/s ห่างสิ่งกีดขวาง 35 m คิด 1 s ก่อนเบรกทำงาน ต้องลดความเร็วอัตราเท่าไรจึงหยุดพอดี?
+  รถยนต์วิ่งด้วยความเร็วคงที่ 10 m/s อยู่ห่างสิ่งกีดขวาง 35 m คนขับใช้เวลาคิด 1 s ก่อนเบรกทำงาน เมื่อเบรกทำงานแล้ว รถต้องลดความเร็วในอัตราเท่าใดจึงจะหยุดพอดีเมื่อถึงสิ่งกีดขวาง
   </div>
   <div class="box answer keep"><div class="box-label">เฉลย</div>
   <ol class="steps">
@@ -152,7 +152,7 @@ def ch1():
   </ol></div>
 
   <div class="box example keep"><div class="box-label">ตัวอย่าง 7 · รถไฟสองขบวน</div>
-  ความเร็ว 10 และ 20 m/s เข้าหากันห่าง 325 m เบรกหยุดพร้อมกันห่างเหลือ 25 m หา t
+  รถไฟ 2 ขบวนวิ่งเข้าหากันในรางเดียวกัน ด้วยความเร็ว 10 m/s และ 20 m/s ขณะอยู่ห่างกัน 325 m ทั้งคู่เบรกและหยุดพอดีพร้อมกัน โดยหยุดแล้วยังห่างกัน 25 m จงหาเวลาที่รถทั้งสองใช้เบรก
   </div>
   <div class="box answer keep"><div class="box-label">เฉลย</div>
   <ol class="steps">
@@ -162,16 +162,15 @@ def ch1():
   </ol></div>
 
   <div class="box example keep"><div class="box-label">ตัวอย่าง 8 · ขว้างหินจากหน้าผา</div>
-  มวล 0.5 kg ขว้างด้วย 10 m/s จากหน้าผาสูง 50 m เหนือน้ำ ความเร็วตอนกระทบน้ำ?
+  ขว้างก้อนหินมวล 0.5 kg ด้วยความเร็ว 10 m/s จากหน้าผาสูง 50 m เหนือระดับน้ำ จงหาความเร็วของก้อนหินขณะกระทบน้ำ
   </div>
 ''' + CLIFF + '''
-  <div class="box answer keep"><div class="box-label">เฉลย</div>
+  <div class="box answer keep"><div class="box-label">เฉลย</div><p class="a">
   ทิศลงบวก: u=10, a=9.8, s=50 → v²=100+2(9.8)(50)=1080 → v≈<span class="hl mint">32.86 m/s</span>
-  </div>
+  </p></div>
 
   <div class="box example keep"><div class="box-label">ตัวอย่าง 9 · วัตถุหลุดจากบอลลูน</div>
-  บอลลูนเร่งขึ้น 2 m/s² นาน 20 s แล้วความเร็วคงที่ หลังปล่อยไป 40 s มีวัตถุหลุด
-  นานเท่าไรจึงถึงพื้น?
+  ปล่อยบอลลูนขึ้นด้วยความเร่งคงที่ 2 m/s² นาน 20 s แล้วเคลื่อนที่ด้วยความเร็วคงที่ หลังจากปล่อยบอลลูนไป 40 s มีวัตถุหลุดจากบอลลูน จงหานานเท่าใดวัตถุจึงตกถึงพื้น
   </div>
   <div class="box answer keep"><div class="box-label">เฉลยทีละขั้น</div>
   <ol class="steps">
@@ -183,14 +182,13 @@ def ch1():
   </ol></div>
 
   <div class="box example keep"><div class="box-label">ตัวอย่าง 10 · ยิงกระสุนขึ้น 3 ลูก</div>
-  ยิงดิ่งขึ้น 3 ลูก จากจุดเดียวกัน u=10 m/s เท่ากัน เว้นช่วงลูกถัดไป 1 s
-  ลูก 2 กับ 3 พุ่งชนกันที่สูงจากฐานกี่เมตร?
+  ยิงกระสุนดิ่งขึ้นฟ้า 3 ลูกติดต่อกัน จากตำแหน่งเดียวกัน ด้วยอัตราเร็วต้น 10 m/s เท่ากัน และเว้นช่วงเวลาระหว่างลูกถัดกัน 1 s จงหาว่ากระสุนลูกที่ 2 และ 3 จะสวนกันที่ระยะสูงจากฐานยิงกี่เมตร
   </div>
   <div class="box answer keep"><div class="box-label">เฉลย</div>
   <ol class="steps">
     <li>ให้ tₑ = เวลาหลังยิงลูก 2 จนพบกัน · ลูก 3 ถูกยิงช้ากว่า 1 s</li>
     <li>y₂=10tₑ − ½g tₑ² · y₃=10(tₑ−1) − ½g(tₑ−1)²</li>
-    <li>ตั้ง y₂=y₃ แก้ได้ tₑ≈0.52 s (ประมาณจากเลคเชอร์)</li>
+    <li>ตั้ง y₂=y₃ แก้ได้ tₑ≈0.52 s </li>
     <li>แทนกลับ y≈<span class="hl mint">3.89 m</span></li>
   </ol></div>
 
@@ -235,10 +233,10 @@ def ch2():
 
   <h2>ตัวอย่างโปรเจคไทล์</h2>
   <div class="box example keep"><div class="box-label">ตัวอย่าง 1 · โดรนปล่อยพัสดุ (ครบ 3 ข้อ)</div>
-  โดรนบินแนวราบคงที่ 72 km/h ความสูง 80 m<br/>
-  (ก) ต้องปล่อยก่อนถึงจุดรับกี่เมตร (ไม่คิดแรงต้าน)<br/>
-  (ข) ขนาดและทิศความเร็วตอนกระทบพื้น<br/>
-  (ค) จุดรับรัศมี 5 m และลมต้าน a<sub>x</sub>=−0.5 m/s² จุดปล่อยเปลี่ยนไปกี่เมตร
+  โดรนส่งสินค้าบินในแนวราบด้วยความเร็วคงที่ 72 km/h ที่ระดับความสูงคงที่ 80 m เหนือพื้นดิน<br/>
+  (ก) ต้องปล่อยพัสดุก่อนถึงจุดรับในแนวราบเป็นระยะทางเท่าใด จึงจะลงตรงเป้าหมาย (ไม่คิดแรงต้านอากาศ)<br/>
+  (ข) จงหาขนาดและทิศทางของความเร็วของพัสดุขณะตกกระทบพื้น<br/>
+  (ค) ถ้าจุดรับมีพื้นที่จำกัดเป็นวงกลมรัศมี 5 m และลมต้านทำให้ความเร่งในแนวราบของพัสดุเป็น a<sub>x</sub> = −0.5 m/s² จุดปล่อยจะต้องเปลี่ยนไปจากเดิมกี่เมตร
   </div>
 ''' + DRONE + '''
   <div class="box answer keep"><div class="box-label">เฉลยทีละขั้น</div>
@@ -247,14 +245,14 @@ def ch2():
     <li>−80 = −½gt² → t²=160/9.8 → t≈4.04 s ≈ <span class="hl">4 s</span></li>
     <li>(ก) s<sub>x</sub>=20·4 = <span class="hl mint">80 m</span></li>
     <li>(ข) v<sub>x</sub>=20, v<sub>y</sub>=9.8·4≈39.2 → |v|=√(20²+39.2²)≈<span class="hl mint">44 m/s</span>
-        ทิศใต้แนวนอน θ=tan⁻¹(39.2/20)≈63°</li>
+        ทำมุมกับแนวราบลงด้านล่าง θ=tan⁻¹(39.2/20)≈63°</li>
     <li>(ค) มี a<sub>x</sub>=−0.5: s<sub>x</sub>=20·4+½(−0.5)(16)=80−4=<span class="hl mint">76 m</span>
         เปลี่ยนจากเดิม <span class="hl pink">4 m</span> (ปล่อยใกล้เป้ากว่าเดิม)
         · v<sub>x,f</sub>=20−0.5·4=18 m/s</li>
   </ol></div>
 
   <div class="box example keep"><div class="box-label">ตัวอย่าง 2 · เตะฟุตบอล</div>
-  เตะด้วย 22 m/s มุม 40° กับพื้น (ไม่คิดแรงต้าน) หา H, เวลาทั้งเที่ยว, R
+  นักฟุตบอลเตะฟุตบอลด้วยความเร็ว 22 m/s ทำมุม 40° กับพื้นราบ ไม่คิดแรงต้านอากาศ จงหาความสูงสูงสุด เวลาตั้งแต่ถูกเตะจนกระทบพื้น และระยะไกลสุด R
   </div>
   <div class="box answer keep"><div class="box-label">เฉลย</div>
   <ol class="steps">
@@ -286,9 +284,8 @@ def ch2():
   n rpm → f=n/60 Hz → ω=2πn/60 &nbsp;|&nbsp; 1 รอบ = 2π rad = 360°
   </div>
 
-  <div class="box example keep"><div class="box-label">ตัวอย่าง 3 · ข้อเหวี่ยงเครื่องยนต์</div>
-  เส้นผ่านศูนย์กลาง 4 cm (r=0.02 m) หมุน 2400 rpm
-  หา T, f, ω, v, a<sub>c</sub> ที่ขอบ
+  <div class="box example keep"><div class="box-label">ตัวอย่าง 3 · เพลาข้อเหวี่ยงเครื่องยนต์</div>
+  เพลาข้อเหวี่ยงมีเส้นผ่านศูนย์กลาง 4 cm (ดังนั้น r = 0.02 m) หมุนด้วยอัตรา 2400 rpm จงหาคาบ ความถี่ อัตราเร็วเชิงมุม อัตราเร็วเชิงเส้น และขนาดความเร่งเข้าสู่ศูนย์กลางที่ขอบ
   </div>
   <div class="box answer keep"><div class="box-label">เฉลย</div>
   <ol class="steps">
@@ -299,8 +296,7 @@ def ch2():
   </ol></div>
 
   <div class="box example keep"><div class="box-label">ตัวอย่าง 4 · แกว่งเชือกแนวดิ่ง มุม 60°</div>
-  มวล 0.5 kg เชือกยาว 1.0 m แกว่งวงกลมแนวดิ่ง
-  เมื่อเชือกทำมุม 60° กับแนวดิ่งจากจุดต่ำสุด ความเร็ว 3.0 m/s หาความตึงเชือก
+  วัตถุมวล 0.5 kg ผูกติดกับเชือกยาว 1.0 m แกว่งเป็นวงกลมในแนวดิ่ง เมื่อเชือกทำมุม 60° กับแนวดิ่งจากตำแหน่งต่ำสุดของวิถี และอัตราเร็วขณะนั้นเป็น 3.0 m/s จงหาความตึงในเส้นเชือก
   </div>
   <div class="box answer keep"><div class="box-label">เฉลย</div>
   <ol class="steps">
@@ -324,7 +320,7 @@ def ch3():
 
   <h2>แรงคืออะไร?</h2>
   <ul>
-    <li>อำนาจที่ทำให้วัตถุเร็วขึ้น/ช้าลง (มีความเร่ง) หรือเปลี่ยนรูปร่าง (เช่น ดึงเส้นลวด)</li>
+    <li>สิ่งที่ทำให้วัตถุเร็วขึ้น/ช้าลง (มีความเร่ง) หรือเปลี่ยนรูปร่าง (เช่น ดึงเส้นลวด)</li>
     <li>เป็น<span class="hl pink">เวกเตอร์</span> → แยก F cosθ, F sinθ ได้ · ขึ้นกับมวลด้วย</li>
   </ul>
 
@@ -336,12 +332,12 @@ def ch3():
   </div>
 ''' + CAR_INERTIA + '''
   <div class="box example keep"><div class="box-label">ตัวอย่าง · รถเมล์เบรก</div>
-  รถโดยสารเบรกกระทันหัน ผู้โดยสารยืนพุ่งไปข้างหน้า แรงอะไรทำให้พุ่ง?
+  รถโดยสารประจำทางที่กำลังวิ่งอยู่ต้องเบรกอย่างกระทันหัน ทำให้ผู้โดยสารที่ยืนอยู่พุ่งไปทางด้านหน้า แรงอะไรที่ทำให้ผู้โดยสารเคลื่อนที่ดังกล่าวนั้น
   </div>
-  <div class="box answer keep"><div class="box-label">เฉลย</div>
+  <div class="box answer keep"><div class="box-label">เฉลย</div><p class="a">
   <span class="hl pink">ไม่มีแรง</span> ที่ดันไปข้างหน้า — เป็นการรักษาสภาพการเคลื่อนที่เดิมตามกฎข้อ 1
-  รถช้าลงแต่คนยังมีความเร็วเดิมช่วงสั้นๆ
-  </div>
+  รถช้าลงแต่คนยังมีความเร็วเดิมช่วงสั้น ๆ
+  </p></div>
 
   <div class="box keep"><strong class="hl blue">ข้อ 2 · ΣF = ma</strong><br/>
   “ถ้ามีแรงลัพธ์กระทำ วัตถุจะเร่งไปตามแรงนั้น”<br/>
@@ -349,9 +345,9 @@ def ch3():
   ตัวอย่าง: ดันรถเข็นเบาไปเร็วกว่าดันรถบรรทุกด้วยแรงเท่ากัน
   </div>
   <div class="box example keep"><div class="box-label">ตัวอย่าง · เบรกรถบรรทุก</div>
-  มวล 1500 kg ความเร็ว 100 km/h เบรกจนหยุด (แนวจากเลคเชอร์)
+  รถบรรทุกมวล 1500 kg วิ่งด้วยความเร็ว 100 km/h แล้วเบรกจนหยุด 
   </div>
-  <div class="box answer keep"><div class="box-label">เฉลยแนว</div>
+  <div class="box answer keep"><div class="box-label">เฉลย</div>
   <ol class="steps">
     <li>u=100 km/h=27.78 m/s, v=0</li>
     <li>หา a จากเวลา/ระยะในโจทย์ (a เป็นลบเพราะเบรก)</li>
@@ -363,7 +359,7 @@ def ch3():
   “ทุกแรงมีคู่ ขนาดเท่า ทิศตรงข้าม ตอบกลับ” — กระทำ<span class="hl pink">คนละวัตถุ</span><br/>
   เท้าถีบพื้น → พื้นผลักกลับ → เดินได้
   </div>
-  <div class="box tip keep"><div class="box-label">จำสั้นๆ</div>
+  <div class="box tip keep"><div class="box-label">จำสั้น ๆ</div>
   ไม่โดนแรง → นิ่งหรือเร็วเท่าเดิม · โดนแรง → เร่งตามแรง · แรงเป็นคู่เสมอ
   </div>
 
@@ -377,7 +373,7 @@ def ch3():
   </div>
 
   <h2>Free-Body Diagram (FBD)</h2>
-  <p>แสดงแรงทั้งหมดที่กระทำต่อวัตถุที่สนใจเท่านั้น</p>
+  <p>แผนภาพแสดงแรงทั้งหมดที่กระทำต่อวัตถุที่สนใจเท่านั้น</p>
 ''' + FBD_BOX + '''
   <ul>
     <li>N ตั้งฉากพื้น · T ตามเชือก · f สวนทางแนวโน้มเคลื่อน · mg ลง</li>
@@ -390,7 +386,7 @@ def ch3():
 ''' + INCLINE + '''
 
   <h2>แรงเสียดทาน</h2>
-  <p>ต้านการเคลื่อนที่ระหว่างผิวสัมผัส เพราะความขรุขระระดับจุลภาค · μ ขึ้นกับชนิดผิว</p>
+  <p>แรงเสียดทานคือแรงที่ต้านการเคลื่อนที่ระหว่างผิวสัมผัส เกิดจากความขรุขระของผิวในระดับจุลภาค โดยค่า μ ขึ้นกับชนิดของผิวสัมผัส</p>
   <div class="two-col keep">
     <div class="box"><strong>สถิต f<sub>s</sub></strong><br/>
     กันไม่ให้เริ่มเคลื่อน · สูงสุด f<sub>s,max</sub>=μ<sub>s</sub>N</div>
@@ -403,9 +399,9 @@ def ch3():
   <div class="box example keep"><div class="box-label">ตัวอย่างตัวเลขเสียดทาน</div>
   m=10 kg, μ<sub>s</sub>=0.4, μ<sub>k</sub>=0.3, g=9.8
   </div>
-  <div class="box answer keep"><div class="box-label">เฉลย</div>
+  <div class="box answer keep"><div class="box-label">เฉลย</div><p class="a">
   N=mg=98 N · f<sub>s,max</sub>=0.4·98=<span class="hl">39.2 N</span> · f<sub>k</sub>=0.3·98=<span class="hl mint">29.4 N</span>
-  </div>
+  </p></div>
 
   <div class="box example keep"><div class="box-label">ตัวอย่าง · ลูกบอลเชือกทำมุม 30° (ครบ ก–ค)</div>
   มวล 0.5 kg เชือกยาว 1.5 m แกว่งวงกลมแนวราบ เชือกเอียง 30° กับแนวดิ่ง<br/>
@@ -438,7 +434,7 @@ def ch4():
   <h1 class="chapter-title">④ งาน · พลังงาน</h1>
 
   <h2>งาน (Work)</h2>
-  <p>ปริมาณพลังงานที่ถ่ายโอนผ่าน<span class="hl">แรงที่กระทำแล้ววัตถุเคลื่อนที่</span></p>
+  <p>ปริมาณพลังงานที่ถูกถ่ายโอนหรือแปลงผ่าน<span class="hl">แรงที่กระทำต่อวัตถุ</span> จนทำให้วัตถุเคลื่อนที่</p>
   <div class="box formula keep"><div class="box-label">สูตรงาน</div>
   <div class="formula-line">W = F · s = Fs cosθ</div>
   หน่วยจูล (J) = N·m · เป็นสเกลาร์
@@ -450,7 +446,7 @@ def ch4():
 ''' + WORK_ANGLE + '''
 
   <div class="box example keep"><div class="box-label">ตัวอย่าง 1 · หาแรงลัพธ์แล้วหางาน</div>
-  จากเลคเชอร์: รวมแรงได้ F<sub>net</sub> ≈ 29.86 N ระยะการกระจัด 40 m
+  รวมแรงได้ F<sub>net</sub> ≈ 29.86 N ระยะการกระจัด 40 m
   </div>
   <div class="box answer keep"><div class="box-label">เฉลย</div>
   <ol class="steps">
@@ -464,13 +460,13 @@ def ch4():
   <div class="box example keep"><div class="box-label">ตัวอย่าง 2 · F(x)=3x² จาก x=3 ถึง x=5</div>
   ที่ x=0 งานเท่ากับ 0 · หาด้วยอินทิกรัล หรือพื้นที่ใต้กราฟ
   </div>
-  <div class="box answer keep"><div class="box-label">เฉลย</div>
+  <div class="box answer keep"><div class="box-label">เฉลย</div><p class="a">
   W = ∫₃⁵ 3x² dx = [x³]₃⁵ = 125 − 27 = <span class="hl mint">98 J</span><br/>
   <em>หมายเหตุ:</em> ตรวจช่วงอินทิกรัลให้ตรงโจทย์ทุกครั้ง
-  </div>
+  </p></div>
 
   <h2>พลังงานกล</h2>
-  <p>พลังงาน = ความสามารถในการทำงาน · ในบทนี้เน้นพลังงานกล 2 ประเภท:</p>
+  <p>พลังงานคือความสามารถในการทำงาน ในบทนี้เน้นพลังงานกล ซึ่งแบ่งเป็น 2 ประเภท:</p>
   <div class="two-col keep">
     <div class="box"><strong class="hl blue">จลน์ KE</strong><br/>
     จากการเคลื่อนที่ · K = ½mv²</div>
@@ -483,19 +479,19 @@ def ch4():
   </div>
 
   <div class="box example keep"><div class="box-label">ตัวอย่าง 3 · พลังงานศักย์ (m=1000 kg)</div>
-  อ้างอิงจุดศูนย์ · คำนวณ U=mgh ที่ความสูงต่างๆ (g=9.8)
+  อ้างอิงจุดศูนย์ · คำนวณ U=mgh ที่ความสูงต่าง ๆ (g=9.8)
   </div>
-  <div class="box answer keep"><div class="box-label">เฉลยตัวเลขจากเลคเชอร์</div>
+  <div class="box answer keep"><div class="box-label">เฉลย</div><p class="a">
   h=10 → U≈98,000 J · h=−15 → U≈−147,000 J<br/>
   h=15 → U≈147,000 J · h=25 → U≈245,000 J<br/>
   ΔU = U<sub>หลัง</sub>−U<sub>ก่อน</sub> (เครื่องหมายบอกสูง/ต่ำกว่าจุดอ้างอิง)
-  </div>
+  </p></div>
 ''' + ENERGY + SPRING + '''
 
   <h2>กฎอนุรักษ์พลังงานกล</h2>
   <div class="box formula keep">
-  ในระบบปิด (ไม่มีเสียดทาน/แรงไม่ใช่คอนเซอร์เวทีฟ)<br/>
-  พลังงานกลรวมคงที่ — ไม่สูญหายหรือเกิดใหม่ แค่เปลี่ยนรูป<br/>
+  ในระบบปิดที่ไม่มีแรงเสียดทาน<br/>
+  พลังงานกลรวมคงที่ — ไม่สูญหายและไม่เกิดใหม่ เพียงเปลี่ยนรูปเท่านั้น<br/>
   K<sub>i</sub> + U<sub>i</sub> = K<sub>f</sub> + U<sub>f</sub>
   </div>
   <div class="box formula keep"><div class="box-label">เมื่อมีเสียดทาน</div>
@@ -505,11 +501,11 @@ def ch4():
   P = W/t = F·v &nbsp;·&nbsp; หน่วยวัตต์ (W) = J/s
   </div>
 
-  <div class="box example keep"><div class="box-label">ตัวอย่าง 4 · สปริง + พื้นเอียง (จากเลคเชอร์)</div>
-  ใช้อนุรักษ์พลังงาน ได้ความเร็วและ ความสูงปลายทาง
-  (ตัวเลขในโน้ต: v≈5.67 m/s, h≈1.64 m)
+  <div class="box example keep"><div class="box-label">ตัวอย่าง 4 · สปริงกับพื้นเอียง</div>
+  ใช้อนุรักษ์พลังงานเพื่อหาความเร็วและความสูงปลายทาง
+  (ได้ประมาณ v ≈ 5.67 m/s และ h ≈ 1.64 m)
   </div>
-  <div class="box answer keep"><div class="box-label">โครงเฉลยมาตรฐาน</div>
+  <div class="box answer keep"><div class="box-label">แนวเฉลย</div>
   <ol class="steps">
     <li>เลือกจุดอ้างอิง h=0</li>
     <li>ต้นทาง: มี U<sub>s</sub>=½kx² (และ/หรือ U<sub>g</sub>)</li>
@@ -520,7 +516,7 @@ def ch4():
 
   <table class="keep">
     <tr><th>แนวคิด</th><th>ใช้เมื่อ</th><th>สูตรหัวใจ</th></tr>
-    <tr><td>งานตรงๆ</td><td>รู้ F, s, θ</td><td>Fs cosθ</td></tr>
+    <tr><td>งานตรง ๆ</td><td>รู้ F, s, θ</td><td>Fs cosθ</td></tr>
     <tr><td>งานแปรแรง</td><td>F(x) หรือกราฟ</td><td>∫F dx</td></tr>
     <tr><td>งาน–พลังงาน</td><td>หา v จากแรงสุทธิ</td><td>W<sub>net</sub>=ΔK</td></tr>
     <tr><td>อนุรักษ์ E</td><td>ไม่มีเสียดทาน</td><td>K+U คงที่</td></tr>
@@ -532,17 +528,17 @@ def ch4():
 def extras():
     return '''
 <section class="chapter" id="exam">
-  <h1 class="chapter-title">📝 เทคนิคทำข้อสอบ + แนวข้อ</h1>
-  <div class="box tip keep"><div class="box-label">จากท้ายเลคเชอร์</div>
-  สอบประมาณ 9.00–11.00 · มีทั้งเขียนสมการ/กราฟ และคำนวณ<br/>
-  แนวจำนวนข้อโดยประมาณ: พื้นฐาน+diff · 1D หลายข้อ · โปรเจคไทล์ ·
-  นิวตัน/FBD · เสียดทาน · งาน–พลังงาน · อ่านโจทย์ให้ครบ
+  <h1 class="chapter-title">เทคนิคทำข้อสอบ</h1>
+  <div class="box tip keep"><div class="box-label">เคล็ดก่อนสอบ</div>
+  มีทั้งข้อเขียนสมการ กราฟ และข้อคำนวณ<br/>
+  เนื้อหาที่มักออก: พื้นฐานและอนุพันธ์ · การเคลื่อนที่ 1 มิติ · โปรเจคไทล์ ·
+  กฎนิวตันและ FBD · แรงเสียดทาน · งาน–พลังงาน · อ่านโจทย์ให้ครบก่อนลงมือ
   </div>
   <ol>
-    <li>กวาดตาทั้งฉบับ — เก็บข้อสั้น/สูตรก่อน</li>
-    <li>ข้อคำนวณ: ข้อมูล已知 → สูตร → แทนค่า → หน่วย</li>
-    <li>ข้อนิวตัน: นึก FBD ก่อนเลือกคำตอบ</li>
-    <li>เหลือเวลา → ย้อนตรวจเครื่องหมายและหน่วย</li>
+    <li>กวาดตาทั้งฉบับก่อน แล้วเก็บข้อสั้นหรือข้อใช้สูตรก่อน</li>
+    <li>ข้อคำนวณ: ข้อมูลที่โจทย์ให้ → สูตร → แทนค่า → หน่วย</li>
+    <li>ข้อกฎนิวตัน: วาดหรือนึก FBD ก่อนเลือกคำตอบ</li>
+    <li>ถ้าเหลือเวลา ให้ย้อนตรวจเครื่องหมายและหน่วยอีกครั้ง</li>
   </ol>
   <table class="keep">
     <tr><th>จาก</th><th>เป็น</th><th>วิธี</th></tr>
@@ -554,55 +550,81 @@ def extras():
 </section>
 
 <section class="chapter" id="practice">
-  <h1 class="chapter-title">✏️ แบบฝึกทบทวน + เฉลย</h1>
+  <h1 class="chapter-title">แบบฝึกทบทวนพร้อมเฉลย</h1>
 
-  <div class="box example keep"><div class="box-label">P1</div>จากหยุด a=3 นาน 4 s แล้วคงที่อีก 6 s หา v และ s รวม</div>
-  <div class="box answer keep"><div class="box-label">เฉลย</div>v=12 m/s · s=24+72=<span class="hl mint">96 m</span></div>
+  <div class="box example keep"><div class="box-label">ข้อ P1</div>
+  <p class="q">วัตถุออกตัวจากหยุดด้วยความเร่ง 3 m/s² นาน 4 s แล้ววิ่งด้วยความเร็วคงที่อีก 6 s จงหาความเร็วช่วงคงที่และระยะทางทั้งหมด</p></div>
+  <div class="box answer keep"><div class="box-label">เฉลย</div>
+  <p class="a">v = 12 m/s · s = 24 + 72 = <span class="hl mint">96 m</span></p></div>
 
-  <div class="box example keep"><div class="box-label">P2</div>v=2t+3 หา s จาก t=0 ถึง 5 และ a</div>
-  <div class="box answer keep"><div class="box-label">เฉลย</div>s=∫(2t+3)dt=40 m · a=2 m/s²</div>
+  <div class="box example keep"><div class="box-label">ข้อ P2</div>
+  <p class="q">ความเร็ว v = 2t + 3 (หน่วย m/s) จงหาการกระจัดจาก t = 0 ถึง t = 5 s และความเร่ง</p></div>
+  <div class="box answer keep"><div class="box-label">เฉลย</div>
+  <p class="a">s = ∫(2t+3) dt = 40 m · a = 2 m/s²</p></div>
 
-  <div class="box example keep"><div class="box-label">P3</div>โยนขึ้น 20 m/s g=10 หา t_up, H, T</div>
-  <div class="box answer keep"><div class="box-label">เฉลย</div>2 s · 20 m · 4 s</div>
+  <div class="box example keep"><div class="box-label">ข้อ P3</div>
+  <p class="q">โยนวัตถุขึ้นด้วยความเร็ว 20 m/s จากพื้น (ใช้ g = 10) จงหาเวลาถึงจุดสูงสุด ความสูงสูงสุด และเวลากลับพื้น</p></div>
+  <div class="box answer keep"><div class="box-label">เฉลย</div>
+  <p class="a">2 s · 20 m · 4 s</p></div>
 
-  <div class="box example keep"><div class="box-label">P4</div>ยิง 30 m/s มุม 30° g=10 หา H, T, R</div>
-  <div class="box answer keep"><div class="box-label">เฉลย</div>H=11.25 m · T=3 s · R≈77.9 m</div>
+  <div class="box example keep"><div class="box-label">ข้อ P4</div>
+  <p class="q">ยิงวัตถุด้วยความเร็ว 30 m/s ทำมุม 30° (ใช้ g = 10) จงหา H, T และ R</p></div>
+  <div class="box answer keep"><div class="box-label">เฉลย</div>
+  <p class="a">H = 11.25 m · T = 3 s · R ≈ 77.9 m</p></div>
 
-  <div class="box example keep"><div class="box-label">P5</div>ปล่อยจากเครื่องบินสูง 500 m ความเร็ว 100 m/s ระยะ x?</div>
-  <div class="box answer keep"><div class="box-label">เฉลย</div>t≈10.1 s · x≈1010 m</div>
+  <div class="box example keep"><div class="box-label">ข้อ P5</div>
+  <p class="q">ปล่อยของจากเครื่องบินที่บินตรงด้วยความเร็วคงที่ 100 m/s ที่ความสูง 500 m จงหาระยะในแนวราบที่ของตกถึงพื้น</p></div>
+  <div class="box answer keep"><div class="box-label">เฉลย</div>
+  <p class="a">t ≈ 10.1 s · x ≈ 1010 m</p></div>
 
-  <div class="box example keep"><div class="box-label">P6</div>m=2 kg r=0.5 m v=4 หา T</div>
-  <div class="box answer keep"><div class="box-label">เฉลย</div>T=mv²/r=<span class="hl mint">64 N</span></div>
+  <div class="box example keep"><div class="box-label">ข้อ P6</div>
+  <p class="q">มวล 2 kg ผูกเชือกยาว 0.5 m หมุนเป็นวงกลมในแนวราบด้วยอัตราเร็ว 4 m/s จงหาความตึงเชือก</p></div>
+  <div class="box answer keep"><div class="box-label">เฉลย</div>
+  <p class="a">T = mv²/r = <span class="hl mint">64 N</span></p></div>
 
-  <div class="box example keep"><div class="box-label">P7</div>กล่อง 5 kg ดึง 20 N μ<sub>k</sub>=0.2 g=10 หา a</div>
-  <div class="box answer keep"><div class="box-label">เฉลย</div>f=10 · a=<span class="hl mint">2 m/s²</span></div>
+  <div class="box example keep"><div class="box-label">ข้อ P7</div>
+  <p class="q">ดึงกล่องมวล 5 kg ด้วยแรง 20 N ในแนวราบ โดย μ<sub>k</sub> = 0.2 และ g = 10 จงหาความเร่ง</p></div>
+  <div class="box answer keep"><div class="box-label">เฉลย</div>
+  <p class="a">f = 10 N · a = <span class="hl mint">2 m/s²</span></p></div>
 
-  <div class="box example keep"><div class="box-label">P8</div>พื้นเอียง 30° ไม่มี f g=10 หา a</div>
-  <div class="box answer keep"><div class="box-label">เฉลย</div>a=g sin30°=<span class="hl mint">5 m/s²</span></div>
+  <div class="box example keep"><div class="box-label">ข้อ P8</div>
+  <p class="q">กล่องเลื่อนลงพื้นเอียงมุม 30° โดยไม่มีแรงเสียดทาน (g = 10) จงหาความเร่ง</p></div>
+  <div class="box answer keep"><div class="box-label">เฉลย</div>
+  <p class="a">a = g sin30° = <span class="hl mint">5 m/s²</span></p></div>
 
-  <div class="box example keep"><div class="box-label">P9</div>ลิฟต์เร่งขึ้น 2 m/s² คน 60 kg g=10 ตาชั่ง?</div>
-  <div class="box answer keep"><div class="box-label">เฉลย</div>N=m(g+a)=<span class="hl mint">720 N</span></div>
+  <div class="box example keep"><div class="box-label">ข้อ P9</div>
+  <p class="q">คนมวล 60 kg ยืนในลิฟต์ที่เร่งขึ้น 2 m/s² (g = 10) ตาชั่งจะอ่านค่าเท่าใด</p></div>
+  <div class="box answer keep"><div class="box-label">เฉลย</div>
+  <p class="a">N = m(g+a) = <span class="hl mint">720 N</span></p></div>
 
-  <div class="box example keep"><div class="box-label">P10</div>แรง 50 N ระยะ 10 m มุม 60° หางาน</div>
-  <div class="box answer keep"><div class="box-label">เฉลย</div>W=250 J</div>
+  <div class="box example keep"><div class="box-label">ข้อ P10</div>
+  <p class="q">ออกแรง 50 N ระยะ 10 m โดยแรงทำมุม 60° กับการกระจัด จงหางาน</p></div>
+  <div class="box answer keep"><div class="box-label">เฉลย</div>
+  <p class="a">W = 250 J</p></div>
 
-  <div class="box example keep"><div class="box-label">P11</div>m=2 v=6 มีงานต้าน −20 J หา v ใหม่</div>
-  <div class="box answer keep"><div class="box-label">เฉลย</div>Kᵢ=36 → Kᶠ=16 → v=<span class="hl mint">4 m/s</span></div>
+  <div class="box example keep"><div class="box-label">ข้อ P11</div>
+  <p class="q">มวล 2 kg มีความเร็ว 6 m/s แล้วมีงานต้าน −20 J จงหาความเร็วใหม่</p></div>
+  <div class="box answer keep"><div class="box-label">เฉลย</div>
+  <p class="a">K<sub>i</sub> = 36 J → K<sub>f</sub> = 16 J → v = <span class="hl mint">4 m/s</span></p></div>
 
-  <div class="box example keep"><div class="box-label">P12</div>ปล่อยจากสูง 5 m g=10 หา v ที่พื้น</div>
-  <div class="box answer keep"><div class="box-label">เฉลย</div>v=√(2gh)=<span class="hl mint">10 m/s</span></div>
+  <div class="box example keep"><div class="box-label">ข้อ P12</div>
+  <p class="q">ปล่อยวัตถุจากความสูง 5 m (g = 10) โดยไม่มีแรงเสียดทาน จงหาความเร็วตอนถึงพื้น</p></div>
+  <div class="box answer keep"><div class="box-label">เฉลย</div>
+  <p class="a">v = √(2gh) = <span class="hl mint">10 m/s</span></p></div>
 
-  <div class="box example keep"><div class="box-label">P13</div>สปริง k=200 อัด 0.1 m มวล 0.5 kg หา v</div>
-  <div class="box answer keep"><div class="box-label">เฉลย</div>v=x√(k/m)=<span class="hl mint">2 m/s</span></div>
+  <div class="box example keep"><div class="box-label">ข้อ P13</div>
+  <p class="q">สปริงค่าคงที่ k = 200 N/m ถูกอัด 0.1 m แล้วปล่อยดันมวล 0.5 kg บนพื้นราบลื่น จงหาความเร็วตอนหลุดจากสปริง</p></div>
+  <div class="box answer keep"><div class="box-label">เฉลย</div>
+  <p class="a">v = x√(k/m) = <span class="hl mint">2 m/s</span></p></div>
 </section>
 
 <section class="chapter" id="compare">
-  <h1 class="chapter-title">🔗 เชื่อม 4 บท + คำศัพท์</h1>
+  <h1 class="chapter-title">เชื่อมโยง 4 บท และคำศัพท์</h1>
   <div class="box keep">
-  <strong>1D</strong> บอกเคลื่อนยังไง (x,v,a) ·
-  <strong>2D</strong> แยกแกนแล้วใช้ 1D ·
-  <strong>นิวตัน</strong> บอกทำไมเร่ง (ΣF=ma) ·
-  <strong>งาน–พลังงาน</strong> ทางลัดหา v/h โดยไม่ไล่ a ทีละช่วง
+  <strong>1D</strong> อธิบายว่าวัตถุเคลื่อนที่อย่างไร (x, v, a)<br/>
+  <strong>2D</strong> แยกแกนแล้วใช้ความรู้ 1 มิติในแต่ละแกน<br/>
+  <strong>นิวตัน</strong> อธิบายว่าทำไมจึงมีความเร่ง (ΣF = ma)<br/>
+  <strong>งาน–พลังงาน</strong> เป็นทางลัดหาความเร็วหรือความสูง โดยไม่ต้องไล่ความเร่งทีละช่วง
   </div>
   <table class="keep">
     <tr><th>โจทย์แนว</th><th>ใช้บท</th><th>จุดเริ่ม</th></tr>
@@ -613,7 +635,7 @@ def extras():
     <tr><td>หมุนวงกลม ความตึง</td><td>2+3</td><td>F_c=mv²/r</td></tr>
   </table>
   <table class="keep">
-    <tr><th>อังกฤษ</th><th>ไทย</th><th>จำสั้นๆ</th></tr>
+    <tr><th>อังกฤษ</th><th>ไทย</th><th>จำสั้น ๆ</th></tr>
     <tr><td>Displacement</td><td>การกระจัด</td><td>เวกเตอร์</td></tr>
     <tr><td>Velocity / Speed</td><td>ความเร็ว / อัตราเร็ว</td><td>มีทิศ / แค่ขนาด</td></tr>
     <tr><td>Projectile</td><td>โปรเจคไทล์</td><td>แยก x–y</td></tr>
@@ -626,7 +648,7 @@ def extras():
 </section>
 
 <section class="chapter quick-sheet" id="quick">
-  <h1 class="chapter-title">⚡ แผ่นสูตรด่วน</h1>
+  <h1 class="chapter-title">แผ่นสูตรด่วน</h1>
   <div class="box formula keep">v=u+at | s=ut+½at² | v²=u²+2as | s=(u+v)t/2</div>
   <div class="box formula keep">uₓ=u cosθ | H=(usinθ)²/(2g) | T=2usinθ/g | R=u²sin2θ/g</div>
   <div class="box formula keep">ω=2π/T | v=ωr | a_c=v²/r | F_c=mv²/r</div>

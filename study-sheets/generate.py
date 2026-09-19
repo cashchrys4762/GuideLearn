@@ -13,7 +13,7 @@ parts = []
 parts.append('''<!DOCTYPE html>
 <html lang="th"><head>
 <meta charset="utf-8"/>
-<title>สรุปฟิสิกส์ 1 Midterm — ครบถ้วนพร้อมภาพ</title>
+<title>สรุปฟิสิกส์ 1 Midterm</title>
 <link rel="stylesheet" href="styles.css"/>
 </head><body><div class="sheet">
 ''')
