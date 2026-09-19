@@ -35,8 +35,8 @@ html, body {
   padding: 0;
   color: var(--ink);
   font-family: 'Mali', 'Itim', 'Sarabun', sans-serif;
-  font-size: 13pt;
-  line-height: 1.62;
+  font-size: 13.2pt;
+  line-height: 1.65;
   background: var(--paper);
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
@@ -125,7 +125,7 @@ body {
 
 .toc { page-break-after: always; }
 .toc h2 { margin-top: 0; }
-.toc ol { font-size: 13pt; }
+.toc ol { font-size: 13.2pt; }
 .toc li { margin: 8px 0; }
 
 h1.chapter-title {
@@ -152,7 +152,7 @@ h2 {
 }
 
 h3 {
-  font-size: 13pt;
+  font-size: 13.2pt;
   color: #5c4d7a;
   margin: 14px 0 6px;
 }
@@ -285,7 +285,7 @@ td.left, th.left { text-align: left; }
 
 .formula-line {
   font-family: 'Mali', sans-serif;
-  font-size: 13pt;
+  font-size: 13.2pt;
   font-weight: 600;
   text-align: center;
   margin: 4px 0;
