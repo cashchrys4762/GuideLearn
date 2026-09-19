@@ -635,6 +635,6 @@ def extras():
   <div class="box tip keep"><div class="box-label">เช็คลิสต์ก่อนส่ง</div>
   หน่วย SI · เครื่องหมายทิศ · แยกแกน · cos/sin ถูกตัว · คำตอบมีหน่วย
   </div>
-  <p class="footer-note">ชีทสรุป Midterm ฟิสิกส์ 1 · สไตล์โน้ตลายมือ + ภาพตัวอย่าง · จากเลคเชอร์ Warisara Boonsiri</p>
+  <p class="footer-note">สรุป จากปาล์มมมมมมมม</p>
 </section>
 '''

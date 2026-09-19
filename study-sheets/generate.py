@@ -22,14 +22,13 @@ parts.append('''
 <section class="cover">
   <div class="cover-deco"></div>
   <h1>สรุปฟิสิกส์ 1</h1>
-  <p class="subtitle">ชีทสอบ Midterm · ครบถ้วน น่ารัก อ่านง่าย · มีภาพ + เฉลยทีละขั้น</p>
   <ul class="cover-list">
     <li>① การเคลื่อนที่แนวตรง (1D + เวกเตอร์)</li>
     <li>② โปรเจคไทล์ + การเคลื่อนที่วงกลม</li>
     <li>③ กฎของนิวตัน</li>
     <li>④ งาน · พลังงาน · กำลัง</li>
   </ul>
-  <p class="cover-note">สรุปละเอียดจากไฟล์เลคเชอร์ Warisara Boonsiri · จัดใหม่เป็นชีทสอบ</p>
+  <p class="cover-note">สรุป จากปาล์มมมมมมมม</p>
 </section>
 
 <section class="toc keep">
